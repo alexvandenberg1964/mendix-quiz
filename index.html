@@ -45,11 +45,7 @@
     .option { display:flex; align-items:flex-start; gap:10px; padding:10px 14px; border-radius:var(--radius); border:1px solid var(--border); cursor:pointer; transition:all 0.15s; font-size:14px; color:var(--text); background:var(--bg); text-align:left; width:100%; line-height:1.4; }
     .option:hover { background:var(--bg2); border-color:var(--border2); }
     .option.selected { border-color:var(--orange); background:var(--orange-light); }
-    .option.correct { border-color:var(--green); background:var(--green-bg); color:var(--green); }
-    .option.wrong { border-color:var(--red); background:var(--red-bg); color:var(--red); }
     .option-letter { font-weight:700; min-width:20px; color:var(--orange); font-size:13px; flex-shrink:0; margin-top:1px; }
-    .option.correct .option-letter { color:var(--green); }
-    .option.wrong .option-letter { color:var(--red); }
     .submit-btn { background:var(--orange); color:white; border:none; border-radius:var(--radius); padding:12px 28px; font-size:15px; font-weight:600; cursor:pointer; margin-top:1rem; width:100%; transition:opacity 0.15s; }
     .submit-btn:disabled { opacity:.4; cursor:not-allowed; }
     .submit-btn:hover:not(:disabled) { opacity:.88; }
@@ -87,7 +83,39 @@
     .admin-table th { background:var(--blue); color:white; padding:8px 10px; text-align:left; font-weight:600; white-space:nowrap; }
     .admin-table td { padding:8px 10px; border-bottom:1px solid var(--border); vertical-align:top; }
     .admin-table tr:hover td { background:var(--bg2); }
-    .correct-tag { background:var(--green-bg); color:var(--green); font-size:11px; font-weight:600; padding:2px 8px; border-radius:var(--radius); display:inline-block; white-space:nowrap; }
+    /* ── Admin question card viewer ── */
+    .aq-toolbar { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:1.25rem; }
+    .aq-counter { margin-left:auto; font-size:13px; color:var(--text2); white-space:nowrap; font-weight:600; }
+    .aq-progress { height:4px; background:var(--bg3); border-radius:2px; margin-bottom:1.5rem; overflow:hidden; }
+    .aq-progress-fill { height:100%; background:var(--orange); border-radius:2px; transition:width .25s; }
+    .aq-card { background:var(--bg); border:1px solid var(--border); border-radius:var(--radius-lg); padding:1.75rem; margin-bottom:1.25rem; }
+    .aq-card-meta { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:1.25rem; }
+    .aq-pill { font-size:11px; font-weight:600; padding:3px 10px; border-radius:var(--radius); }
+    .aq-pill-week { background:var(--orange); color:#fff; }
+    .aq-pill-cat { background:var(--blue-light); color:var(--blue); }
+    .aq-qnum { font-size:12px; color:var(--text2); margin-left:auto; }
+    .aq-question { font-size:16px; font-weight:600; color:var(--text); line-height:1.55; margin-bottom:1.25rem; padding-bottom:1.25rem; border-bottom:1px solid var(--border); }
+    .aq-options { display:flex; flex-direction:column; gap:8px; margin-bottom:1.25rem; }
+    .aq-option { display:flex; align-items:flex-start; gap:10px; padding:11px 14px; border-radius:var(--radius); border:1px solid var(--border); font-size:14px; color:var(--text); line-height:1.45; }
+    .aq-option.aq-correct { border:1.5px solid var(--green); background:var(--green-bg); color:#27500A; }
+    .aq-letter { font-weight:700; min-width:20px; font-size:13px; flex-shrink:0; margin-top:1px; color:var(--text2); }
+    .aq-option.aq-correct .aq-letter { color:var(--green); }
+    .aq-check { margin-left:auto; flex-shrink:0; width:18px; height:18px; background:var(--green); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .aq-check::after { content:''; width:9px; height:5px; border-left:2px solid #fff; border-bottom:2px solid #fff; transform:rotate(-45deg) translate(1px,-1px); display:block; }
+    .aq-explanation { border-left:3px solid var(--orange); padding:12px 16px; background:var(--bg2); font-size:13px; color:var(--text2); line-height:1.65; }
+    .aq-nav { display:flex; align-items:center; gap:10px; margin-top:1.25rem; flex-wrap:wrap; }
+    .aq-nav-btn { display:flex; align-items:center; gap:6px; padding:9px 20px; border-radius:var(--radius); border:1px solid var(--border2); background:var(--bg); color:var(--text); cursor:pointer; font-size:13px; font-weight:600; transition:background .12s; white-space:nowrap; }
+    .aq-nav-btn:hover:not(:disabled) { background:var(--bg2); }
+    .aq-nav-btn:disabled { opacity:.35; cursor:not-allowed; }
+    .aq-nav-btn.aq-primary { background:var(--orange); border-color:var(--orange); color:white; }
+    .aq-nav-btn.aq-primary:hover:not(:disabled) { opacity:.88; background:var(--orange); }
+    .aq-dots { display:flex; gap:5px; flex-wrap:wrap; flex:1; justify-content:center; padding:4px 0; }
+    .aq-dot { width:9px; height:9px; border-radius:50%; border:1px solid var(--border2); background:var(--bg3); cursor:pointer; transition:background .12s; flex-shrink:0; }
+    .aq-dot.aq-active { background:var(--orange); border-color:var(--orange); transform:scale(1.2); }
+    .aq-dot.aq-visited { background:var(--border2); border-color:var(--border2); }
+    .aq-kbd { font-size:11px; color:var(--text2); text-align:center; margin-top:8px; }
+    .aq-empty { padding:2.5rem; text-align:center; font-size:14px; color:var(--text2); background:var(--bg2); border-radius:var(--radius-lg); }
+    /* ── Shared ── */
     .not-started { background:var(--blue-light); border-radius:var(--radius-lg); padding:2.5rem; text-align:center; }
     .not-started h2 { font-size:20px; font-weight:700; color:var(--blue); margin-bottom:.5rem; }
     .not-started p { font-size:14px; color:var(--text2); }
@@ -116,514 +144,436 @@
 </div>
 
 <script>
-/* ═══════════════════════════════════════════════
-   CONFIGURATION — fill in your Supabase details
-   ═══════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   CONFIGURATION
+   ═══════════════════════════════════════════ */
 const SUPABASE_URL     = 'https://pfjkxskvwbfezpkvlcnl.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBmamt4c2t2d2JmZXpwa3ZsY25sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2NzQ4MjksImV4cCI6MjA4OTI1MDgyOX0.6Mrz1uj1IS1zCsO4Z1t5tTLg9XBhWycXP_8h6nD1APE';
 
-/* ═══════════════════════════════════════════════
-   QUIZ SETTINGS
-   ═══════════════════════════════════════════════ */
 const QUIZ_START = new Date('2026-03-23T00:00:00');
 const QUIZ_WEEKS = 16;
+const CATEGORIES = [
+  'Mendix Basics','Domain Model & Data','Microflows & Logic','Pages & UI',
+  'Integration & APIs','Security & Access','Performance & Deployment',
+  'Version Control & Teamwork','Best Practices','PostNL & Logistics Context'
+];
 
 function getCurrentWeek() {
   const diff = new Date() - QUIZ_START;
   if (diff < 0) return 0;
-  return Math.min(Math.floor(diff / (7 * 24 * 3600 * 1000)) + 1, QUIZ_WEEKS);
+  return Math.min(Math.floor(diff / (7*24*3600*1000)) + 1, QUIZ_WEEKS);
 }
 
-/* ═══════════════════════════════════════════════
-   SUPABASE HELPERS
-   ═══════════════════════════════════════════════ */
-async function sbRpc(fn, params = {}) {
+/* ═══════════════════════════════════════════
+   SUPABASE
+   ═══════════════════════════════════════════ */
+async function sbRpc(fn, params={}) {
   const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fn}`, {
-    method: 'POST',
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(params)
+    method:'POST',
+    headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':`Bearer ${SUPABASE_ANON_KEY}`,'Content-Type':'application/json'},
+    body:JSON.stringify(params)
   });
   if (!res.ok) throw new Error(await res.text());
-  const text = await res.text();
-  return text ? JSON.parse(text) : null;
+  const t = await res.text(); return t ? JSON.parse(t) : null;
 }
-
 async function sbGet(path) {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
-    headers: {
-      'apikey': SUPABASE_ANON_KEY,
-      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-    }
-  });
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`,{headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':`Bearer ${SUPABASE_ANON_KEY}`}});
   if (!res.ok) throw new Error(await res.text());
-  const text = await res.text();
-  return text ? JSON.parse(text) : [];
+  const t = await res.text(); return t ? JSON.parse(t) : [];
 }
-
-/* Fetch only current week questions — NO correct_index, NO explanation */
-async function fetchWeekQuestions(week) {
-  return sbGet(`quiz_questions_public?week=eq.${week}&order=id.asc`);
-}
-
-/* Submit answers — scoring happens in the database, correct answers never sent to browser */
-async function submitAnswers(email, week, answers) {
-  return sbRpc('submit_quiz_answers', { p_email: email, p_week: week, p_answers: answers });
-}
-
-/* Fetch my past results — only for weeks < current (closed weeks) */
-async function fetchMyResults(email, currentWeek) {
-  return sbRpc('get_my_results', { p_email: email, p_current_week: currentWeek });
-}
-
-/* Check if I already submitted this week */
-async function fetchMySubmission(email, week) {
-  const rows = await sbGet(`quiz_submissions?email=eq.${encodeURIComponent(email)}&week=eq.${week}&select=answers,score`);
-  return rows.length ? rows[0] : null;
-}
-
-/* Leaderboard */
+const fetchWeekQuestions   = w    => sbGet(`quiz_questions_public?week=eq.${w}&order=id.asc`);
+const submitAnswers        = (e,w,a)  => sbRpc('submit_quiz_answers',{p_email:e,p_week:w,p_answers:a});
+const fetchMyResults       = (e,cw)  => sbRpc('get_my_results',{p_email:e,p_current_week:cw});
+const fetchMySubmission    = (e,w)   => sbGet(`quiz_submissions?email=eq.${encodeURIComponent(e)}&week=eq.${w}&select=answers,score`).then(r=>r.length?r[0]:null);
+const fetchAllQuestionsAdmin = ()   => sbRpc('get_all_questions_admin',{});
+const fetchAllSubmissionsAdmin = () => sbGet('quiz_submissions?select=email,week,answers,score,submitted_at&order=week.asc,email.asc');
 async function fetchLeaderboard() {
-  const rows = await sbGet('quiz_leaderboard?select=display_name,week,score');
-rows.forEach(r => {
-  if (!map[r.display_name]) map[r.display_name] = { email: r.display_name, weeks: 0, score: 0 };
-  map[r.display_name].weeks++;
-  map[r.display_name].score += (r.score || 0);
-});
-  return Object.values(map).sort((a, b) => b.score - a.score);
+  const rows = await sbGet('quiz_submissions?select=email,week,score');
+  const map={};
+  rows.forEach(r=>{ if(!map[r.email]) map[r.email]={email:r.email,weeks:0,score:0}; map[r.email].weeks++; map[r.email].score+=(r.score||0); });
+  return Object.values(map).sort((a,b)=>b.score-a.score);
 }
 
-/* Admin: all questions with answers */
-async function fetchAllQuestionsAdmin() {
-  return sbRpc('get_all_questions_admin', {});
-}
+/* ═══════════════════════════════════════════
+   LOCAL STORAGE — remember email
+   ═══════════════════════════════════════════ */
+const pKey = ()=>'u_'+(navigator.userAgent||'').replace(/\W/g,'').slice(0,20);
+function rememberEmail(e){ try{const d=JSON.parse(localStorage.getItem('mxquiz_id')||'{}');d[pKey()]=e;localStorage.setItem('mxquiz_id',JSON.stringify(d));}catch(x){} }
+function recallEmail(){ try{return JSON.parse(localStorage.getItem('mxquiz_id')||'{}')[pKey()]||'';}catch(x){return '';} }
 
-/* Admin: all submissions */
-async function fetchAllSubmissionsAdmin() {
-  return sbGet('quiz_submissions?select=email,week,answers,score,submitted_at&order=week.asc,email.asc');
-}
-
-/* ═══════════════════════════════════════════════
-   LOCAL STORAGE — remember email across visits
-   ═══════════════════════════════════════════════ */
-function getParticipantKey() { return 'u_' + (navigator.userAgent||'').replace(/\W/g,'').slice(0,20); }
-function rememberEmail(email) {
-  try { const d = JSON.parse(localStorage.getItem('mxquiz_id')||'{}'); d[getParticipantKey()] = email; localStorage.setItem('mxquiz_id', JSON.stringify(d)); } catch(e){}
-}
-function recallEmail() {
-  try { const d = JSON.parse(localStorage.getItem('mxquiz_id')||'{}'); return d[getParticipantKey()] || ''; } catch(e){ return ''; }
-}
-
-/* ═══════════════════════════════════════════════
-   APP STATE
-   ═══════════════════════════════════════════════ */
-const CATEGORIES = ['Mendix Basics','Domain Model & Data','Microflows & Logic','Pages & UI','Integration & APIs','Security & Access','Performance & Deployment','Version Control & Teamwork','Best Practices','PostNL & Logistics Context'];
-
-let state = {
-  page: 'quiz',
-  email: '',
-  confirmedEmail: recallEmail(),
-  currentWeek: getCurrentWeek(),
-  weekQuestions: null,      // fetched from Supabase — no correct answers
-  answers: {},              // participant's selected answers (indices)
-  existingSubmission: null, // {answers, score} if already submitted this week
-  loadingQuiz: false,
-  loadingSubmit: false,
-  successMsg: '',
-  errorMsg: '',
-  results: null,            // fetched from get_my_results()
-  loadingResults: false,
-  leaderboard: null,
-  loadingLeaderboard: false,
-  adminTab: 'questions',
-  adminQuestions: null,
-  adminSubmissions: null,
-  loadingAdmin: false,
-  filterWeek: 0,
-  filterCat: '',
-  sortField: 'week',
-  isAdmin: location.search.includes('admin=true')
+/* ═══════════════════════════════════════════
+   STATE
+   ═══════════════════════════════════════════ */
+let S = {
+  page:'quiz', email:'', confirmedEmail:recallEmail(),
+  currentWeek:getCurrentWeek(),
+  weekQuestions:null, answers:{}, existingSubmission:null,
+  loadingQuiz:false, loadingSubmit:false,
+  successMsg:'', errorMsg:'',
+  results:null, loadingResults:false,
+  leaderboard:null, loadingLeaderboard:false,
+  adminTab:'questions', adminQuestions:null, adminSubmissions:null, loadingAdmin:false,
+  filterWeek:0, filterCat:'', sortField:'week',
+  isAdmin:location.search.includes('admin=true'),
+  aqCurrent:0, aqVisited:new Set(), aqFilterWeek:0, aqFilterCat:''
 };
 
-/* ═══════════════════════════════════════════════
+/* ═══════════════════════════════════════════
    RENDER
-   ═══════════════════════════════════════════════ */
+   ═══════════════════════════════════════════ */
 function render() {
-  const root = document.getElementById('root');
-  if (!root) return;
-  root.innerHTML = '';
-
-  const wl = document.getElementById('header-week-label');
-  if (wl) wl.textContent = state.currentWeek > 0 ? `Week ${state.currentWeek} of ${QUIZ_WEEKS}` : 'Starting soon';
-
-  const nav = document.createElement('div'); nav.className = 'nav';
-  const pages = [['quiz','Quiz'],['results','My Results'],['leaderboard','Leaderboard']];
-  if (state.isAdmin) pages.push(['admin','Admin']);
-  pages.forEach(([id, label]) => {
-    const btn = document.createElement('button');
-    btn.className = 'nav-btn' + (state.page === id ? ' active' : '');
-    btn.textContent = label;
-    btn.onclick = () => { state.page = id; state.successMsg = ''; state.errorMsg = ''; render(); };
+  const root=document.getElementById('root'); if(!root) return;
+  root.innerHTML='';
+  const wl=document.getElementById('header-week-label');
+  if(wl) wl.textContent=S.currentWeek>0?`Week ${S.currentWeek} of ${QUIZ_WEEKS}`:'Starting soon';
+  const nav=document.createElement('div'); nav.className='nav';
+  const pages=[['quiz','Quiz'],['results','My Results'],['leaderboard','Leaderboard']];
+  if(S.isAdmin) pages.push(['admin','Admin']);
+  pages.forEach(([id,label])=>{
+    const btn=document.createElement('button');
+    btn.className='nav-btn'+(S.page===id?' active':'');
+    btn.textContent=label;
+    btn.onclick=()=>{S.page=id;S.successMsg='';S.errorMsg='';render();};
     nav.appendChild(btn);
   });
   root.appendChild(nav);
-
-  const c = document.createElement('div'); c.className = 'container';
-  root.appendChild(c);
-
-  if (state.page === 'quiz') renderQuiz(c);
-  else if (state.page === 'results') renderResults(c);
-  else if (state.page === 'leaderboard') renderLeaderboard(c);
+  const c=document.createElement('div'); c.className='container'; root.appendChild(c);
+  if(S.page==='quiz') renderQuiz(c);
+  else if(S.page==='results') renderResults(c);
+  else if(S.page==='leaderboard') renderLeaderboard(c);
   else renderAdmin(c);
 }
 
-/* ── Identity box ── */
-function renderIdentityBox(container, onConfirm) {
-  if (state.confirmedEmail) { onConfirm(); return; }
-  const box = document.createElement('div'); box.className = 'identity-box';
-  box.innerHTML = '<h2>Welcome to the PostNL Mendix Quiz</h2><p>Enter your PostNL email address to participate.</p>';
-  const inp = document.createElement('input'); inp.type = 'email';
-  inp.placeholder = 'your.name@postnl.nl'; inp.value = state.email || '';
-  inp.oninput = e => state.email = e.target.value;
-  inp.onkeydown = e => { if (e.key === 'Enter') go(); };
-  const btn = document.createElement('button'); btn.className = 'submit-btn';
-  btn.style.cssText = 'width:auto;padding:8px 24px;margin-top:0';
-  btn.textContent = 'Start';
-  function go() {
-    if (state.email && state.email.includes('@')) {
-      state.confirmedEmail = state.email;
-      rememberEmail(state.email);
-      render();
-    } else { alert('Please enter a valid email address.'); }
-  }
-  btn.onclick = go;
-  box.appendChild(inp); box.appendChild(btn); container.appendChild(box);
+/* ── Identity ── */
+function renderIdentityBox(c,cb) {
+  if(S.confirmedEmail){cb();return;}
+  const box=document.createElement('div'); box.className='identity-box';
+  box.innerHTML='<h2>Welcome to the PostNL Mendix Quiz</h2><p>Enter your PostNL email address to participate.</p>';
+  const inp=document.createElement('input'); inp.type='email'; inp.placeholder='your.name@postnl.nl'; inp.value=S.email||'';
+  inp.oninput=e=>S.email=e.target.value; inp.onkeydown=e=>{if(e.key==='Enter')go();};
+  const btn=document.createElement('button'); btn.className='submit-btn'; btn.style.cssText='width:auto;padding:8px 24px;margin-top:0'; btn.textContent='Start';
+  function go(){if(S.email&&S.email.includes('@')){S.confirmedEmail=S.email;rememberEmail(S.email);render();}else alert('Please enter a valid email address.');}
+  btn.onclick=go; box.appendChild(inp); box.appendChild(btn); c.appendChild(box);
 }
 
-/* ── Quiz page ── */
+/* ── Quiz ── */
 function renderQuiz(c) {
-  renderIdentityBox(c, () => {
-    const cw = state.currentWeek;
-    if (cw === 0) {
-      const m = document.createElement('div'); m.className = 'not-started';
-      m.innerHTML = '<h2>Quiz starts March 23, 2026</h2><p>Week 1 questions will be available from Monday, March 23.</p>';
-      c.appendChild(m); return;
+  renderIdentityBox(c,()=>{
+    const cw=S.currentWeek;
+    if(cw===0){const m=document.createElement('div');m.className='not-started';m.innerHTML='<h2>Quiz starts March 23, 2026</h2><p>Week 1 questions will be available from Monday, March 23.</p>';c.appendChild(m);return;}
+    if(S.successMsg){const m=document.createElement('div');m.className='success-msg';m.textContent=S.successMsg;c.appendChild(m);}
+    if(S.errorMsg){const m=document.createElement('div');m.className='error-msg';m.textContent=S.errorMsg;c.appendChild(m);}
+    if(!S.weekQuestions&&!S.loadingQuiz){
+      S.loadingQuiz=true;
+      const m=document.createElement('div');m.className='info-msg';m.innerHTML='<span class="spinner"></span>Loading this week\'s questions...';c.appendChild(m);
+      Promise.all([fetchWeekQuestions(cw),fetchMySubmission(S.confirmedEmail,cw)]).then(([qs,existing])=>{
+        S.weekQuestions=qs;S.existingSubmission=existing;
+        if(existing&&Object.keys(S.answers).length===0) qs.forEach((_,i)=>{S.answers[i]=existing.answers[i];});
+        S.loadingQuiz=false;render();
+      }).catch(err=>{S.loadingQuiz=false;S.errorMsg='Could not load questions: '+err.message;render();}); return;
     }
-
-    // Messages
-    if (state.successMsg) { const m = document.createElement('div'); m.className = 'success-msg'; m.textContent = state.successMsg; c.appendChild(m); }
-    if (state.errorMsg)   { const m = document.createElement('div'); m.className = 'error-msg';   m.textContent = state.errorMsg;   c.appendChild(m); }
-
-    // Fetch questions + existing submission on first load
-    if (!state.weekQuestions && !state.loadingQuiz) {
-      state.loadingQuiz = true;
-      const m = document.createElement('div'); m.className = 'info-msg';
-      m.innerHTML = '<span class="spinner"></span>Loading this week\'s questions...';
-      c.appendChild(m);
-      Promise.all([
-        fetchWeekQuestions(cw),
-        fetchMySubmission(state.confirmedEmail, cw)
-      ]).then(([qs, existing]) => {
-        state.weekQuestions = qs;
-        state.existingSubmission = existing;
-        if (existing && Object.keys(state.answers).length === 0) {
-          qs.forEach((_, i) => { state.answers[i] = existing.answers[i]; });
-        }
-        state.loadingQuiz = false;
-        render();
-      }).catch(err => {
-        state.loadingQuiz = false;
-        state.errorMsg = 'Could not load questions: ' + err.message;
-        render();
-      });
-      return;
-    }
-
-    if (state.loadingQuiz) {
-      const m = document.createElement('div'); m.className = 'info-msg';
-      m.innerHTML = '<span class="spinner"></span>Loading...'; c.appendChild(m); return;
-    }
-
-    const qs = state.weekQuestions || [];
-
-    if (state.existingSubmission && !state.successMsg) {
-      const note = document.createElement('div'); note.className = 'resubmit-note';
-      note.textContent = `You already submitted week ${cw} (score: ${state.existingSubmission.score}/${qs.length}). You can update and resubmit until Sunday.`;
-      c.appendChild(note);
-    }
-
-    const answered = Object.keys(state.answers).length;
-    const pct = qs.length ? Math.round(answered / qs.length * 100) : 0;
-    const prog = document.createElement('div');
-    prog.innerHTML = `<div style="font-size:13px;color:var(--text2);margin-bottom:6px;">${answered} of ${qs.length} answered &mdash; Week ${cw}</div><div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>`;
+    if(S.loadingQuiz){const m=document.createElement('div');m.className='info-msg';m.innerHTML='<span class="spinner"></span>Loading...';c.appendChild(m);return;}
+    const qs=S.weekQuestions||[];
+    if(S.existingSubmission&&!S.successMsg){const n=document.createElement('div');n.className='resubmit-note';n.textContent=`You already submitted week ${cw} (score: ${S.existingSubmission.score}/${qs.length}). You can update and resubmit until Sunday.`;c.appendChild(n);}
+    const answered=Object.keys(S.answers).length;
+    const pct=qs.length?Math.round(answered/qs.length*100):0;
+    const prog=document.createElement('div');
+    prog.innerHTML=`<div style="font-size:13px;color:var(--text2);margin-bottom:6px;">${answered} of ${qs.length} answered &mdash; Week ${cw}</div><div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>`;
     c.appendChild(prog);
-
-    qs.forEach((q, i) => {
-      const card = document.createElement('div'); card.className = 'card';
-      card.innerHTML = `<span class="week-badge">Week ${cw}</span><span class="cat-badge">${q.category}</span><p class="question-text">${i+1}. ${q.question}</p>`;
-      const opts = document.createElement('div'); opts.className = 'options';
-      [q.option_a, q.option_b, q.option_c, q.option_d, q.option_e].forEach((opt, oi) => {
-        const btn = document.createElement('button');
-        btn.className = 'option' + (state.answers[i] === oi ? ' selected' : '');
-        btn.innerHTML = `<span class="option-letter">${String.fromCharCode(65+oi)}</span>${opt}`;
-        btn.onclick = () => { state.answers[i] = oi; render(); };
+    qs.forEach((q,i)=>{
+      const card=document.createElement('div');card.className='card';
+      card.innerHTML=`<span class="week-badge">Week ${cw}</span><span class="cat-badge">${q.category}</span><p class="question-text">${i+1}. ${q.question}</p>`;
+      const opts=document.createElement('div');opts.className='options';
+      [q.option_a,q.option_b,q.option_c,q.option_d,q.option_e].forEach((opt,oi)=>{
+        const btn=document.createElement('button');
+        btn.className='option'+(S.answers[i]===oi?' selected':'');
+        btn.innerHTML=`<span class="option-letter">${String.fromCharCode(65+oi)}</span>${opt}`;
+        btn.onclick=()=>{S.answers[i]=oi;render();};
         opts.appendChild(btn);
       });
-      card.appendChild(opts); c.appendChild(card);
+      card.appendChild(opts);c.appendChild(card);
     });
-
-    const allAnswered = qs.length > 0 && answered === qs.length;
-    const subBtn = document.createElement('button'); subBtn.className = 'submit-btn';
-    subBtn.disabled = !allAnswered || state.loadingSubmit;
-    subBtn.textContent = state.loadingSubmit ? 'Submitting...'
-      : allAnswered ? (state.existingSubmission ? `Resubmit Week ${cw} Answers` : `Submit Week ${cw} Answers`)
-      : `Answer all ${qs.length} questions to submit`;
-    subBtn.onclick = async () => {
-      if (!allAnswered || state.loadingSubmit) return;
-      state.loadingSubmit = true; render();
-      try {
-        const answersArr = qs.map((_, i) => state.answers[i]);
-        const score = await submitAnswers(state.confirmedEmail, cw, answersArr);
-        state.existingSubmission = { answers: answersArr, score };
-        state.leaderboard = null; // force refresh
-        state.successMsg = `${state.existingSubmission ? 'Resubmitted' : 'Submitted'}! You scored ${score} out of ${qs.length}. Full results available after this week closes.`;
-        state.errorMsg = '';
-      } catch(err) {
-        state.errorMsg = 'Submission failed: ' + err.message;
-      }
-      state.loadingSubmit = false; render();
+    const allAnswered=qs.length>0&&answered===qs.length;
+    const subBtn=document.createElement('button');subBtn.className='submit-btn';
+    subBtn.disabled=!allAnswered||S.loadingSubmit;
+    subBtn.textContent=S.loadingSubmit?'Submitting...':allAnswered?(S.existingSubmission?`Resubmit Week ${cw} Answers`:`Submit Week ${cw} Answers`):`Answer all ${qs.length} questions to submit`;
+    subBtn.onclick=async()=>{
+      if(!allAnswered||S.loadingSubmit)return;
+      S.loadingSubmit=true;render();
+      try{
+        const arr=qs.map((_,i)=>S.answers[i]);
+        const score=await submitAnswers(S.confirmedEmail,cw,arr);
+        S.existingSubmission={answers:arr,score};S.leaderboard=null;
+        S.successMsg=`Submitted! You scored ${score} out of ${qs.length}. Full results available after this week closes.`;S.errorMsg='';
+      }catch(err){S.errorMsg='Submission failed: '+err.message;}
+      S.loadingSubmit=false;render();
     };
     c.appendChild(subBtn);
   });
 }
 
-/* ── Results page ── */
+/* ── Results ── */
 function renderResults(c) {
-  renderIdentityBox(c, () => {
-    const cw = state.currentWeek;
-
-    if (!state.results && !state.loadingResults) {
-      state.loadingResults = true;
-      const m = document.createElement('div'); m.className = 'info-msg';
-      m.innerHTML = '<span class="spinner"></span>Loading your results...'; c.appendChild(m);
-      fetchMyResults(state.confirmedEmail, cw).then(rows => {
-        state.results = rows || [];
-        state.loadingResults = false;
-        render();
-      }).catch(err => {
-        state.results = [];
-        state.loadingResults = false;
-        state.errorMsg = 'Could not load results: ' + err.message;
-        render();
-      });
-      return;
+  renderIdentityBox(c,()=>{
+    const cw=S.currentWeek;
+    if(!S.results&&!S.loadingResults){
+      S.loadingResults=true;
+      const m=document.createElement('div');m.className='info-msg';m.innerHTML='<span class="spinner"></span>Loading your results...';c.appendChild(m);
+      fetchMyResults(S.confirmedEmail,cw).then(rows=>{S.results=rows||[];S.loadingResults=false;render();})
+        .catch(err=>{S.results=[];S.loadingResults=false;S.errorMsg='Could not load results: '+err.message;render();}); return;
     }
-    if (state.loadingResults) {
-      const m = document.createElement('div'); m.className = 'info-msg';
-      m.innerHTML = '<span class="spinner"></span>Loading...'; c.appendChild(m); return;
-    }
-
-    const rows = state.results || [];
-    const totalQ = rows.length;
-    const totalCorrect = rows.filter(r => r.is_correct).length;
-    const weeksPlayed = new Set(rows.map(r => r.week)).size;
-
-    const sg = document.createElement('div'); sg.className = 'summary-grid';
-    sg.innerHTML = `
-      <div class="metric"><div class="metric-val">${weeksPlayed}</div><div class="metric-label">Weeks played</div></div>
-      <div class="metric"><div class="metric-val">${totalQ}</div><div class="metric-label">Questions answered</div></div>
-      <div class="metric"><div class="metric-val">${totalCorrect}</div><div class="metric-label">Correct</div></div>
-      <div class="metric"><div class="metric-val">${totalQ > 0 ? Math.round(totalCorrect/totalQ*100) : 0}%</div><div class="metric-label">Score</div></div>`;
+    if(S.loadingResults){const m=document.createElement('div');m.className='info-msg';m.innerHTML='<span class="spinner"></span>Loading...';c.appendChild(m);return;}
+    const rows=S.results||[];
+    const totalQ=rows.length,totalCorrect=rows.filter(r=>r.is_correct).length,weeksPlayed=new Set(rows.map(r=>r.week)).size;
+    const sg=document.createElement('div');sg.className='summary-grid';
+    sg.innerHTML=`<div class="metric"><div class="metric-val">${weeksPlayed}</div><div class="metric-label">Weeks played</div></div><div class="metric"><div class="metric-val">${totalQ}</div><div class="metric-label">Questions answered</div></div><div class="metric"><div class="metric-val">${totalCorrect}</div><div class="metric-label">Correct</div></div><div class="metric"><div class="metric-val">${totalQ>0?Math.round(totalCorrect/totalQ*100):0}%</div><div class="metric-label">Score</div></div>`;
     c.appendChild(sg);
-
-    const refreshBtn = document.createElement('button'); refreshBtn.className = 'nav-btn'; refreshBtn.style.marginBottom = '1rem';
-    refreshBtn.textContent = 'Refresh results';
-    refreshBtn.onclick = () => { state.results = null; render(); };
-    c.appendChild(refreshBtn);
-
-    if (cw <= 1) {
-      const m = document.createElement('div'); m.className = 'info-msg';
-      m.textContent = 'Results for completed weeks appear here. Week 1 closes March 29, 2026.'; c.appendChild(m); return;
-    }
-    if (rows.length === 0) {
-      const m = document.createElement('div'); m.className = 'info-msg';
-      m.textContent = 'No completed weeks found for your email. Participate in weekly quizzes to see your results here.'; c.appendChild(m); return;
-    }
-
-    const fr = document.createElement('div'); fr.className = 'filter-row';
-    const weekSel = document.createElement('select');
-    weekSel.innerHTML = '<option value="0">All weeks</option>';
-    [...new Set(rows.map(r => r.week))].sort((a,b)=>a-b).forEach(w => weekSel.innerHTML += `<option value="${w}"${state.filterWeek==w?' selected':''}>Week ${w}</option>`);
-    weekSel.value = state.filterWeek; weekSel.onchange = e => { state.filterWeek = parseInt(e.target.value); render(); };
-    const catSel = document.createElement('select');
-    catSel.innerHTML = '<option value="">All categories</option>';
-    CATEGORIES.forEach(cat => catSel.innerHTML += `<option value="${cat}"${state.filterCat===cat?' selected':''}>${cat}</option>`);
-    catSel.value = state.filterCat; catSel.onchange = e => { state.filterCat = e.target.value; render(); };
-    const sortSel = document.createElement('select');
-    sortSel.innerHTML = '<option value="week">Sort by week</option><option value="cat">Sort by category</option><option value="status">Wrong answers first</option>';
-    sortSel.value = state.sortField; sortSel.onchange = e => { state.sortField = e.target.value; render(); };
-    fr.appendChild(weekSel); fr.appendChild(catSel); fr.appendChild(sortSel); c.appendChild(fr);
-
-    let filtered = rows.filter(r => (state.filterWeek===0||r.week===state.filterWeek) && (!state.filterCat||r.category===state.filterCat));
-    if (state.sortField==='week') filtered.sort((a,b)=>a.week-b.week);
-    else if (state.sortField==='cat') filtered.sort((a,b)=>a.category.localeCompare(b.category));
+    const rb=document.createElement('button');rb.className='nav-btn';rb.style.marginBottom='1rem';rb.textContent='Refresh results';rb.onclick=()=>{S.results=null;render();};c.appendChild(rb);
+    if(cw<=1){const m=document.createElement('div');m.className='info-msg';m.textContent='Results for completed weeks appear here. Week 1 closes March 29, 2026.';c.appendChild(m);return;}
+    if(rows.length===0){const m=document.createElement('div');m.className='info-msg';m.textContent='No completed weeks found. Participate in weekly quizzes to see your results here.';c.appendChild(m);return;}
+    const fr=document.createElement('div');fr.className='filter-row';
+    const wkSel=document.createElement('select');wkSel.innerHTML='<option value="0">All weeks</option>';
+    [...new Set(rows.map(r=>r.week))].sort((a,b)=>a-b).forEach(w=>wkSel.innerHTML+=`<option value="${w}"${S.filterWeek==w?' selected':''}>Week ${w}</option>`);
+    wkSel.value=S.filterWeek;wkSel.onchange=e=>{S.filterWeek=parseInt(e.target.value);render();};
+    const catSel=document.createElement('select');catSel.innerHTML='<option value="">All categories</option>';
+    CATEGORIES.forEach(cat=>catSel.innerHTML+=`<option value="${cat}"${S.filterCat===cat?' selected':''}>${cat}</option>`);
+    catSel.value=S.filterCat;catSel.onchange=e=>{S.filterCat=e.target.value;render();};
+    const sortSel=document.createElement('select');
+    sortSel.innerHTML='<option value="week">Sort by week</option><option value="cat">Sort by category</option><option value="status">Wrong answers first</option>';
+    sortSel.value=S.sortField;sortSel.onchange=e=>{S.sortField=e.target.value;render();};
+    fr.appendChild(wkSel);fr.appendChild(catSel);fr.appendChild(sortSel);c.appendChild(fr);
+    let filtered=rows.filter(r=>(S.filterWeek===0||r.week===S.filterWeek)&&(!S.filterCat||r.category===S.filterCat));
+    if(S.sortField==='week') filtered.sort((a,b)=>a.week-b.week);
+    else if(S.sortField==='cat') filtered.sort((a,b)=>a.category.localeCompare(b.category));
     else filtered.sort((a,b)=>(a.is_correct?1:0)-(b.is_correct?1:0));
-
-    const card = document.createElement('div'); card.className = 'card';
-    const optKeys = ['option_a','option_b','option_c','option_d','option_e'];
-    filtered.forEach(r => {
-      const row = document.createElement('div'); row.className = 'result-row';
-      const given = r.given_answer;
-      const givenTxt = given !== null ? `${String.fromCharCode(65+given)}: ${r[optKeys[given]]}` : 'Not answered';
-      const correctTxt = `${String.fromCharCode(65+r.correct_index)}: ${r[optKeys[r.correct_index]]}`;
-      row.innerHTML = `
-        <div class="result-q"><span class="status-dot ${r.is_correct?'dot-green':'dot-red'}"></span>${r.question}</div>
-        <div class="result-meta">Week ${r.week} &nbsp;&middot;&nbsp; ${r.category}</div>
-        <div style="font-size:13px;line-height:1.6">
-          <span class="${r.is_correct?'result-correct':'result-wrong'}">Your answer: ${givenTxt}</span>
-          ${!r.is_correct ? `<br><span class="result-correct">Correct: ${correctTxt}</span>` : ''}
-        </div>
-        <div class="explanation-box">${r.explanation}</div>`;
+    const card=document.createElement('div');card.className='card';
+    const optKeys=['option_a','option_b','option_c','option_d','option_e'];
+    filtered.forEach(r=>{
+      const row=document.createElement('div');row.className='result-row';
+      const given=r.given_answer;
+      const gt=given!==null?`${String.fromCharCode(65+given)}: ${r[optKeys[given]]}`:'Not answered';
+      const ct=`${String.fromCharCode(65+r.correct_index)}: ${r[optKeys[r.correct_index]]}`;
+      row.innerHTML=`<div class="result-q"><span class="status-dot ${r.is_correct?'dot-green':'dot-red'}"></span>${r.question}</div><div class="result-meta">Week ${r.week} &nbsp;&middot;&nbsp; ${r.category}</div><div style="font-size:13px;line-height:1.6"><span class="${r.is_correct?'result-correct':'result-wrong'}">Your answer: ${gt}</span>${!r.is_correct?`<br><span class="result-correct">Correct: ${ct}</span>`:''}</div><div class="explanation-box">${r.explanation}</div>`;
       card.appendChild(row);
     });
-    if (filtered.length === 0) card.innerHTML = '<div class="info-msg" style="margin:0">No results match the current filter.</div>';
+    if(filtered.length===0) card.innerHTML='<div class="info-msg" style="margin:0">No results match the current filter.</div>';
     c.appendChild(card);
   });
 }
 
 /* ── Leaderboard ── */
 function renderLeaderboard(c) {
-  const h = document.createElement('h2'); h.style.cssText = 'font-size:18px;font-weight:700;margin-bottom:1rem';
-  h.textContent = 'Live Leaderboard'; c.appendChild(h);
-
-  if (!state.leaderboard && !state.loadingLeaderboard) {
-    state.loadingLeaderboard = true;
-    const m = document.createElement('div'); m.className = 'info-msg';
-    m.innerHTML = '<span class="spinner"></span>Loading leaderboard...'; c.appendChild(m);
-    fetchLeaderboard().then(rows => {
-      state.leaderboard = rows;
-      state.loadingLeaderboard = false;
-      render();
-    }).catch(() => { state.loadingLeaderboard = false; render(); });
-    return;
+  const h=document.createElement('h2');h.style.cssText='font-size:18px;font-weight:700;margin-bottom:1rem';h.textContent='Live Leaderboard';c.appendChild(h);
+  if(!S.leaderboard&&!S.loadingLeaderboard){
+    S.loadingLeaderboard=true;
+    const m=document.createElement('div');m.className='info-msg';m.innerHTML='<span class="spinner"></span>Loading leaderboard...';c.appendChild(m);
+    fetchLeaderboard().then(rows=>{S.leaderboard=rows;S.loadingLeaderboard=false;render();}).catch(()=>{S.loadingLeaderboard=false;render();}); return;
   }
-
-  const refreshBtn = document.createElement('button'); refreshBtn.className = 'nav-btn'; refreshBtn.style.marginBottom = '1rem';
-  refreshBtn.textContent = 'Refresh'; refreshBtn.onclick = () => { state.leaderboard = null; render(); };
-  c.appendChild(refreshBtn);
-
-  if (!state.leaderboard || state.leaderboard.length === 0) {
-    const m = document.createElement('div'); m.className = 'info-msg'; m.textContent = 'No submissions yet. Be the first!'; c.appendChild(m); return;
-  }
-
-  const maxScore = state.leaderboard[0]?.score || 1;
-  const wrap = document.createElement('div'); wrap.style.overflowX = 'auto';
-  const table = document.createElement('table'); table.className = 'leaderboard';
-  table.innerHTML = '<thead><tr><th>#</th><th>Participant</th><th>Weeks</th><th>Total score</th><th style="min-width:120px">Progress</th></tr></thead>';
-  const tbody = document.createElement('tbody');
-  state.leaderboard.forEach((row, i) => {
-    const tr = document.createElement('tr');
-    if (row.email === state.confirmedEmail) tr.className = 'me';
-    const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}`;
-    const short = row.email.length > 28 ? row.email.slice(0,25)+'...' : row.email;
-    const isMe = row.email === state.confirmedEmail;
-    tr.innerHTML = `
-      <td>${medal}</td>
-      <td style="font-size:13px">${short}${isMe?' <span style="color:var(--orange);font-size:11px;font-weight:700">(you)</span>':''}</td>
-      <td style="text-align:center">${row.weeks}</td>
-      <td style="text-align:center;font-weight:700;color:var(--orange)">${row.score}</td>
-      <td><div class="score-bar-wrap"><div class="score-bar-fill" style="width:${Math.round(row.score/maxScore*100)}%"></div></div></td>`;
+  const rb=document.createElement('button');rb.className='nav-btn';rb.style.marginBottom='1rem';rb.textContent='Refresh';rb.onclick=()=>{S.leaderboard=null;render();};c.appendChild(rb);
+  if(!S.leaderboard||S.leaderboard.length===0){const m=document.createElement('div');m.className='info-msg';m.textContent='No submissions yet. Be the first!';c.appendChild(m);return;}
+  const maxScore=S.leaderboard[0]?.score||1;
+  const wrap=document.createElement('div');wrap.style.overflowX='auto';
+  const table=document.createElement('table');table.className='leaderboard';
+  table.innerHTML='<thead><tr><th>#</th><th>Participant</th><th>Weeks</th><th>Total score</th><th style="min-width:120px">Progress</th></tr></thead>';
+  const tbody=document.createElement('tbody');
+  S.leaderboard.forEach((row,i)=>{
+    const tr=document.createElement('tr');if(row.email===S.confirmedEmail)tr.className='me';
+    const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}`;
+    const short=row.email.length>28?row.email.slice(0,25)+'...':row.email;
+    const isMe=row.email===S.confirmedEmail;
+    tr.innerHTML=`<td>${medal}</td><td style="font-size:13px">${short}${isMe?' <span style="color:var(--orange);font-size:11px;font-weight:700">(you)</span>':''}</td><td style="text-align:center">${row.weeks}</td><td style="text-align:center;font-weight:700;color:var(--orange)">${row.score}</td><td><div class="score-bar-wrap"><div class="score-bar-fill" style="width:${Math.round(row.score/maxScore*100)}%"></div></div></td>`;
     tbody.appendChild(tr);
   });
-  table.appendChild(tbody); wrap.appendChild(table); c.appendChild(wrap);
+  table.appendChild(tbody);wrap.appendChild(table);c.appendChild(wrap);
 }
 
-/* ── Admin ── */
-function renderAdmin(c) {
-  if (!state.isAdmin) { c.innerHTML = '<div class="info-msg">Admin access requires ?admin=true in the URL.</div>'; return; }
+/* ═══════════════════════════════════════════
+   ADMIN — question card viewer
+   ═══════════════════════════════════════════ */
+function renderAdminQuestionCards(c, allQ) {
+  function getFiltered() {
+    return allQ.filter(q =>
+      (S.aqFilterWeek===0||q.week===S.aqFilterWeek) &&
+      (!S.aqFilterCat||q.category===S.aqFilterCat)
+    );
+  }
 
-  const tabRow = document.createElement('div'); tabRow.className = 'tab-row';
-  [['questions','All Questions & Answers'],['submissions','All Submissions'],['lb','Leaderboard']].forEach(([id, label]) => {
-    const btn = document.createElement('button');
-    btn.className = 'tab-btn' + (state.adminTab===id?' active':'');
-    btn.textContent = label; btn.onclick = () => { state.adminTab = id; render(); };
+  /* toolbar */
+  const toolbar=document.createElement('div');toolbar.className='aq-toolbar';
+  const wkSel=document.createElement('select');
+  wkSel.innerHTML='<option value="0">All weeks</option>';
+  for(let w=1;w<=16;w++) wkSel.innerHTML+=`<option value="${w}"${S.aqFilterWeek===w?' selected':''}>Week ${w}</option>`;
+  wkSel.value=S.aqFilterWeek;
+  wkSel.onchange=e=>{S.aqFilterWeek=parseInt(e.target.value);S.aqCurrent=0;S.aqVisited=new Set();drawCard(getFiltered());};
+  const catSel=document.createElement('select');
+  catSel.innerHTML='<option value="">All categories</option>';
+  CATEGORIES.forEach(cat=>catSel.innerHTML+=`<option value="${cat}"${S.aqFilterCat===cat?' selected':''}>${cat}</option>`);
+  catSel.value=S.aqFilterCat;
+  catSel.onchange=e=>{S.aqFilterCat=e.target.value;S.aqCurrent=0;S.aqVisited=new Set();drawCard(getFiltered());};
+  const rfBtn=document.createElement('button');rfBtn.className='nav-btn';rfBtn.textContent='Refresh data';rfBtn.onclick=()=>{S.adminQuestions=null;render();};
+  const counter=document.createElement('span');counter.className='aq-counter';counter.id='aq-counter';
+  toolbar.appendChild(wkSel);toolbar.appendChild(catSel);toolbar.appendChild(rfBtn);toolbar.appendChild(counter);
+  c.appendChild(toolbar);
+
+  /* progress */
+  const progWrap=document.createElement('div');progWrap.className='aq-progress';
+  const progFill=document.createElement('div');progFill.className='aq-progress-fill';progFill.id='aq-pfill';
+  progWrap.appendChild(progFill);c.appendChild(progWrap);
+
+  /* card area */
+  const cardArea=document.createElement('div');cardArea.id='aq-area';c.appendChild(cardArea);
+
+  /* nav */
+  const navRow=document.createElement('div');navRow.className='aq-nav';
+  const prevBtn=document.createElement('button');prevBtn.className='aq-nav-btn';prevBtn.id='aq-prev';
+  prevBtn.innerHTML=`<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M8.5 2L3.5 6.5L8.5 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Previous`;
+  prevBtn.onclick=()=>{if(S.aqCurrent>0){S.aqCurrent--;drawCard(getFiltered());}};
+  const dotsWrap=document.createElement('div');dotsWrap.className='aq-dots';dotsWrap.id='aq-dots';
+  const nextBtn=document.createElement('button');nextBtn.className='aq-nav-btn aq-primary';nextBtn.id='aq-next';
+  nextBtn.innerHTML=`Next<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M4.5 2L9.5 6.5L4.5 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  nextBtn.onclick=()=>{const pool=getFiltered();if(S.aqCurrent<pool.length-1){S.aqCurrent++;drawCard(pool);}};
+  navRow.appendChild(prevBtn);navRow.appendChild(dotsWrap);navRow.appendChild(nextBtn);
+  c.appendChild(navRow);
+  const kbd=document.createElement('div');kbd.className='aq-kbd';kbd.textContent='← → arrow keys to navigate between questions';c.appendChild(kbd);
+
+  /* keyboard listener — attach only once */
+  if(!window._aqKey){
+    window._aqKey=true;
+    document.addEventListener('keydown',e=>{
+      if(S.page!=='admin'||S.adminTab!=='questions') return;
+      const pool=(S.adminQuestions||[]).filter(q=>(S.aqFilterWeek===0||q.week===S.aqFilterWeek)&&(!S.aqFilterCat||q.category===S.aqFilterCat));
+      if((e.key==='ArrowRight'||e.key==='ArrowDown')&&S.aqCurrent<pool.length-1){S.aqCurrent++;drawCard(pool);}
+      if((e.key==='ArrowLeft'||e.key==='ArrowUp')&&S.aqCurrent>0){S.aqCurrent--;drawCard(pool);}
+    });
+  }
+
+  drawCard(getFiltered());
+
+  function drawCard(pool) {
+    const area=document.getElementById('aq-area');
+    const ctr=document.getElementById('aq-counter');
+    const pf=document.getElementById('aq-pfill');
+    const dotsEl=document.getElementById('aq-dots');
+    const pb=document.getElementById('aq-prev');
+    const nb=document.getElementById('aq-next');
+    if(!area) return;
+
+    if(pool.length===0){
+      area.innerHTML='<div class="aq-empty">No questions match the current filter.</div>';
+      if(ctr) ctr.textContent='0 questions';
+      if(pf) pf.style.width='0%';
+      if(dotsEl) dotsEl.innerHTML='';
+      if(pb) pb.disabled=true;
+      if(nb) nb.disabled=true;
+      return;
+    }
+
+    if(S.aqCurrent>=pool.length) S.aqCurrent=pool.length-1;
+    S.aqVisited.add(S.aqCurrent);
+
+    const q=pool[S.aqCurrent];
+    const total=pool.length;
+    const idx=S.aqCurrent;
+    const pct=Math.round((idx+1)/total*100);
+    const letters=['A','B','C','D','E'];
+    const opts=[q.option_a,q.option_b,q.option_c,q.option_d,q.option_e];
+
+    if(ctr) ctr.textContent=`${idx+1} / ${total}`;
+    if(pf) pf.style.width=pct+'%';
+    if(pb) pb.disabled=idx===0;
+    if(nb){
+      nb.disabled=false;
+      nb.innerHTML=idx===total-1
+        ?`All done<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M4.5 2L9.5 6.5L4.5 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+        :`Next<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M4.5 2L9.5 6.5L4.5 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+      if(idx===total-1) nb.disabled=true;
+    }
+
+    const optHtml=opts.map((opt,i)=>{
+      const ok=i===q.correct_index;
+      return `<div class="aq-option${ok?' aq-correct':''}">
+        <span class="aq-letter">${letters[i]}</span>
+        <span style="flex:1">${opt}</span>
+        ${ok?'<div class="aq-check"></div>':''}
+      </div>`;
+    }).join('');
+
+    area.innerHTML=`
+      <div class="aq-card">
+        <div class="aq-card-meta">
+          <span class="aq-pill aq-pill-week">Week ${q.week}</span>
+          <span class="aq-pill aq-pill-cat">${q.category}</span>
+          <span class="aq-qnum">Question ${idx+1} of ${total}</span>
+        </div>
+        <div class="aq-question">${q.question}</div>
+        <div class="aq-options">${optHtml}</div>
+        <div class="aq-explanation">${q.explanation}</div>
+      </div>`;
+
+    /* dots */
+    if(dotsEl){
+      dotsEl.innerHTML='';
+      const step=total<=40?1:Math.ceil(total/40);
+      for(let i=0;i<total;i+=step){
+        const dot=document.createElement('div');
+        const isActive=step===1?i===idx:(i<=idx&&idx<i+step);
+        const isVisited=S.aqVisited.has(i);
+        dot.className='aq-dot'+(isActive?' aq-active':isVisited?' aq-visited':'');
+        dot.title=`Q${i+1}`;
+        const jump=i;
+        dot.onclick=()=>{S.aqCurrent=jump;drawCard(pool);};
+        dotsEl.appendChild(dot);
+      }
+    }
+  }
+}
+
+/* ── Admin page ── */
+function renderAdmin(c) {
+  if(!S.isAdmin){c.innerHTML='<div class="info-msg">Admin access requires ?admin=true in the URL.</div>';return;}
+  const tabRow=document.createElement('div');tabRow.className='tab-row';
+  [['questions','Questions & Answers'],['submissions','Submissions'],['lb','Leaderboard']].forEach(([id,label])=>{
+    const btn=document.createElement('button');
+    btn.className='tab-btn'+(S.adminTab===id?' active':'');
+    btn.textContent=label;btn.onclick=()=>{S.adminTab=id;render();};
     tabRow.appendChild(btn);
   });
   c.appendChild(tabRow);
 
-  if (state.adminTab === 'lb') { renderLeaderboard(c); return; }
+  if(S.adminTab==='lb'){renderLeaderboard(c);return;}
 
-  if (state.adminTab === 'questions') {
-    if (!state.adminQuestions && !state.loadingAdmin) {
-      state.loadingAdmin = true;
-      const m = document.createElement('div'); m.className = 'info-msg';
-      m.innerHTML = '<span class="spinner"></span>Loading questions...'; c.appendChild(m);
-      fetchAllQuestionsAdmin().then(rows => {
-        state.adminQuestions = rows; state.loadingAdmin = false; render();
-      }).catch(err => { state.loadingAdmin = false; state.errorMsg = err.message; render(); });
-      return;
+  if(S.adminTab==='questions'){
+    if(!S.adminQuestions&&!S.loadingAdmin){
+      S.loadingAdmin=true;
+      const m=document.createElement('div');m.className='info-msg';m.innerHTML='<span class="spinner"></span>Loading questions...';c.appendChild(m);
+      fetchAllQuestionsAdmin().then(rows=>{S.adminQuestions=rows;S.loadingAdmin=false;render();})
+        .catch(err=>{S.loadingAdmin=false;S.errorMsg=err.message;render();}); return;
     }
-
-    const fr = document.createElement('div'); fr.className = 'filter-row';
-    const weekSel = document.createElement('select');
-    weekSel.innerHTML = '<option value="0">All weeks</option>';
-    for (let w=1;w<=16;w++) weekSel.innerHTML += `<option value="${w}"${state.filterWeek==w?' selected':''}>Week ${w}</option>`;
-    weekSel.value = state.filterWeek; weekSel.onchange = e => { state.filterWeek = parseInt(e.target.value); render(); };
-    const catSel = document.createElement('select');
-    catSel.innerHTML = '<option value="">All categories</option>';
-    CATEGORIES.forEach(cat => catSel.innerHTML += `<option value="${cat}"${state.filterCat===cat?' selected':''}>${cat}</option>`);
-    catSel.value = state.filterCat; catSel.onchange = e => { state.filterCat = e.target.value; render(); };
-    const refreshBtn = document.createElement('button'); refreshBtn.className = 'nav-btn';
-    refreshBtn.textContent = 'Refresh'; refreshBtn.onclick = () => { state.adminQuestions = null; render(); };
-    fr.appendChild(weekSel); fr.appendChild(catSel); fr.appendChild(refreshBtn); c.appendChild(fr);
-
-    const qs = (state.adminQuestions||[]).filter(q =>
-      (state.filterWeek===0||q.week===state.filterWeek) && (!state.filterCat||q.category===state.filterCat));
-    const wrap = document.createElement('div'); wrap.style.overflowX = 'auto';
-    const table = document.createElement('table'); table.className = 'admin-table';
-    table.innerHTML = '<thead><tr><th>Wk</th><th>Category</th><th>Question</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>Correct</th><th>Explanation</th></tr></thead>';
-    const tbody = document.createElement('tbody');
-    qs.forEach(q => {
-      const opts = [q.option_a,q.option_b,q.option_c,q.option_d,q.option_e];
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${q.week}</td><td style="white-space:nowrap;font-size:11px">${q.category}</td><td style="min-width:180px;max-width:220px">${q.question}</td>${opts.map(o=>`<td style="min-width:100px;max-width:140px;font-size:11px">${o}</td>`).join('')}<td><span class="correct-tag">${String.fromCharCode(65+q.correct_index)}: ${opts[q.correct_index]}</span></td><td style="min-width:180px;font-size:11px;color:var(--text2)">${q.explanation}</td>`;
-      tbody.appendChild(tr);
-    });
-    table.appendChild(tbody); wrap.appendChild(table); c.appendChild(wrap);
-
-  } else {
-    if (!state.adminSubmissions && !state.loadingAdmin) {
-      state.loadingAdmin = true;
-      const m = document.createElement('div'); m.className = 'info-msg';
-      m.innerHTML = '<span class="spinner"></span>Loading submissions...'; c.appendChild(m);
-      fetchAllSubmissionsAdmin().then(rows => {
-        state.adminSubmissions = rows; state.loadingAdmin = false; render();
-      }).catch(err => { state.loadingAdmin = false; state.errorMsg = err.message; render(); });
-      return;
-    }
-
-    const refreshBtn = document.createElement('button'); refreshBtn.className = 'nav-btn'; refreshBtn.style.marginBottom='1rem';
-    refreshBtn.textContent = 'Refresh'; refreshBtn.onclick = () => { state.adminSubmissions = null; render(); };
-    c.appendChild(refreshBtn);
-
-    if (!state.adminSubmissions || state.adminSubmissions.length === 0) {
-      c.innerHTML += '<div class="info-msg">No submissions yet.</div>'; return;
-    }
-    const wrap = document.createElement('div'); wrap.style.overflowX = 'auto';
-    const table = document.createElement('table'); table.className = 'admin-table';
-    table.innerHTML = '<thead><tr><th>Email</th><th>Week</th><th>Score</th><th>Submitted</th></tr></thead>';
-    const tbody = document.createElement('tbody');
-    state.adminSubmissions.forEach(r => {
-      const when = r.submitted_at ? new Date(r.submitted_at).toLocaleString('nl-NL',{dateStyle:'short',timeStyle:'short'}) : '—';
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td style="font-size:12px">${r.email}</td><td>Week ${r.week}</td><td style="font-weight:700">${r.score ?? '?'}/5</td><td style="font-size:11px;color:var(--text2);white-space:nowrap">${when}</td>`;
-      tbody.appendChild(tr);
-    });
-    table.appendChild(tbody); wrap.appendChild(table); c.appendChild(wrap);
+    if(S.loadingAdmin){const m=document.createElement('div');m.className='info-msg';m.innerHTML='<span class="spinner"></span>Loading...';c.appendChild(m);return;}
+    renderAdminQuestionCards(c,S.adminQuestions||[]);
+    return;
   }
+
+  /* submissions tab */
+  if(!S.adminSubmissions&&!S.loadingAdmin){
+    S.loadingAdmin=true;
+    const m=document.createElement('div');m.className='info-msg';m.innerHTML='<span class="spinner"></span>Loading submissions...';c.appendChild(m);
+    fetchAllSubmissionsAdmin().then(rows=>{S.adminSubmissions=rows;S.loadingAdmin=false;render();})
+      .catch(err=>{S.loadingAdmin=false;S.errorMsg=err.message;render();}); return;
+  }
+  const rb=document.createElement('button');rb.className='nav-btn';rb.style.marginBottom='1rem';rb.textContent='Refresh';rb.onclick=()=>{S.adminSubmissions=null;render();};c.appendChild(rb);
+  if(!S.adminSubmissions||S.adminSubmissions.length===0){c.innerHTML+='<div class="info-msg">No submissions yet.</div>';return;}
+  const wrap=document.createElement('div');wrap.style.overflowX='auto';
+  const table=document.createElement('table');table.className='admin-table';
+  table.innerHTML='<thead><tr><th>Email</th><th>Week</th><th>Score</th><th>Submitted</th></tr></thead>';
+  const tbody=document.createElement('tbody');
+  S.adminSubmissions.forEach(r=>{
+    const when=r.submitted_at?new Date(r.submitted_at).toLocaleString('nl-NL',{dateStyle:'short',timeStyle:'short'}):'—';
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td style="font-size:12px">${r.email}</td><td>Week ${r.week}</td><td style="font-weight:700">${r.score??'?'}/5</td><td style="font-size:11px;color:var(--text2);white-space:nowrap">${when}</td>`;
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);wrap.appendChild(table);c.appendChild(wrap);
 }
 
 render();
