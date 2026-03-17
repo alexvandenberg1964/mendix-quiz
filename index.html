@@ -187,13 +187,12 @@ async function fetchMySubmission(email, week) {
 
 /* Leaderboard */
 async function fetchLeaderboard() {
-  const rows = await sbGet('quiz_submissions?select=email,week,score');
-  const map = {};
-  rows.forEach(r => {
-    if (!map[r.email]) map[r.email] = { email: r.email, weeks: 0, score: 0 };
-    map[r.email].weeks++;
-    map[r.email].score += (r.score || 0);
-  });
+  const rows = await sbGet('quiz_leaderboard?select=display_name,week,score');
+rows.forEach(r => {
+  if (!map[r.display_name]) map[r.display_name] = { email: r.display_name, weeks: 0, score: 0 };
+  map[r.display_name].weeks++;
+  map[r.display_name].score += (r.score || 0);
+});
   return Object.values(map).sort((a, b) => b.score - a.score);
 }
 
