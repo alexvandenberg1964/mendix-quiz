@@ -21,7 +21,8 @@ set -euo pipefail
 # CONFIGURATION — edit these if needed
 # ---------------------------------------------------------------------------
 REGION="eu-west-1"          # Frankfurt — closest to PostNL
-ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+#ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+ACCOUNT_ID=851725425406
 ROLE_NAME="quiz-lambda-role"
 POLICY_NAME="quiz-dynamo-policy"
 
@@ -32,6 +33,7 @@ TABLE_FEEDBACK="quiz-feedback"
 LAMBDA_GET="quiz-getQuestion"
 LAMBDA_ANSWER="quiz-saveAnswer"
 LAMBDA_FEEDBACK="quiz-saveFeedback"
+LAMBDA_GET_FEEDBACK="quiz-getFeedback"
 
 API_NAME="quiz-api"
 
@@ -122,20 +124,20 @@ sleep 10
 # ---------------------------------------------------------------------------
 # STEP 3 — Bundle Lambda functions as zip packages
 # ---------------------------------------------------------------------------
-echo ""
-echo ">>> [3/6] Bundling Lambda function packages..."
+#echo ""
+#echo ">>> [3/6] Bundling Lambda function packages..."
 
-for FN in getQuestion saveAnswer saveFeedback; do
-  echo "  Bundling $FN..."
-  cd "lambda/$FN"
-  # Create a minimal package.json so Node.js treats this as an ES module
-  cat > package.json <<'PKGJSON'
-{ "type": "module" }
-PKGJSON
-  zip -q -r "/tmp/quiz-${FN}.zip" .
-  cd ../..
-  echo "  Created /tmp/quiz-${FN}.zip"
-done
+#for FN in getQuestion saveAnswer saveFeedback getFeedback; do
+#  echo "  Bundling $FN..."
+#  cd "lambda/$FN"
+#  # Create a minimal package.json so Node.js treats this as an ES module
+#  cat > package.json <<'PKGJSON'
+#{ "type": "module" }
+#PKGJSON
+#  zip -q -r "/tmp/quiz-${FN}.zip" .
+#  cd ../..
+#  echo "  Created /tmp/quiz-${FN}.zip"
+#done
 
 # ---------------------------------------------------------------------------
 # STEP 4 — Deploy Lambda functions
@@ -179,19 +181,22 @@ deploy_lambda() {
   fi
 }
 
-deploy_lambda "$LAMBDA_GET"      "index.handler" "quiz-getQuestion.zip"
-deploy_lambda "$LAMBDA_ANSWER"   "index.handler" "quiz-saveAnswer.zip"
-deploy_lambda "$LAMBDA_FEEDBACK" "index.handler" "quiz-saveFeedback.zip"
+deploy_lambda "$LAMBDA_GET"          "index.handler" "quiz-getQuestion.zip"
+deploy_lambda "$LAMBDA_ANSWER"       "index.handler" "quiz-saveAnswer.zip"
+deploy_lambda "$LAMBDA_FEEDBACK"     "index.handler" "quiz-saveFeedback.zip"
+deploy_lambda "$LAMBDA_GET_FEEDBACK" "index.handler" "quiz-getFeedback.zip"
 
 echo "  Waiting for functions to be Active..."
-aws lambda wait function-active --function-name "$LAMBDA_GET"      --region "$REGION"
-aws lambda wait function-active --function-name "$LAMBDA_ANSWER"   --region "$REGION"
-aws lambda wait function-active --function-name "$LAMBDA_FEEDBACK" --region "$REGION"
+aws lambda wait function-active --function-name "$LAMBDA_GET"          --region "$REGION"
+aws lambda wait function-active --function-name "$LAMBDA_ANSWER"       --region "$REGION"
+aws lambda wait function-active --function-name "$LAMBDA_FEEDBACK"     --region "$REGION"
+aws lambda wait function-active --function-name "$LAMBDA_GET_FEEDBACK" --region "$REGION"
 
 # Retrieve Lambda ARNs
 ARN_GET=$(aws lambda get-function --function-name "$LAMBDA_GET" --region "$REGION" --query "Configuration.FunctionArn" --output text)
 ARN_ANSWER=$(aws lambda get-function --function-name "$LAMBDA_ANSWER" --region "$REGION" --query "Configuration.FunctionArn" --output text)
 ARN_FEEDBACK=$(aws lambda get-function --function-name "$LAMBDA_FEEDBACK" --region "$REGION" --query "Configuration.FunctionArn" --output text)
+ARN_GET_FEEDBACK=$(aws lambda get-function --function-name "$LAMBDA_GET_FEEDBACK" --region "$REGION" --query "Configuration.FunctionArn" --output text)
 
 # ---------------------------------------------------------------------------
 # STEP 5 — API Gateway (HTTP API)
@@ -227,6 +232,7 @@ create_integration() {
 INT_GET=$(create_integration "$ARN_GET")
 INT_ANSWER=$(create_integration "$ARN_ANSWER")
 INT_FEEDBACK=$(create_integration "$ARN_FEEDBACK")
+INT_GET_FEEDBACK=$(create_integration "$ARN_GET_FEEDBACK")
 
 echo "  Creating routes..."
 aws apigatewayv2 create-route \
@@ -245,6 +251,12 @@ aws apigatewayv2 create-route \
   --api-id "$API_ID" \
   --route-key "POST /feedback" \
   --target "integrations/$INT_FEEDBACK" \
+  --region "$REGION" --no-cli-pager > /dev/null
+
+aws apigatewayv2 create-route \
+  --api-id "$API_ID" \
+  --route-key "GET /feedback" \
+  --target "integrations/$INT_GET_FEEDBACK" \
   --region "$REGION" --no-cli-pager > /dev/null
 
 echo "  Creating stage and auto-deploying..."
@@ -267,9 +279,10 @@ grant_invoke() {
     --region "$REGION" --no-cli-pager > /dev/null 2>&1 || true
 }
 
-grant_invoke "$LAMBDA_GET"      "apigw-get-question"
-grant_invoke "$LAMBDA_ANSWER"   "apigw-save-answer"
-grant_invoke "$LAMBDA_FEEDBACK" "apigw-save-feedback"
+grant_invoke "$LAMBDA_GET"          "apigw-get-question"
+grant_invoke "$LAMBDA_ANSWER"       "apigw-save-answer"
+grant_invoke "$LAMBDA_FEEDBACK"     "apigw-save-feedback"
+grant_invoke "$LAMBDA_GET_FEEDBACK" "apigw-get-feedback"
 
 API_ENDPOINT="https://${API_ID}.execute-api.${REGION}.amazonaws.com/prod"
 
@@ -345,6 +358,7 @@ echo " Routes:"
 echo "   GET  $API_ENDPOINT/question?email=you@postnl.nl"
 echo "   POST $API_ENDPOINT/answer"
 echo "   POST $API_ENDPOINT/feedback"
+echo "   GET  $API_ENDPOINT/feedback"
 echo ""
 echo " Quick smoke test:"
 echo "   curl \"$API_ENDPOINT/question?email=test@postnl.nl\" | jq ."

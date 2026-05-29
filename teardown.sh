@@ -20,7 +20,7 @@ if [ -n "$API_ID" ]; then
 fi
 
 echo ">>> Deleting Lambda functions..."
-for FN in quiz-getQuestion quiz-saveAnswer quiz-saveFeedback; do
+for FN in quiz-getQuestion quiz-saveAnswer quiz-saveFeedback quiz-getFeedback; do
   aws lambda delete-function --function-name "$FN" --region "$REGION" 2>/dev/null && \
     echo "  Deleted $FN" || echo "  $FN not found, skipping"
 done
