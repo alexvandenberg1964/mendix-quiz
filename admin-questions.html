@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mendix Quiz — Question Editor</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange: #FF6200; --orange-light: #FFF0E6; --orange-mid: #FFD5B3;
+      --blue: #003087; --blue-light: #E6EBF5;
+      --bg: #f5f5f5; --surface: #ffffff;
+      --border: #e0e0e0; --border2: #c8c8c8;
+      --text: #1a1a1a; --text2: #555; --text3: #999;
+      --green: #2a6010; --green-bg: #e8f5d9; --green-border: #7ecb3e;
+      --red: #a32020; --red-bg: #fde8e8;
+      --amber-bg: #fff3d9; --amber: #7a4800;
+      --radius: 6px;
+      --sidebar-w: 290px;
+      --feedback-w: 320px;
+      --header-h: 52px;
+    }
+    html, body { height: 100%; overflow: hidden; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5;
+    }
+
+    /* ── Header ── */
+    .header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: var(--header-h);
+      background: var(--blue);
+      border-bottom: 3px solid var(--orange);
+      display: flex; align-items: center; padding: 0 1rem; gap: 0.75rem;
+    }
+    .header-brand { font-size: 15px; font-weight: 700; color: var(--orange); flex-shrink: 0; }
+    .header-sep { color: rgba(255,255,255,0.25); }
+    .header-title { font-size: 13px; color: rgba(255,255,255,0.7); flex-shrink: 0; }
+    .header-spacer { flex: 1; }
+    .header-status { font-size: 12px; color: rgba(255,255,255,0.55); white-space: nowrap; }
+    .btn-hdr {
+      height: 30px; padding: 0 12px; border-radius: var(--radius);
+      font-size: 12px; font-weight: 600; cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.3); background: transparent;
+      color: rgba(255,255,255,0.85); transition: background 0.15s, opacity 0.15s;
+      display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0;
+    }
+    .btn-hdr:hover { background: rgba(255,255,255,0.12); color: #fff; }
+    .btn-hdr:disabled { opacity: 0.35; cursor: default; }
+    .btn-hdr.active { background: var(--orange); border-color: var(--orange); color: #fff; }
+
+    /* ── Layout ── */
+    .layout {
+      display: flex; position: fixed;
+      top: var(--header-h); bottom: 0; left: 0; right: 0;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: var(--sidebar-w); flex-shrink: 0;
+      background: var(--surface); border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    .sidebar-controls {
+      padding: 0.625rem; border-bottom: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 0.5rem; flex-shrink: 0;
+    }
+    .ctrl-input {
+      width: 100%; height: 32px; border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 0 10px; font-size: 13px;
+      color: var(--text); background: var(--bg); outline: none; font-family: inherit;
+    }
+    .ctrl-input:focus { border-color: var(--orange); box-shadow: 0 0 0 2px rgba(255,98,0,.15); }
+    .jump-row { display: flex; gap: 0.5rem; align-items: center; }
+    .jump-input {
+      width: 72px; height: 32px; border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 0 8px; font-size: 13px;
+      color: var(--text); background: var(--bg); outline: none; font-family: inherit;
+      text-align: center;
+    }
+    .jump-input:focus { border-color: var(--orange); }
+    .jump-hint { font-size: 11px; color: var(--text3); }
+    .sidebar-info { font-size: 11px; color: var(--text3); padding: 0.25rem 0; }
+
+    .q-list { flex: 1; overflow-y: auto; }
+    .q-item {
+      padding: 0.5rem 0.625rem; border-bottom: 1px solid var(--border);
+      cursor: pointer; transition: background 0.1s;
+      border-left: 3px solid transparent;
+    }
+    .q-item:hover { background: var(--orange-light); }
+    .q-item.selected { background: var(--orange-light); border-left-color: var(--orange); }
+    .q-item.inactive { opacity: 0.45; }
+    .q-row1 { display: flex; align-items: center; gap: 0.35rem; margin-bottom: 0.2rem; flex-wrap: wrap; }
+    .q-num { font-size: 11px; font-weight: 700; color: var(--text3); flex-shrink: 0; min-width: 32px; }
+    .q-modified { color: var(--orange); font-size: 10px; font-weight: 800; flex-shrink: 0; }
+    .badge {
+      font-size: 10px; padding: 1px 5px; border-radius: 3px; flex-shrink: 0;
+      max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .badge-cat { background: var(--blue-light); color: var(--blue); }
+    .badge-easy { background: var(--green-bg); color: var(--green); }
+    .badge-medium { background: var(--amber-bg); color: var(--amber); }
+    .badge-hard { background: var(--red-bg); color: var(--red); }
+    .badge-fb { background: var(--bg); color: var(--text3); margin-left: auto; }
+    .q-preview { font-size: 12px; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* ── Editor ── */
+    .editor { flex: 1; overflow-y: auto; padding: 1.25rem 1.5rem; min-width: 0; }
+    .empty-state {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; height: 100%; text-align: center; gap: 1rem; padding: 2rem;
+    }
+    .empty-title { font-size: 20px; font-weight: 600; }
+    .empty-sub { font-size: 14px; color: var(--text2); max-width: 320px; line-height: 1.6; }
+
+    .ed-header {
+      display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.25rem;
+      padding-bottom: 1rem; border-bottom: 1px solid var(--border);
+    }
+    .ed-title-group { flex: 1; min-width: 0; }
+    .ed-title { font-size: 16px; font-weight: 700; }
+    .ed-subtitle { font-size: 12px; color: var(--text3); font-family: monospace; margin-top: 2px; }
+    .ed-nav { display: flex; gap: 0.5rem; flex-shrink: 0; }
+
+    .field { margin-bottom: 1rem; }
+    .field-label {
+      display: block; font-size: 11px; font-weight: 700; color: var(--text3);
+      text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;
+    }
+    .field-input {
+      width: 100%; border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 8px 10px; font-size: 14px; font-family: inherit;
+      color: var(--text); background: var(--surface); outline: none; resize: vertical;
+    }
+    .field-input:focus { border-color: var(--orange); box-shadow: 0 0 0 2px rgba(255,98,0,.15); }
+    select.field-input { cursor: pointer; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    /* Options */
+    .options-stack { display: flex; flex-direction: column; gap: 0.5rem; }
+    .opt-row {
+      display: flex; align-items: center; gap: 0.625rem;
+      padding: 0.5rem 0.75rem; border: 1px solid var(--border);
+      border-radius: var(--radius); background: var(--surface); transition: border-color 0.15s, background 0.15s;
+    }
+    .opt-row.correct { border-color: var(--green-border); background: var(--green-bg); }
+    .opt-letter {
+      width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+      background: var(--bg); border: 1px solid var(--border2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: var(--text2);
+    }
+    .opt-row.correct .opt-letter { background: var(--green); border-color: var(--green); color: #fff; }
+    .opt-input {
+      flex: 1; border: none; outline: none; font-size: 14px;
+      font-family: inherit; color: var(--text); background: transparent; min-width: 0;
+    }
+    .opt-correct-wrap { display: flex; align-items: center; gap: 4px; flex-shrink: 0; cursor: pointer; }
+    .opt-radio { width: 15px; height: 15px; cursor: pointer; accent-color: var(--green); }
+    .opt-correct-lbl { font-size: 11px; color: var(--text3); cursor: pointer; white-space: nowrap; }
+    .opt-row.correct .opt-correct-lbl { color: var(--green); font-weight: 600; }
+
+    /* Active toggle */
+    .active-row { display: flex; align-items: center; gap: 0.625rem; }
+    .active-cb { width: 16px; height: 16px; cursor: pointer; accent-color: var(--orange); }
+
+    /* Buttons */
+    .btn {
+      height: 32px; padding: 0 12px; border-radius: var(--radius);
+      font-size: 13px; font-weight: 600; cursor: pointer; border: none;
+      transition: opacity 0.15s; display: inline-flex; align-items: center; gap: 5px;
+    }
+    .btn:disabled { opacity: 0.35; cursor: default; }
+    .btn-primary { background: var(--orange); color: #fff; }
+    .btn-primary:hover:not(:disabled) { opacity: 0.85; }
+    .btn-secondary { background: var(--bg); color: var(--text2); border: 1px solid var(--border2); }
+    .btn-secondary:hover:not(:disabled) { background: var(--border); }
+    .btn-sm { height: 28px; padding: 0 10px; font-size: 12px; }
+    .btn-danger { background: var(--red-bg); color: var(--red); border: 1px solid #f0c0c0; }
+    .btn-danger:hover:not(:disabled) { background: #f8c8c8; }
+
+    /* ── Feedback panel ── */
+    .feedback-panel {
+      width: var(--feedback-w); flex-shrink: 0; overflow: hidden;
+      background: var(--surface); border-left: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      max-width: var(--feedback-w); opacity: 1;
+      transition: max-width 0.25s ease, opacity 0.2s ease;
+    }
+    .feedback-panel.collapsed { max-width: 0; opacity: 0; }
+    .fb-header {
+      height: 44px; padding: 0 0.875rem; flex-shrink: 0;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 0.625rem;
+    }
+    .fb-header-title { font-size: 13px; font-weight: 600; flex: 1; white-space: nowrap; overflow: hidden; }
+    .fb-body { flex: 1; overflow-y: auto; padding: 0.875rem; }
+    .fb-summary { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.875rem; padding-bottom: 0.875rem; border-bottom: 1px solid var(--border); }
+    .fb-avg { font-size: 26px; font-weight: 700; line-height: 1; }
+    .fb-stars { color: var(--orange); font-size: 16px; letter-spacing: 1px; line-height: 1; margin-top: 2px; }
+    .fb-count { font-size: 12px; color: var(--text3); margin-top: 2px; }
+    .fb-item { padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+    .fb-item:last-child { border-bottom: none; }
+    .fb-item-top { display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.2rem; }
+    .fb-item-stars { color: var(--orange); font-size: 12px; }
+    .fb-item-email { font-size: 11px; color: var(--text3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 130px; }
+    .fb-item-date { font-size: 11px; color: var(--text3); margin-left: auto; flex-shrink: 0; }
+    .fb-item-comment { font-size: 13px; color: var(--text2); line-height: 1.5; }
+    .fb-empty { text-align: center; color: var(--text3); font-size: 13px; padding: 1.5rem 0; line-height: 1.6; }
+    .fb-code { display: block; font-family: monospace; font-size: 11px; background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 0.5rem 0.625rem; margin-top: 0.625rem; white-space: pre; overflow-x: auto; color: var(--text2); }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <span class="header-brand">PostNL</span>
+  <span class="header-sep">|</span>
+  <span class="header-title">Mendix Quiz — Question Editor</span>
+  <div class="header-spacer"></div>
+  <span class="header-status" id="hdr-status"></span>
+  <input type="file" id="file-q" accept=".json" style="display:none" onchange="onLoadQFile(this)">
+  <input type="file" id="file-fb" accept=".json" style="display:none" onchange="onLoadFbFile(this)">
+  <button class="btn-hdr" onclick="document.getElementById('file-q').click()">⬆ Load questions.json</button>
+  <button class="btn-hdr" id="btn-dl" onclick="downloadJSON()" disabled>⬇ Download updated JSON</button>
+  <button class="btn-hdr" id="btn-fb-toggle" onclick="toggleFeedback()">Feedback ▶</button>
+</div>
+
+<!-- Layout -->
+<div class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-controls">
+      <input class="ctrl-input" type="search" id="search" placeholder="Search questions…" oninput="onSearch(this.value)">
+      <div class="jump-row">
+        <input class="jump-input" type="number" id="jump" placeholder="#" min="1" onkeydown="if(event.key==='Enter')jumpTo(this.value)">
+        <span class="jump-hint">↵ jump to #</span>
+      </div>
+      <div class="sidebar-info" id="sidebar-info">No questions loaded</div>
+    </div>
+    <div class="q-list" id="q-list"></div>
+  </aside>
+
+  <!-- Editor -->
+  <main class="editor" id="editor">
+    <div class="empty-state">
+      <div class="empty-title">No questions loaded</div>
+      <div class="empty-sub">Use <strong>Load questions.json</strong> in the header to open your question bank.</div>
+      <button class="btn btn-primary" onclick="document.getElementById('file-q').click()">Load questions.json</button>
+    </div>
+  </main>
+
+  <!-- Feedback panel -->
+  <aside class="feedback-panel collapsed" id="fb-panel">
+    <div class="fb-header">
+      <span class="fb-header-title" id="fb-header-title">Feedback</span>
+      <button class="btn btn-secondary btn-sm" onclick="document.getElementById('file-fb').click()">Load feedback JSON</button>
+    </div>
+    <div class="fb-body" id="fb-body">
+      <div class="fb-empty">
+        Load a feedback export to see ratings and comments per question.
+        <code class="fb-code">aws dynamodb scan \
+  --table-name quiz-feedback \
+  > feedback.json</code>
+      </div>
+    </div>
+  </aside>
+
+</div>
+
+<script>
+  // ── State ─────────────────────────────────────────────────────────────────
+  let questions        = [];
+  let origQuestions    = [];   // deep clone for change detection
+  let selIdx           = -1;
+  let feedbackMap      = {};   // questionId → [{rating,comment,email,submittedAt}]
+  let feedbackLoaded   = false;
+  let fbVisible        = false;
+  let filterText       = '';
+  let visibleIndices   = [];   // subset of questions[] matching current filter
+
+  // ── Load questions ────────────────────────────────────────────────────────
+  function onLoadQFile(input) {
+    const file = input.files[0];
+    if (!file) return;
+    input.value = '';
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const data = JSON.parse(e.target.result);
+        if (!Array.isArray(data)) throw new Error('Expected a JSON array of questions.');
+        questions     = data;
+        origQuestions = deepClone(data);
+        filterText    = '';
+        document.getElementById('search').value = '';
+        rebuildVisibleIndices();
+        setStatus(`${questions.length} questions loaded`);
+        document.getElementById('btn-dl').disabled = false;
+        renderSidebar();
+        selectQuestion(0);
+      } catch (err) {
+        alert('Could not load questions.json:\n' + err.message);
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  // ── Download ──────────────────────────────────────────────────────────────
+  function downloadJSON() {
+    const blob = new Blob([JSON.stringify(questions, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'questions.json';
+    a.click();
+  }
+
+  // ── Load feedback ─────────────────────────────────────────────────────────
+  function onLoadFbFile(input) {
+    const file = input.files[0];
+    if (!file) return;
+    input.value = '';
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const raw = JSON.parse(e.target.result);
+        let items = Array.isArray(raw) ? raw : (raw.Items || []);
+
+        // Detect DynamoDB JSON format ({"S":"..."}, {"N":"..."}, etc.)
+        if (items.length > 0 && items[0].feedbackId && typeof items[0].feedbackId === 'object') {
+          items = items.map(i => ({
+            feedbackId:  i.feedbackId?.S  ?? '',
+            questionId:  i.questionId?.S  ?? '',
+            email:       i.email?.S       ?? '',
+            rating:      Number(i.rating?.N ?? 0),
+            comment:     i.comment?.S     ?? '',
+            submittedAt: i.submittedAt?.S ?? ''
+          }));
+        }
+
+        feedbackMap = {};
+        for (const fb of items) {
+          if (!feedbackMap[fb.questionId]) feedbackMap[fb.questionId] = [];
+          feedbackMap[fb.questionId].push(fb);
+        }
+        // Sort newest first
+        for (const qid of Object.keys(feedbackMap)) {
+          feedbackMap[qid].sort((a, b) => b.submittedAt.localeCompare(a.submittedAt));
+        }
+        feedbackLoaded = true;
+        setStatus(`Feedback loaded — ${items.length} entries across ${Object.keys(feedbackMap).length} questions`);
+        renderSidebar();
+        renderFeedbackBody();
+      } catch (err) {
+        alert('Could not load feedback JSON:\n' + err.message);
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  // ── Feedback panel toggle ─────────────────────────────────────────────────
+  function toggleFeedback() {
+    fbVisible = !fbVisible;
+    document.getElementById('fb-panel').classList.toggle('collapsed', !fbVisible);
+    document.getElementById('btn-fb-toggle').textContent = fbVisible ? 'Hide feedback ◀' : 'Feedback ▶';
+    document.getElementById('btn-fb-toggle').classList.toggle('active', fbVisible);
+  }
+
+  // ── Selection ─────────────────────────────────────────────────────────────
+  function selectQuestion(idx) {
+    if (idx < 0 || idx >= questions.length) return;
+    selIdx = idx;
+    renderSidebar();
+    renderEditor();
+    renderFeedbackBody();
+    // Scroll selected item into view
+    requestAnimationFrame(() => {
+      const el = document.querySelector('.q-item.selected');
+      if (el) el.scrollIntoView({ block: 'nearest' });
+    });
+  }
+
+  function jumpTo(val) {
+    const n = parseInt(val, 10);
+    if (isNaN(n) || n < 1 || n > questions.length) return;
+    // Clear filter so the user sees the item in context
+    filterText = '';
+    document.getElementById('search').value = '';
+    rebuildVisibleIndices();
+    selectQuestion(n - 1);
+  }
+
+  // ── Search ────────────────────────────────────────────────────────────────
+  function onSearch(val) {
+    filterText = val.toLowerCase().trim();
+    rebuildVisibleIndices();
+    renderSidebar();
+  }
+
+  function rebuildVisibleIndices() {
+    if (!filterText) {
+      visibleIndices = questions.map((_, i) => i);
+    } else {
+      visibleIndices = [];
+      for (let i = 0; i < questions.length; i++) {
+        const q = questions[i];
+        if (
+          q.text?.toLowerCase().includes(filterText) ||
+          q.category?.toLowerCase().includes(filterText) ||
+          q.explanation?.toLowerCase().includes(filterText) ||
+          (q.options || []).some(o => o.toLowerCase().includes(filterText))
+        ) visibleIndices.push(i);
+      }
+    }
+    document.getElementById('sidebar-info').textContent =
+      filterText
+        ? `${visibleIndices.length} of ${questions.length} questions`
+        : `${questions.length} questions`;
+  }
+
+  // ── Sidebar ───────────────────────────────────────────────────────────────
+  function renderSidebar() {
+    const list = document.getElementById('q-list');
+    if (!questions.length) { list.innerHTML = ''; return; }
+
+    list.innerHTML = visibleIndices.map(i => {
+      const q   = questions[i];
+      const mod = isModified(i);
+      const fb  = feedbackLoaded ? (feedbackMap[q.questionId]?.length || 0) : 0;
+      const diff = q.difficulty || 'medium';
+      return `<div class="q-item${i === selIdx ? ' selected' : ''}${q.active === false ? ' inactive' : ''}"
+                   data-idx="${i}" onclick="selectQuestion(${i})">
+        <div class="q-row1">
+          <span class="q-num">#${String(i + 1).padStart(3, ' ')}</span>
+          ${mod ? '<span class="q-modified" title="Modified">●</span>' : ''}
+          <span class="badge badge-cat" title="${esc(q.category || '')}">${esc(q.category || '—')}</span>
+          <span class="badge badge-${diff}">${diff}</span>
+          ${fb ? `<span class="badge badge-fb" style="margin-left:auto">💬 ${fb}</span>` : ''}
+        </div>
+        <div class="q-preview">${esc(q.text || '')}</div>
+      </div>`;
+    }).join('');
+  }
+
+  function refreshSidebarItem(idx) {
+    const el = document.querySelector(`.q-item[data-idx="${idx}"]`);
+    if (!el) return;
+    const q   = questions[idx];
+    const mod = isModified(idx);
+    const row1 = el.querySelector('.q-row1');
+    const preview = el.querySelector('.q-preview');
+    // Update modified dot
+    const dot = row1.querySelector('.q-modified');
+    if (mod && !dot) row1.querySelector('.q-num').insertAdjacentHTML('afterend', '<span class="q-modified" title="Modified">●</span>');
+    else if (!mod && dot) dot.remove();
+    // Update preview text
+    if (preview) preview.textContent = q.text || '';
+    // Update inactive class
+    el.classList.toggle('inactive', q.active === false);
+    updateDownloadLabel();
+  }
+
+  // ── Editor ────────────────────────────────────────────────────────────────
+  function renderEditor() {
+    const root = document.getElementById('editor');
+    if (selIdx < 0 || !questions[selIdx]) {
+      root.innerHTML = `<div class="empty-state"><div class="empty-title">Select a question</div></div>`;
+      return;
+    }
+    const q = questions[selIdx];
+    const n = selIdx + 1;
+    const opts = q.options || ['', '', '', '', ''];
+    const mod  = isModified(selIdx);
+
+    root.innerHTML = `
+      <div class="ed-header">
+        <div class="ed-title-group">
+          <div class="ed-title">Question #${n} ${mod ? '<span style="color:var(--orange);font-size:13px">● unsaved changes</span>' : ''}</div>
+          <div class="ed-subtitle">${esc(q.questionId || '')} &nbsp;·&nbsp; ${esc(q.category || 'no category')} &nbsp;·&nbsp; ${q.active !== false ? '✓ active' : '✗ inactive'}</div>
+        </div>
+        <div class="ed-nav">
+          <button class="btn btn-secondary btn-sm" onclick="selectQuestion(${selIdx - 1})" ${selIdx === 0 ? 'disabled' : ''}>← Prev</button>
+          <button class="btn btn-secondary btn-sm" onclick="selectQuestion(${selIdx + 1})" ${selIdx === questions.length - 1 ? 'disabled' : ''}>Next →</button>
+          <button class="btn btn-danger btn-sm" onclick="revertQuestion()" ${mod ? '' : 'disabled'}>Revert</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Question text</label>
+        <textarea class="field-input" rows="3" id="f-text" oninput="setField('text',this.value)">${esc(q.text || '')}</textarea>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Answer options — click "correct?" to mark the right answer</label>
+        <div class="options-stack">
+          ${opts.map((opt, i) => {
+            const correct = i === q.correctIndex;
+            return `<div class="opt-row${correct ? ' correct' : ''}" id="opt-row-${i}">
+              <span class="opt-letter">${'ABCDE'[i]}</span>
+              <input class="opt-input" type="text" value="${esc(opt)}" placeholder="Option ${'ABCDE'[i]}"
+                oninput="setOption(${i}, this.value)">
+              <label class="opt-correct-wrap">
+                <input type="radio" class="opt-radio" name="correct-opt" value="${i}" ${correct ? 'checked' : ''}
+                  onchange="setCorrectIndex(${i})">
+                <span class="opt-correct-lbl">${correct ? '✓ correct' : 'correct?'}</span>
+              </label>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="field">
+          <label class="field-label">Category</label>
+          <input class="field-input" type="text" value="${esc(q.category || '')}" oninput="setField('category',this.value)" placeholder="e.g. Mendix Basics">
+        </div>
+        <div class="field">
+          <label class="field-label">Difficulty</label>
+          <select class="field-input" onchange="setField('difficulty',this.value)">
+            <option value="easy"   ${q.difficulty === 'easy'   ? 'selected' : ''}>Easy</option>
+            <option value="medium" ${q.difficulty === 'medium' ? 'selected' : ''}>Medium</option>
+            <option value="hard"   ${q.difficulty === 'hard'   ? 'selected' : ''}>Hard</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Explanation (shown to participant after answering)</label>
+        <textarea class="field-input" rows="4" oninput="setField('explanation',this.value)">${esc(q.explanation || '')}</textarea>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Status</label>
+        <div class="active-row">
+          <input type="checkbox" class="active-cb" id="f-active" ${q.active !== false ? 'checked' : ''}
+            onchange="setField('active', this.checked)">
+          <label for="f-active" style="cursor:pointer">Active — include this question in the daily quiz pool</label>
+        </div>
+      </div>
+    `;
+  }
+
+  // ── Field mutation ────────────────────────────────────────────────────────
+  function setField(field, value) {
+    if (selIdx < 0) return;
+    questions[selIdx][field] = value;
+    refreshSidebarItem(selIdx);
+    refreshEditorMeta();
+  }
+
+  function setOption(optIdx, value) {
+    if (selIdx < 0) return;
+    if (!questions[selIdx].options) questions[selIdx].options = [];
+    questions[selIdx].options[optIdx] = value;
+    refreshSidebarItem(selIdx);
+    refreshEditorMeta();
+  }
+
+  function setCorrectIndex(optIdx) {
+    if (selIdx < 0) return;
+    questions[selIdx].correctIndex = optIdx;
+    // Re-render just the options to update highlight without losing other input focus
+    const q    = questions[selIdx];
+    const opts = q.options || [];
+    for (let i = 0; i < 5; i++) {
+      const row = document.getElementById(`opt-row-${i}`);
+      if (!row) continue;
+      const correct = i === optIdx;
+      row.classList.toggle('correct', correct);
+      const lbl = row.querySelector('.opt-correct-lbl');
+      if (lbl) lbl.textContent = correct ? '✓ correct' : 'correct?';
+    }
+    refreshSidebarItem(selIdx);
+    refreshEditorMeta();
+  }
+
+  function revertQuestion() {
+    if (selIdx < 0 || !origQuestions[selIdx]) return;
+    questions[selIdx] = deepClone(origQuestions[selIdx]);
+    renderEditor();
+    refreshSidebarItem(selIdx);
+  }
+
+  function refreshEditorMeta() {
+    // Update the title line (modified indicator + subtitle) without full re-render
+    const titleEl = document.querySelector('.ed-title');
+    const subEl   = document.querySelector('.ed-subtitle');
+    if (!titleEl || !subEl) return;
+    const q   = questions[selIdx];
+    const mod = isModified(selIdx);
+    titleEl.innerHTML = `Question #${selIdx + 1} ${mod ? '<span style="color:var(--orange);font-size:13px">● unsaved changes</span>' : ''}`;
+    subEl.innerHTML   = `${esc(q.questionId || '')} &nbsp;·&nbsp; ${esc(q.category || 'no category')} &nbsp;·&nbsp; ${q.active !== false ? '✓ active' : '✗ inactive'}`;
+    // Enable/disable revert button
+    const btn = document.querySelector('.btn-danger');
+    if (btn) btn.disabled = !mod;
+  }
+
+  // ── Feedback body ─────────────────────────────────────────────────────────
+  function renderFeedbackBody() {
+    const body = document.getElementById('fb-body');
+    const title = document.getElementById('fb-header-title');
+
+    if (selIdx < 0 || !questions[selIdx]) {
+      body.innerHTML = `<div class="fb-empty">Select a question to view feedback.</div>`;
+      if (title) title.textContent = 'Feedback';
+      return;
+    }
+
+    const q   = questions[selIdx];
+    const qid = q.questionId;
+
+    if (title) title.textContent = `Feedback — #${selIdx + 1}`;
+
+    if (!feedbackLoaded) {
+      body.innerHTML = `
+        <div class="fb-empty">
+          No feedback data loaded.<br><br>
+          Export from DynamoDB, then click <strong>Load feedback JSON</strong>:
+          <code class="fb-code">aws dynamodb scan \\
+  --table-name quiz-feedback \\
+  > feedback.json</code>
+        </div>`;
+      return;
+    }
+
+    const items = feedbackMap[qid] || [];
+
+    if (!items.length) {
+      body.innerHTML = `<div class="fb-empty">No feedback yet for this question.</div>`;
+      return;
+    }
+
+    const avg  = items.reduce((s, fb) => s + fb.rating, 0) / items.length;
+    const star = n => '★'.repeat(n) + '☆'.repeat(5 - n);
+
+    body.innerHTML = `
+      <div class="fb-summary">
+        <div>
+          <div class="fb-avg">${avg.toFixed(1)}</div>
+          <div class="fb-stars">${star(Math.round(avg))}</div>
+        </div>
+        <div>
+          <div class="fb-count">${items.length} response${items.length !== 1 ? 's' : ''}</div>
+        </div>
+      </div>
+      ${items.map(fb => `
+        <div class="fb-item">
+          <div class="fb-item-top">
+            <span class="fb-item-stars">${star(fb.rating)}</span>
+            <span class="fb-item-email" title="${esc(fb.email)}">${esc(fb.email || '—')}</span>
+            <span class="fb-item-date">${fb.submittedAt ? new Date(fb.submittedAt).toLocaleDateString('nl-NL') : ''}</span>
+          </div>
+          ${fb.comment ? `<div class="fb-item-comment">${esc(fb.comment)}</div>` : ''}
+        </div>
+      `).join('')}
+    `;
+  }
+
+  // ── Helpers ───────────────────────────────────────────────────────────────
+  function isModified(idx) {
+    if (!origQuestions[idx]) return true;
+    return JSON.stringify(questions[idx]) !== JSON.stringify(origQuestions[idx]);
+  }
+
+  function deepClone(obj) { return JSON.parse(JSON.stringify(obj)); }
+
+  function setStatus(msg) { document.getElementById('hdr-status').textContent = msg; }
+
+  function updateDownloadLabel() {
+    const btn = document.getElementById('btn-dl');
+    if (!btn || btn.disabled) return;
+    const cnt = questions.filter((_, i) => isModified(i)).length;
+    btn.textContent = cnt > 0 ? `⬇ Download (${cnt} change${cnt !== 1 ? 's' : ''})` : '⬇ Download updated JSON';
+  }
+
+  function esc(str) {
+    if (str == null) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+</script>
+</body>
+</html>

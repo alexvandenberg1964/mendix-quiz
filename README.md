@@ -1,132 +1,155 @@
-# PostNL Mendix Engineer Quiz — Setup Guide
+# PostNL Mendix Daily Quiz
 
-## What's in the box
-- `index.html` — the complete quiz app (80 questions, 16 weeks, 5 options each)
-- Live leaderboard powered by Supabase
-- Admin view at `?admin=true`
-- Works without Supabase too (falls back to browser localStorage)
+One new Mendix question per participant per day. Each user gets a random question they haven't seen before, answers it, sees the explanation, and can leave feedback.
 
 ---
 
-## Step 1 — Create a free Supabase project
+## Architecture
 
-1. Go to https://supabase.com and click **Start your project** (free account)
-2. Click **New project**, give it a name like `mendix-quiz`, choose a region close to the Netherlands (e.g. Frankfurt)
-3. Set a database password (save it somewhere safe) and click **Create new project**
-4. Wait ~1 minute for the project to be ready
+| Layer | Technology |
+|-------|------------|
+| Frontend | Single `index.html` (no build step) — deployed to GitHub Pages |
+| Backend | AWS API Gateway (HTTP API) → Lambda → DynamoDB |
+| Region | `eu-west-1` (Ireland) |
+
+### AWS resources
+
+| Resource | Name |
+|----------|------|
+| DynamoDB table | `quiz-questions` — question bank |
+| DynamoDB table | `quiz-participants` — one row per (email, date), tracks answered questions |
+| DynamoDB table | `quiz-feedback` — star ratings and comments |
+| Lambda | `quiz-getQuestion` — assigns and returns today's question per participant |
+| Lambda | `quiz-saveAnswer` — validates answer server-side, returns result |
+| Lambda | `quiz-saveFeedback` — stores star rating + optional comment |
+| API Gateway | `quiz-api` — HTTP API with CORS enabled |
+
+The correct answer is **never sent to the client** — validation happens in `quiz-saveAnswer`.
 
 ---
 
-## Step 2 — Create the database table
+## How it works
 
-1. In your Supabase project, click **SQL Editor** in the left sidebar
-2. Paste and run this SQL:
+1. User enters their PostNL email address.
+2. `GET /question?email=...` — Lambda picks a random unseen question for this participant and reserves it for today.
+3. User selects an option and submits — `POST /answer` validates the answer and returns the result + explanation.
+4. After answering, the user can rate the question 1–5 stars and leave a comment — `POST /feedback`.
+5. Returning tomorrow: the same email gets a fresh unseen question.
+6. When all questions are exhausted the app shows a "well done" completion screen.
 
-```sql
-create table quiz_submissions (
-  id uuid default gen_random_uuid() primary key,
-  email text not null,
-  week integer not null,
-  answers jsonb not null,
-  submitted_at timestamptz default now(),
-  unique(email, week)
-);
+---
 
--- Allow anyone to read and write (the quiz is internal, no login required)
-alter table quiz_submissions enable row level security;
+## Question bank
 
-create policy "allow all reads" on quiz_submissions
-  for select using (true);
+- **160 questions** across 56 Mendix categories
+- Stored in DynamoDB; managed locally via `questions.json`
+- Seeded to AWS with `seed-questions.sh`
 
-create policy "allow all inserts and updates" on quiz_submissions
-  for insert with check (true);
+### Question format (`questions.json`)
 
-create policy "allow updates" on quiz_submissions
-  for update using (true);
+```json
+{
+  "questionId": "q001",
+  "category": "Mendix Basics",
+  "text": "Your question text?",
+  "options": ["Option A", "Option B", "Option C", "Option D", "Option E"],
+  "correctIndex": 2,
+  "explanation": "Shown after the participant answers.",
+  "difficulty": "easy",
+  "active": true
+}
 ```
 
-3. Click **Run** — you should see "Success. No rows returned."
+`correctIndex` is zero-based (0 = A, 1 = B, …, 4 = E). Set `active: false` to hide a question without deleting it.
 
 ---
 
-## Step 3 — Get your Supabase credentials
+## API
 
-1. In your Supabase project, click **Settings** (gear icon) → **API**
-2. Copy two values:
-   - **Project URL** (looks like `https://abcdefgh.supabase.co`)
-   - **anon / public key** (a long string starting with `eyJ...`)
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/question?email=you@postnl.nl` | Get today's question for a participant |
+| `POST` | `/answer` | Submit an answer |
+| `POST` | `/feedback` | Submit a star rating (1–5) and optional comment |
 
----
-
-## Step 4 — Add credentials to index.html
-
-Open `index.html` in any text editor (Notepad, VS Code, etc.) and find these two lines near the top of the `<script>` section:
-
-```javascript
-const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+Current endpoint (hardcoded in `index.html`):
+```
+https://4kklbjjir4.execute-api.eu-west-1.amazonaws.com/prod
 ```
 
-Replace with your actual values:
-
-```javascript
-const SUPABASE_URL = 'https://abcdefgh.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5...';
-```
-
-Save the file.
-
 ---
 
-## Step 5 — Deploy to GitHub Pages
+## Deployment
 
-1. Go to https://github.com and create a free account (if you don't have one)
-2. Click **+** → **New repository**, name it `mendix-quiz`, set to **Public**, check "Add README"
-3. Click **Add file** → **Upload files**, drag your updated `index.html`
-4. Commit the file
-5. Go to **Settings** → **Pages** → Source: **Deploy from a branch** → Branch: **main** → folder: **/ (root)** → **Save**
-6. After ~2 minutes your quiz is live at:
+### Prerequisites
 
+- AWS CLI v2 configured (`aws configure`)
+- Node.js 22+
+- `jq` and `python3` (for seeding)
+- Bash (Git Bash or WSL on Windows)
+
+### First-time setup
+
+```bash
+# 1. Deploy all AWS infrastructure
+chmod +x deploy.sh
+./deploy.sh
+# The API endpoint is printed at the end and saved to .api-endpoint
+
+# 2. Update the API endpoint in index.html if it changed
+#    Find this line near the top of the <script> section:
+#    const API = 'https://...execute-api.eu-west-1.amazonaws.com/prod';
+#    Replace it with the value from .api-endpoint
+
+# 3. Seed questions into DynamoDB
+chmod +x seed-questions.sh
+./seed-questions.sh questions.json
+
+# 4. Push index.html to GitHub Pages
+git add index.html
+git commit -m "Update API endpoint"
+git push
+```
+
+GitHub Pages serves the quiz at:
 ```
 https://YOUR-GITHUB-USERNAME.github.io/mendix-quiz
 ```
 
----
+### Updating questions
 
-## Usage
+Edit `questions.json` and re-run the seed script. The script uses Python to build the DynamoDB `put-item` calls, so no shell quoting issues with special characters.
 
-| URL | Purpose |
-|-----|---------|
-| `https://you.github.io/mendix-quiz` | Participant quiz link — share this |
-| `https://you.github.io/mendix-quiz?admin=true` | Admin view — keep this private |
-
-### Admin view includes:
-- All 80 questions, correct answers, and explanations (filterable by week/category)
-- All participant submissions with scores
-- Full leaderboard
-
-### Quiz rules:
-- Week 1 opens **Monday March 23, 2026**
-- Each week runs Monday–Sunday
-- Participants can resubmit until Sunday
-- Results for completed weeks visible in "My Results" tab
-- Leaderboard visible to everyone at all times
-
----
-
-## Updating questions
-
-All questions are in `index.html` in the `QUESTIONS` array. Each question looks like:
-
-```javascript
-{
-  week: 1,
-  cat: 'Mendix Basics',
-  q: 'Your question text here?',
-  options: ['Option A', 'Option B', 'Option C', 'Option D', 'Option E'],
-  correct: 2,          // 0 = A, 1 = B, 2 = C, 3 = D, 4 = E
-  explanation: 'Explanation shown in results after the week closes.'
-}
+```bash
+./seed-questions.sh questions.json
 ```
 
-After editing, re-upload `index.html` to GitHub and commit. GitHub Pages will update within a minute.
+To deactivate a question without deleting it, set `"active": false` in the JSON and re-seed.
+
+### Tear down
+
+```bash
+chmod +x teardown.sh
+./teardown.sh
+```
+
+This deletes the API Gateway, all three Lambda functions, the IAM role, and all three DynamoDB tables.
+
+---
+
+## File overview
+
+```
+index.html          — self-contained frontend SPA
+questions.json      — full question bank (source of truth)
+seed-questions.sh   — bulk-loads questions.json into DynamoDB
+deploy.sh           — creates all AWS resources from scratch
+teardown.sh         — removes all AWS resources
+iam-trust-policy.json   — Lambda execution role trust policy
+iam-dynamo-policy.json  — inline DynamoDB access policy
+lambda/
+  getQuestion/index.mjs
+  saveAnswer/index.mjs
+  saveFeedback/index.mjs
+.api-endpoint       — written by deploy.sh; contains the live API URL
+```

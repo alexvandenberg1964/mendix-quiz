@@ -3,580 +3,575 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PostNL Mendix Engineer Quiz</title>
+  <title>PostNL Mendix Daily Quiz</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --orange: #FF6200; --orange-light: #FFF0E6;
+      --orange: #FF6200; --orange-light: #FFF0E6; --orange-mid: #FFD5B3;
       --blue: #003087; --blue-light: #E6EBF5;
       --bg: #ffffff; --bg2: #f5f5f5; --bg3: #ececec;
-      --text: #1a1a1a; --text2: #666666;
+      --text: #1a1a1a; --text2: #555555; --text3: #999999;
       --border: rgba(0,0,0,0.10); --border2: rgba(0,0,0,0.20);
-      --green: #3B6D11; --green-bg: #EAF3DE;
-      --red: #A32D2D; --red-bg: #FCEBEB;
-      --amber: #854F0B; --amber-bg: #FAEEDA;
-      --radius: 8px; --radius-lg: 12px;
+      --green: #2d6a0f; --green-bg: #e8f5d9;
+      --red: #a32020; --red-bg: #fde8e8;
+      --amber: #7a4800; --amber-bg: #fff3d9;
+      --radius: 8px; --radius-lg: 14px;
     }
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg:#1e1e1e; --bg2:#2a2a2a; --bg3:#333;
-        --text:#f0f0f0; --text2:#aaaaaa;
-        --border:rgba(255,255,255,0.10); --border2:rgba(255,255,255,0.20);
-        --blue-light:#0d1f3c; --orange-light:#3a1f0a;
-        --green-bg:#1a2e0a; --red-bg:#2e1010; --amber-bg:#2e1e08;
+        --bg: #18181b; --bg2: #27272a; --bg3: #3f3f46;
+        --text: #f4f4f5; --text2: #a1a1aa; --text3: #71717a;
+        --border: rgba(255,255,255,0.09); --border2: rgba(255,255,255,0.18);
+        --blue-light: #0f1f42; --orange-light: #2e1600;
+        --green-bg: #132b06; --red-bg: #2b0a0a; --amber-bg: #2b1800;
       }
     }
-    body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
-    #app { max-width:900px; margin:0 auto; padding-bottom:3rem; }
-    .header { background:var(--blue); padding:1rem 1.5rem; display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem; }
-    .header-logo { font-size:22px; font-weight:700; color:var(--orange); }
-    .header-sub { font-size:12px; color:rgba(255,255,255,0.7); margin-top:2px; }
-    .header-week { background:var(--orange); color:white; font-size:12px; font-weight:600; padding:4px 12px; border-radius:var(--radius); }
-    .nav { display:flex; gap:8px; padding:0 1.5rem; margin-bottom:1.5rem; flex-wrap:wrap; }
-    .nav-btn { padding:8px 18px; border-radius:var(--radius); border:1px solid var(--border2); background:var(--bg); color:var(--text); cursor:pointer; font-size:13px; font-weight:500; transition:all 0.15s; }
-    .nav-btn.active { background:var(--orange); border-color:var(--orange); color:white; }
-    .nav-btn:hover:not(.active) { background:var(--bg2); }
-    .container { padding:0 1.5rem; }
-    .card { background:var(--bg); border:1px solid var(--border); border-radius:var(--radius-lg); padding:1.25rem; margin-bottom:1rem; }
-    .week-badge { display:inline-block; background:var(--orange); color:white; font-size:11px; font-weight:600; padding:3px 10px; border-radius:var(--radius); margin-bottom:.75rem; }
-    .cat-badge { display:inline-block; background:var(--blue-light); color:var(--blue); font-size:11px; font-weight:600; padding:3px 10px; border-radius:var(--radius); margin-bottom:.75rem; margin-left:6px; }
-    .question-text { font-size:15px; font-weight:600; margin-bottom:1rem; line-height:1.5; }
-    .options { display:flex; flex-direction:column; gap:8px; }
-    .option { display:flex; align-items:flex-start; gap:10px; padding:10px 14px; border-radius:var(--radius); border:1px solid var(--border); cursor:pointer; transition:all 0.15s; font-size:14px; color:var(--text); background:var(--bg); text-align:left; width:100%; line-height:1.4; }
-    .option:hover { background:var(--bg2); border-color:var(--border2); }
-    .option.selected { border-color:var(--orange); background:var(--orange-light); }
-    .option-letter { font-weight:700; min-width:20px; color:var(--orange); font-size:13px; flex-shrink:0; margin-top:1px; }
-    .submit-btn { background:var(--orange); color:white; border:none; border-radius:var(--radius); padding:12px 28px; font-size:15px; font-weight:600; cursor:pointer; margin-top:1rem; width:100%; transition:opacity 0.15s; }
-    .submit-btn:disabled { opacity:.4; cursor:not-allowed; }
-    .submit-btn:hover:not(:disabled) { opacity:.88; }
-    .identity-box { background:var(--blue-light); border:1px solid var(--blue); border-radius:var(--radius-lg); padding:1.5rem; margin-bottom:1.5rem; }
-    .identity-box h2 { font-size:17px; font-weight:600; color:var(--blue); margin-bottom:.5rem; }
-    .identity-box p { font-size:13px; color:var(--text2); margin-bottom:1rem; }
-    input[type=email] { width:100%; padding:10px 12px; border-radius:var(--radius); border:1px solid var(--border2); font-size:14px; background:var(--bg); color:var(--text); margin-bottom:10px; outline:none; }
-    input[type=email]:focus { border-color:var(--orange); box-shadow:0 0 0 3px rgba(255,98,0,.12); }
-    .progress-bar { background:var(--bg2); border-radius:4px; height:6px; margin-bottom:1.5rem; overflow:hidden; }
-    .progress-fill { height:100%; background:var(--orange); border-radius:4px; transition:width .3s; }
-    .summary-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:1.5rem; }
-    .metric { background:var(--bg2); border-radius:var(--radius); padding:1rem; text-align:center; }
-    .metric-val { font-size:24px; font-weight:700; }
-    .metric-label { font-size:11px; color:var(--text2); margin-top:4px; }
-    .filter-row { display:flex; gap:8px; margin-bottom:1rem; flex-wrap:wrap; align-items:center; }
-    select { padding:8px 12px; border-radius:var(--radius); border:1px solid var(--border2); font-size:13px; background:var(--bg); color:var(--text); cursor:pointer; }
-    .result-row { border-bottom:1px solid var(--border); padding:.85rem 0; }
-    .result-row:last-child { border-bottom:none; }
-    .result-q { font-size:14px; font-weight:600; margin-bottom:4px; }
-    .result-meta { font-size:12px; color:var(--text2); margin-bottom:4px; }
-    .result-correct { color:var(--green); font-weight:600; }
-    .result-wrong { color:var(--red); font-weight:600; }
-    .status-dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; vertical-align:middle; }
-    .dot-green { background:var(--green); }
-    .dot-red { background:var(--red); }
-    .explanation-box { background:var(--bg2); border-radius:var(--radius); padding:8px 12px; margin-top:6px; font-size:12px; color:var(--text2); line-height:1.6; }
-    .leaderboard { width:100%; border-collapse:collapse; }
-    .leaderboard th { background:var(--blue); color:white; padding:10px 14px; text-align:left; font-weight:600; font-size:13px; }
-    .leaderboard td { padding:10px 14px; border-bottom:1px solid var(--border); font-size:14px; vertical-align:middle; }
-    .leaderboard tr:hover td { background:var(--bg2); }
-    .leaderboard tr.me td { background:var(--orange-light); font-weight:600; }
-    .score-bar-wrap { background:var(--bg3); border-radius:4px; height:8px; min-width:80px; overflow:hidden; }
-    .score-bar-fill { height:100%; background:var(--orange); border-radius:4px; transition:width .4s; }
-    .admin-table { width:100%; border-collapse:collapse; font-size:12px; }
-    .admin-table th { background:var(--blue); color:white; padding:8px 10px; text-align:left; font-weight:600; white-space:nowrap; }
-    .admin-table td { padding:8px 10px; border-bottom:1px solid var(--border); vertical-align:top; }
-    .admin-table tr:hover td { background:var(--bg2); }
-    /* ── Admin question card viewer ── */
-    .aq-toolbar { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:1.25rem; }
-    .aq-counter { margin-left:auto; font-size:13px; color:var(--text2); white-space:nowrap; font-weight:600; }
-    .aq-progress { height:4px; background:var(--bg3); border-radius:2px; margin-bottom:1.5rem; overflow:hidden; }
-    .aq-progress-fill { height:100%; background:var(--orange); border-radius:2px; transition:width .25s; }
-    .aq-card { background:var(--bg); border:1px solid var(--border); border-radius:var(--radius-lg); padding:1.75rem; margin-bottom:1.25rem; }
-    .aq-card-meta { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:1.25rem; }
-    .aq-pill { font-size:11px; font-weight:600; padding:3px 10px; border-radius:var(--radius); }
-    .aq-pill-week { background:var(--orange); color:#fff; }
-    .aq-pill-cat { background:var(--blue-light); color:var(--blue); }
-    .aq-qnum { font-size:12px; color:var(--text2); margin-left:auto; }
-    .aq-question { font-size:16px; font-weight:600; color:var(--text); line-height:1.55; margin-bottom:1.25rem; padding-bottom:1.25rem; border-bottom:1px solid var(--border); }
-    .aq-options { display:flex; flex-direction:column; gap:8px; margin-bottom:1.25rem; }
-    .aq-option { display:flex; align-items:flex-start; gap:10px; padding:11px 14px; border-radius:var(--radius); border:1px solid var(--border); font-size:14px; color:var(--text); line-height:1.45; }
-    .aq-option.aq-correct { border:1.5px solid var(--green); background:var(--green-bg); color:#27500A; }
-    .aq-letter { font-weight:700; min-width:20px; font-size:13px; flex-shrink:0; margin-top:1px; color:var(--text2); }
-    .aq-option.aq-correct .aq-letter { color:var(--green); }
-    .aq-check { margin-left:auto; flex-shrink:0; width:18px; height:18px; background:var(--green); border-radius:50%; display:flex; align-items:center; justify-content:center; }
-    .aq-check::after { content:''; width:9px; height:5px; border-left:2px solid #fff; border-bottom:2px solid #fff; transform:rotate(-45deg) translate(1px,-1px); display:block; }
-    .aq-explanation { border-left:3px solid var(--orange); padding:12px 16px; background:var(--bg2); font-size:13px; color:var(--text2); line-height:1.65; }
-    .aq-nav { display:flex; align-items:center; gap:10px; margin-top:1.25rem; flex-wrap:wrap; }
-    .aq-nav-btn { display:flex; align-items:center; gap:6px; padding:9px 20px; border-radius:var(--radius); border:1px solid var(--border2); background:var(--bg); color:var(--text); cursor:pointer; font-size:13px; font-weight:600; transition:background .12s; white-space:nowrap; }
-    .aq-nav-btn:hover:not(:disabled) { background:var(--bg2); }
-    .aq-nav-btn:disabled { opacity:.35; cursor:not-allowed; }
-    .aq-nav-btn.aq-primary { background:var(--orange); border-color:var(--orange); color:white; }
-    .aq-nav-btn.aq-primary:hover:not(:disabled) { opacity:.88; background:var(--orange); }
-    .aq-dots { display:flex; gap:5px; flex-wrap:wrap; flex:1; justify-content:center; padding:4px 0; }
-    .aq-dot { width:9px; height:9px; border-radius:50%; border:1px solid var(--border2); background:var(--bg3); cursor:pointer; transition:background .12s; flex-shrink:0; }
-    .aq-dot.aq-active { background:var(--orange); border-color:var(--orange); transform:scale(1.2); }
-    .aq-dot.aq-visited { background:var(--border2); border-color:var(--border2); }
-    .aq-kbd { font-size:11px; color:var(--text2); text-align:center; margin-top:8px; }
-    .aq-empty { padding:2.5rem; text-align:center; font-size:14px; color:var(--text2); background:var(--bg2); border-radius:var(--radius-lg); }
-    /* ── Shared ── */
-    .not-started { background:var(--blue-light); border-radius:var(--radius-lg); padding:2.5rem; text-align:center; }
-    .not-started h2 { font-size:20px; font-weight:700; color:var(--blue); margin-bottom:.5rem; }
-    .not-started p { font-size:14px; color:var(--text2); }
-    .info-msg { background:var(--bg2); border-radius:var(--radius); padding:12px 16px; font-size:13px; color:var(--text2); margin-bottom:1rem; }
-    .success-msg { background:var(--green-bg); border:1px solid #97C459; border-radius:var(--radius); padding:12px 16px; font-size:14px; color:var(--green); margin-bottom:1rem; font-weight:600; }
-    .error-msg { background:var(--red-bg); border:1px solid #f09595; border-radius:var(--radius); padding:12px 16px; font-size:13px; color:var(--red); margin-bottom:1rem; }
-    .resubmit-note { background:var(--amber-bg); border:1px solid #EF9F27; border-radius:var(--radius); padding:10px 14px; font-size:13px; color:var(--amber); margin-bottom:1rem; }
-    .tab-row { display:flex; margin-bottom:1.5rem; border-bottom:1px solid var(--border); }
-    .tab-btn { padding:8px 18px; border:none; background:none; cursor:pointer; font-size:14px; color:var(--text2); border-bottom:2px solid transparent; margin-bottom:-1px; transition:all .15s; }
-    .tab-btn.active { color:var(--orange); border-bottom-color:var(--orange); font-weight:600; }
-    .spinner { display:inline-block; width:16px; height:16px; border:2px solid var(--border2); border-top-color:var(--orange); border-radius:50%; animation:spin .7s linear infinite; vertical-align:middle; margin-right:6px; }
-    @keyframes spin { to { transform:rotate(360deg); } }
-    @media(max-width:600px){ .summary-grid{grid-template-columns:repeat(2,1fr);} }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg); color: var(--text); min-height: 100vh;
+    }
+    #app { max-width: 680px; margin: 0 auto; padding: 0 1rem 4rem; }
+
+    /* ── Header ── */
+    .header {
+      background: var(--blue); color: #fff;
+      padding: 0 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; margin: 0 -1rem 2rem;
+    }
+    .header-brand { display: flex; align-items: center; gap: 10px; }
+    .header-logo { font-size: 18px; font-weight: 700; color: var(--orange); letter-spacing: -0.3px; }
+    .header-sep { color: rgba(255,255,255,0.3); font-size: 16px; }
+    .header-title { font-size: 13px; color: rgba(255,255,255,0.8); letter-spacing: 0.02em; }
+    .header-date { font-size: 12px; color: rgba(255,255,255,0.55); font-variant-numeric: tabular-nums; }
+
+    /* ── Shared card ── */
+    .card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 1.75rem;
+    }
+
+    /* ── Email gate ── */
+    .email-section { padding-top: 2rem; }
+    .email-section h1 { font-size: 22px; font-weight: 600; margin-bottom: .4rem; }
+    .email-section p { color: var(--text2); font-size: 14px; line-height: 1.6; margin-bottom: 1.5rem; }
+    .input-row { display: flex; gap: 10px; }
+    .email-input {
+      flex: 1; height: 42px; border: 1px solid var(--border2);
+      border-radius: var(--radius); background: var(--bg); color: var(--text);
+      padding: 0 12px; font-size: 15px; outline: none;
+    }
+    .email-input:focus { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(255,98,0,.15); }
+    .btn {
+      height: 42px; padding: 0 20px; border-radius: var(--radius);
+      font-size: 14px; font-weight: 600; cursor: pointer;
+      border: none; transition: opacity .15s, transform .1s;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn:active { transform: scale(.97); }
+    .btn-primary { background: var(--orange); color: #fff; }
+    .btn-primary:hover { opacity: .9; }
+    .btn-secondary { background: var(--bg3); color: var(--text2); }
+    .btn-secondary:hover { background: var(--border2); }
+
+    /* ── Loading / status ── */
+    .spinner {
+      width: 36px; height: 36px; margin: 3rem auto; display: block;
+      border: 3px solid var(--border2); border-top-color: var(--orange);
+      border-radius: 50%; animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .status-msg {
+      text-align: center; padding: 3rem 1rem; color: var(--text2); font-size: 15px;
+    }
+    .status-msg strong { display: block; font-size: 28px; margin-bottom: .5rem; }
+
+    /* ── Question card ── */
+    .q-meta {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 1.2rem;
+      flex-wrap: wrap;
+    }
+    .badge {
+      font-size: 11px; font-weight: 600; padding: 3px 9px;
+      border-radius: 20px; letter-spacing: .03em;
+    }
+    .badge-cat { background: var(--blue-light); color: var(--blue); }
+    .badge-diff-easy { background: var(--green-bg); color: var(--green); }
+    .badge-diff-medium { background: var(--amber-bg); color: var(--amber); }
+    .badge-diff-hard { background: var(--red-bg); color: var(--red); }
+    .q-text {
+      font-size: 17px; font-weight: 500; line-height: 1.55;
+      margin-bottom: 1.5rem; color: var(--text);
+    }
+    .q-text code {
+      background: var(--bg3); padding: 1px 5px; border-radius: 4px;
+      font-size: 14px; font-family: 'Menlo', 'Consolas', monospace;
+    }
+
+    /* ── Options ── */
+    .options { display: flex; flex-direction: column; gap: 10px; }
+    .option {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 13px 15px; border-radius: var(--radius);
+      border: 1.5px solid var(--border); background: var(--bg);
+      cursor: pointer; transition: border-color .15s, background .15s;
+      text-align: left; width: 100%;
+    }
+    .option:hover:not(:disabled) { border-color: var(--orange); background: var(--orange-light); }
+    .option:disabled { cursor: default; }
+    .option-letter {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--bg3); color: var(--text2);
+      font-size: 12px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 1px;
+    }
+    .option-text { font-size: 14px; line-height: 1.5; color: var(--text); }
+    .option.selected { border-color: var(--orange); background: var(--orange-light); }
+    .option.selected .option-letter { background: var(--orange); color: #fff; }
+    .option.correct { border-color: var(--green); background: var(--green-bg); }
+    .option.correct .option-letter { background: var(--green); color: #fff; }
+    .option.wrong { border-color: var(--red); background: var(--red-bg); }
+    .option.wrong .option-letter { background: var(--red); color: #fff; }
+
+    /* ── Submit row ── */
+    .submit-row { margin-top: 1.25rem; display: flex; gap: 10px; align-items: center; }
+    .btn-submit { background: var(--orange); color: #fff; height: 44px; padding: 0 24px; }
+    .btn-submit:disabled { opacity: .45; cursor: default; }
+
+    /* ── Result ── */
+    .result-banner {
+      border-radius: var(--radius); padding: 14px 16px;
+      display: flex; align-items: flex-start; gap: 10px; margin-top: 1.25rem;
+    }
+    .result-banner.correct { background: var(--green-bg); border: 1px solid var(--green); }
+    .result-banner.wrong { background: var(--red-bg); border: 1px solid var(--red); }
+    .result-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+    .result-label { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .result-label.correct { color: var(--green); }
+    .result-label.wrong { color: var(--red); }
+    .result-explanation { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+    /* ── Feedback widget ── */
+    .feedback-section {
+      margin-top: 1.75rem; padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .feedback-title {
+      font-size: 13px; font-weight: 600; color: var(--text2);
+      margin-bottom: .75rem; text-transform: uppercase; letter-spacing: .05em;
+    }
+    .stars { display: flex; gap: 6px; margin-bottom: 1rem; }
+    .star {
+      font-size: 24px; cursor: pointer; color: var(--border2);
+      transition: color .1s, transform .1s;
+      background: none; border: none; padding: 0; line-height: 1;
+    }
+    .star:hover, .star.active { color: #f5a623; }
+    .star:hover { transform: scale(1.15); }
+    .feedback-comment {
+      width: 100%; min-height: 70px; resize: vertical;
+      border: 1px solid var(--border2); border-radius: var(--radius);
+      background: var(--bg); color: var(--text);
+      padding: 10px 12px; font-size: 13px; font-family: inherit;
+      outline: none; margin-bottom: .75rem;
+    }
+    .feedback-comment:focus { border-color: var(--orange); }
+    .feedback-sent { font-size: 13px; color: var(--green); font-weight: 500; }
+    .feedback-error { font-size: 13px; color: var(--red); }
+
+    /* ── Already answered banner ── */
+    .already-banner {
+      background: var(--blue-light); border: 1px solid rgba(0,48,135,.2);
+      border-radius: var(--radius); padding: 10px 14px;
+      font-size: 13px; color: var(--blue); margin-bottom: 1rem;
+    }
+
+    /* ── Footer / change user ── */
+    .footer-bar {
+      margin-top: 2rem; display: flex; align-items: center; justify-content: space-between;
+      font-size: 12px; color: var(--text3);
+    }
+    .link-btn {
+      background: none; border: none; cursor: pointer;
+      color: var(--orange); font-size: 12px; padding: 0; text-decoration: underline;
+    }
+
+    /* ── Error ── */
+    .error-box {
+      background: var(--red-bg); border: 1px solid var(--red);
+      border-radius: var(--radius); padding: 12px 16px;
+      font-size: 13px; color: var(--red); margin-top: 1rem;
+    }
   </style>
 </head>
 <body>
 <div id="app">
   <div class="header">
-    <div>
-      <div class="header-logo">PostNL</div>
-      <div class="header-sub">Mendix Engineer Quiz &mdash; 16 Weeks</div>
+    <div class="header-brand">
+      <span class="header-logo">PostNL</span>
+      <span class="header-sep">|</span>
+      <span class="header-title">Mendix Daily Quiz</span>
     </div>
-    <div class="header-week" id="header-week-label"></div>
+    <span class="header-date" id="header-date"></span>
   </div>
   <div id="root"></div>
 </div>
 
 <script>
-/* ═══════════════════════════════════════════
-   CONFIGURATION
-   ═══════════════════════════════════════════ */
-const SUPABASE_URL     = 'https://pfjkxskvwbfezpkvlcnl.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBmamt4c2t2d2JmZXpwa3ZsY25sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2NzQ4MjksImV4cCI6MjA4OTI1MDgyOX0.6Mrz1uj1IS1zCsO4Z1t5tTLg9XBhWycXP_8h6nD1APE';
+// ─────────────────────────────────────────────────────────────────────────────
+// CONFIG — replace with your API Gateway endpoint after running deploy.sh
+// ─────────────────────────────────────────────────────────────────────────────
+const API = 'https://4kklbjjir4.execute-api.eu-west-1.amazonaws.com/prod';
 
-const QUIZ_START = new Date('2026-03-23T00:00:00');
-const QUIZ_WEEKS = 32;
-const CATEGORIES = [
-  'Mendix Basics','Domain Model & Data','Microflows & Logic','Pages & UI',
-  'Integration & APIs','Security & Access','Performance & Deployment',
-  'Version Control & Teamwork','Best Practices','PostNL & Logistics Context'
-];
-
-function getCurrentWeek() {
-  const diff = new Date() - QUIZ_START;
-  if (diff < 0) return 0;
-  return Math.min(Math.floor(diff / (7*24*3600*1000)) + 1, QUIZ_WEEKS);
-}
-
-/* ═══════════════════════════════════════════
-   SUPABASE
-   ═══════════════════════════════════════════ */
-async function sbRpc(fn, params={}) {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fn}`, {
-    method:'POST',
-    headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':`Bearer ${SUPABASE_ANON_KEY}`,'Content-Type':'application/json'},
-    body:JSON.stringify(params)
-  });
-  if (!res.ok) throw new Error(await res.text());
-  const t = await res.text(); return t ? JSON.parse(t) : null;
-}
-async function sbGet(path) {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`,{headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':`Bearer ${SUPABASE_ANON_KEY}`}});
-  if (!res.ok) throw new Error(await res.text());
-  const t = await res.text(); return t ? JSON.parse(t) : [];
-}
-const fetchWeekQuestions   = w    => sbGet(`quiz_questions_public?week=eq.${w}&order=id.asc`);
-const submitAnswers        = (e,w,a)  => sbRpc('submit_quiz_answers',{p_email:e,p_week:w,p_answers:a});
-const fetchMyResults       = (e,cw)  => sbRpc('get_my_results',{p_email:e,p_current_week:cw});
-const fetchMySubmission    = (e,w)   => sbGet(`quiz_submissions?email=eq.${encodeURIComponent(e)}&week=eq.${w}&select=answers,score`).then(r=>r.length?r[0]:null);
-const fetchAllQuestionsAdmin = ()   => sbRpc('get_all_questions_admin',{});
-const fetchAllSubmissionsAdmin = () => sbGet('quiz_submissions?select=email,week,answers,score,submitted_at&order=week.asc,email.asc');
-async function fetchLeaderboard() {
-  const rows = await sbGet('quiz_submissions?select=email,week,score');
-  const map={};
-  rows.forEach(r=>{ if(!map[r.email]) map[r.email]={email:r.email,weeks:0,score:0}; map[r.email].weeks++; map[r.email].score+=(r.score||0); });
-  return Object.values(map).sort((a,b)=>b.score-a.score);
-}
-
-/* ═══════════════════════════════════════════
-   LOCAL STORAGE — remember email
-   ═══════════════════════════════════════════ */
-const pKey = ()=>'u_'+(navigator.userAgent||'').replace(/\W/g,'').slice(0,20);
-function rememberEmail(e){ try{const d=JSON.parse(localStorage.getItem('mxquiz_id')||'{}');d[pKey()]=e;localStorage.setItem('mxquiz_id',JSON.stringify(d));}catch(x){} }
-function recallEmail(){ try{return JSON.parse(localStorage.getItem('mxquiz_id')||'{}')[pKey()]||'';}catch(x){return '';} }
-
-/* ═══════════════════════════════════════════
-   STATE
-   ═══════════════════════════════════════════ */
-let S = {
-  page:'quiz', email:'', confirmedEmail:recallEmail(),
-  currentWeek:getCurrentWeek(),
-  weekQuestions:null, answers:{}, existingSubmission:null,
-  loadingQuiz:false, loadingSubmit:false,
-  successMsg:'', errorMsg:'',
-  results:null, loadingResults:false,
-  leaderboard:null, loadingLeaderboard:false,
-  adminTab:'questions', adminQuestions:null, adminSubmissions:null, loadingAdmin:false,
-  filterWeek:0, filterCat:'', sortField:'week',
-  isAdmin:location.search.includes('admin=true'),
-  aqCurrent:0, aqVisited:new Set(), aqFilterWeek:0, aqFilterCat:''
+// ─────────────────────────────────────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────────────────────────────────────
+const state = {
+  email: localStorage.getItem('quiz_email') || '',
+  loading: false,
+  error: null,
+  question: null,
+  done: false,
+  doneMessage: '',
+  selectedIndex: null,
+  submitted: false,
+  correct: null,
+  correctIndex: null,
+  explanation: null,
+  alreadyAnswered: false,
+  // feedback
+  feedbackRating: 0,
+  feedbackComment: '',
+  feedbackSent: false,
+  feedbackError: null,
+  feedbackSending: false,
 };
 
-/* ═══════════════════════════════════════════
-   RENDER
-   ═══════════════════════════════════════════ */
+// ─────────────────────────────────────────────────────────────────────────────
+// RENDER
+// ─────────────────────────────────────────────────────────────────────────────
 function render() {
-  const root=document.getElementById('root'); if(!root) return;
-  root.innerHTML='';
-  const wl=document.getElementById('header-week-label');
-  if(wl) wl.textContent=S.currentWeek>0?`Week ${S.currentWeek} of ${QUIZ_WEEKS}`:'Starting soon';
-  const nav=document.createElement('div'); nav.className='nav';
-  const pages=[['quiz','Quiz'],['results','My Results'],['leaderboard','Leaderboard']];
-  if(S.isAdmin) pages.push(['admin','Admin']);
-  pages.forEach(([id,label])=>{
-    const btn=document.createElement('button');
-    btn.className='nav-btn'+(S.page===id?' active':'');
-    btn.textContent=label;
-    btn.onclick=()=>{S.page=id;S.successMsg='';S.errorMsg='';render();};
-    nav.appendChild(btn);
-  });
-  root.appendChild(nav);
-  const c=document.createElement('div'); c.className='container'; root.appendChild(c);
-  if(S.page==='quiz') renderQuiz(c);
-  else if(S.page==='results') renderResults(c);
-  else if(S.page==='leaderboard') renderLeaderboard(c);
-  else renderAdmin(c);
-}
+  const root = document.getElementById('root');
 
-/* ── Identity ── */
-function renderIdentityBox(c,cb) {
-  if(S.confirmedEmail){cb();return;}
-  const box=document.createElement('div'); box.className='identity-box';
-  box.innerHTML='<h2>Welcome to the PostNL Mendix Quiz</h2><p>Enter your PostNL email address to participate.</p>';
-  const inp=document.createElement('input'); inp.type='email'; inp.placeholder='your.name@postnl.nl'; inp.value=S.email||'';
-  inp.oninput=e=>S.email=e.target.value; inp.onkeydown=e=>{if(e.key==='Enter')go();};
-  const btn=document.createElement('button'); btn.className='submit-btn'; btn.style.cssText='width:auto;padding:8px 24px;margin-top:0'; btn.textContent='Start';
-  function go(){if(S.email&&S.email.includes('@')){S.confirmedEmail=S.email;rememberEmail(S.email);render();}else alert('Please enter a valid email address.');}
-  btn.onclick=go; box.appendChild(inp); box.appendChild(btn); c.appendChild(box);
-}
-
-/* ── Quiz ── */
-function renderQuiz(c) {
-  renderIdentityBox(c,()=>{
-    const cw=S.currentWeek;
-    if(cw===0){const m=document.createElement('div');m.className='not-started';m.innerHTML='<h2>Quiz starts March 23, 2026</h2><p>Week 1 questions will be available from Monday, March 23.</p>';c.appendChild(m);return;}
-    if(S.successMsg){const m=document.createElement('div');m.className='success-msg';m.textContent=S.successMsg;c.appendChild(m);}
-    if(S.errorMsg){const m=document.createElement('div');m.className='error-msg';m.textContent=S.errorMsg;c.appendChild(m);}
-    if(!S.weekQuestions&&!S.loadingQuiz){
-      S.loadingQuiz=true;
-      const m=document.createElement('div');m.className='info-msg';m.innerHTML='<span class="spinner"></span>Loading this week\'s questions...';c.appendChild(m);
-      Promise.all([fetchWeekQuestions(cw),fetchMySubmission(S.confirmedEmail,cw)]).then(([qs,existing])=>{
-        S.weekQuestions=qs;S.existingSubmission=existing;
-        if(existing&&Object.keys(S.answers).length===0) qs.forEach((_,i)=>{S.answers[i]=existing.answers[i];});
-        S.loadingQuiz=false;render();
-      }).catch(err=>{S.loadingQuiz=false;S.errorMsg='Could not load questions: '+err.message;render();}); return;
-    }
-    if(S.loadingQuiz){const m=document.createElement('div');m.className='info-msg';m.innerHTML='<span class="spinner"></span>Loading...';c.appendChild(m);return;}
-    const qs=S.weekQuestions||[];
-    if(S.existingSubmission&&!S.successMsg){const n=document.createElement('div');n.className='resubmit-note';n.textContent=`You already submitted week ${cw} (score: ${S.existingSubmission.score}/${qs.length}). You can update and resubmit until Sunday.`;c.appendChild(n);}
-    const answered=Object.keys(S.answers).length;
-    const pct=qs.length?Math.round(answered/qs.length*100):0;
-    const prog=document.createElement('div');
-    prog.innerHTML=`<div style="font-size:13px;color:var(--text2);margin-bottom:6px;">${answered} of ${qs.length} answered &mdash; Week ${cw}</div><div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>`;
-    c.appendChild(prog);
-    qs.forEach((q,i)=>{
-      const card=document.createElement('div');card.className='card';
-      card.innerHTML=`<span class="week-badge">Week ${cw}</span><span class="cat-badge">${q.category}</span><p class="question-text">${i+1}. ${q.question}</p>`;
-      const opts=document.createElement('div');opts.className='options';
-      [q.option_a,q.option_b,q.option_c,q.option_d,q.option_e].forEach((opt,oi)=>{
-        const btn=document.createElement('button');
-        btn.className='option'+(S.answers[i]===oi?' selected':'');
-        btn.innerHTML=`<span class="option-letter">${String.fromCharCode(65+oi)}</span>${opt}`;
-        btn.onclick=()=>{S.answers[i]=oi;render();};
-        opts.appendChild(btn);
-      });
-      card.appendChild(opts);c.appendChild(card);
+  if (!state.email) {
+    root.innerHTML = renderEmailGate();
+    document.getElementById('email-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') submitEmail();
     });
-    const allAnswered=qs.length>0&&answered===qs.length;
-    const subBtn=document.createElement('button');subBtn.className='submit-btn';
-    subBtn.disabled=!allAnswered||S.loadingSubmit;
-    subBtn.textContent=S.loadingSubmit?'Submitting...':allAnswered?(S.existingSubmission?`Resubmit Week ${cw} Answers`:`Submit Week ${cw} Answers`):`Answer all ${qs.length} questions to submit`;
-    subBtn.onclick=async()=>{
-      if(!allAnswered||S.loadingSubmit)return;
-      S.loadingSubmit=true;render();
-      try{
-        const arr=qs.map((_,i)=>S.answers[i]);
-        const score=await submitAnswers(S.confirmedEmail,cw,arr);
-        S.existingSubmission={answers:arr,score};S.leaderboard=null;
-        S.successMsg=`Submitted! You scored ${score} out of ${qs.length}. Full results available after this week closes.`;S.errorMsg='';
-      }catch(err){S.errorMsg='Submission failed: '+err.message;}
-      S.loadingSubmit=false;render();
-    };
-    c.appendChild(subBtn);
-  });
-}
-
-/* ── Results ── */
-function renderResults(c) {
-  renderIdentityBox(c,()=>{
-    const cw=S.currentWeek;
-    if(!S.results&&!S.loadingResults){
-      S.loadingResults=true;
-      const m=document.createElement('div');m.className='info-msg';m.innerHTML='<span class="spinner"></span>Loading your results...';c.appendChild(m);
-      fetchMyResults(S.confirmedEmail,cw).then(rows=>{S.results=rows||[];S.loadingResults=false;render();})
-        .catch(err=>{S.results=[];S.loadingResults=false;S.errorMsg='Could not load results: '+err.message;render();}); return;
-    }
-    if(S.loadingResults){const m=document.createElement('div');m.className='info-msg';m.innerHTML='<span class="spinner"></span>Loading...';c.appendChild(m);return;}
-    const rows=S.results||[];
-    const totalQ=rows.length,totalCorrect=rows.filter(r=>r.is_correct).length,weeksPlayed=new Set(rows.map(r=>r.week)).size;
-    const sg=document.createElement('div');sg.className='summary-grid';
-    sg.innerHTML=`<div class="metric"><div class="metric-val">${weeksPlayed}</div><div class="metric-label">Weeks played</div></div><div class="metric"><div class="metric-val">${totalQ}</div><div class="metric-label">Questions answered</div></div><div class="metric"><div class="metric-val">${totalCorrect}</div><div class="metric-label">Correct</div></div><div class="metric"><div class="metric-val">${totalQ>0?Math.round(totalCorrect/totalQ*100):0}%</div><div class="metric-label">Score</div></div>`;
-    c.appendChild(sg);
-    const rb=document.createElement('button');rb.className='nav-btn';rb.style.marginBottom='1rem';rb.textContent='Refresh results';rb.onclick=()=>{S.results=null;render();};c.appendChild(rb);
-    if(cw<=1){const m=document.createElement('div');m.className='info-msg';m.textContent='Results for completed weeks appear here. Week 1 closes March 29, 2026.';c.appendChild(m);return;}
-    if(rows.length===0){const m=document.createElement('div');m.className='info-msg';m.textContent='No completed weeks found. Participate in weekly quizzes to see your results here.';c.appendChild(m);return;}
-    const fr=document.createElement('div');fr.className='filter-row';
-    const wkSel=document.createElement('select');wkSel.innerHTML='<option value="0">All weeks</option>';
-    [...new Set(rows.map(r=>r.week))].sort((a,b)=>a-b).forEach(w=>wkSel.innerHTML+=`<option value="${w}"${S.filterWeek==w?' selected':''}>Week ${w}</option>`);
-    wkSel.value=S.filterWeek;wkSel.onchange=e=>{S.filterWeek=parseInt(e.target.value);render();};
-    const catSel=document.createElement('select');catSel.innerHTML='<option value="">All categories</option>';
-    CATEGORIES.forEach(cat=>catSel.innerHTML+=`<option value="${cat}"${S.filterCat===cat?' selected':''}>${cat}</option>`);
-    catSel.value=S.filterCat;catSel.onchange=e=>{S.filterCat=e.target.value;render();};
-    const sortSel=document.createElement('select');
-    sortSel.innerHTML='<option value="week">Sort by week</option><option value="cat">Sort by category</option><option value="status">Wrong answers first</option>';
-    sortSel.value=S.sortField;sortSel.onchange=e=>{S.sortField=e.target.value;render();};
-    fr.appendChild(wkSel);fr.appendChild(catSel);fr.appendChild(sortSel);c.appendChild(fr);
-    let filtered=rows.filter(r=>(S.filterWeek===0||r.week===S.filterWeek)&&(!S.filterCat||r.category===S.filterCat));
-    if(S.sortField==='week') filtered.sort((a,b)=>a.week-b.week);
-    else if(S.sortField==='cat') filtered.sort((a,b)=>a.category.localeCompare(b.category));
-    else filtered.sort((a,b)=>(a.is_correct?1:0)-(b.is_correct?1:0));
-    const card=document.createElement('div');card.className='card';
-    const optKeys=['option_a','option_b','option_c','option_d','option_e'];
-    filtered.forEach(r=>{
-      const row=document.createElement('div');row.className='result-row';
-      const given=r.given_answer;
-      const gt=given!==null?`${String.fromCharCode(65+given)}: ${r[optKeys[given]]}`:'Not answered';
-      const ct=`${String.fromCharCode(65+r.correct_index)}: ${r[optKeys[r.correct_index]]}`;
-      row.innerHTML=`<div class="result-q"><span class="status-dot ${r.is_correct?'dot-green':'dot-red'}"></span>${r.question}</div><div class="result-meta">Week ${r.week} &nbsp;&middot;&nbsp; ${r.category}</div><div style="font-size:13px;line-height:1.6"><span class="${r.is_correct?'result-correct':'result-wrong'}">Your answer: ${gt}</span>${!r.is_correct?`<br><span class="result-correct">Correct: ${ct}</span>`:''}</div><div class="explanation-box">${r.explanation}</div>`;
-      card.appendChild(row);
-    });
-    if(filtered.length===0) card.innerHTML='<div class="info-msg" style="margin:0">No results match the current filter.</div>';
-    c.appendChild(card);
-  });
-}
-
-/* ── Leaderboard ── */
-function renderLeaderboard(c) {
-  const h=document.createElement('h2');h.style.cssText='font-size:18px;font-weight:700;margin-bottom:1rem';h.textContent='Live Leaderboard';c.appendChild(h);
-  if(!S.leaderboard&&!S.loadingLeaderboard){
-    S.loadingLeaderboard=true;
-    const m=document.createElement('div');m.className='info-msg';m.innerHTML='<span class="spinner"></span>Loading leaderboard...';c.appendChild(m);
-    fetchLeaderboard().then(rows=>{S.leaderboard=rows;S.loadingLeaderboard=false;render();}).catch(()=>{S.loadingLeaderboard=false;render();}); return;
-  }
-  const rb=document.createElement('button');rb.className='nav-btn';rb.style.marginBottom='1rem';rb.textContent='Refresh';rb.onclick=()=>{S.leaderboard=null;render();};c.appendChild(rb);
-  if(!S.leaderboard||S.leaderboard.length===0){const m=document.createElement('div');m.className='info-msg';m.textContent='No submissions yet. Be the first!';c.appendChild(m);return;}
-  const maxScore=S.leaderboard[0]?.score||1;
-  const wrap=document.createElement('div');wrap.style.overflowX='auto';
-  const table=document.createElement('table');table.className='leaderboard';
-  table.innerHTML='<thead><tr><th>#</th><th>Participant</th><th>Weeks</th><th>Total score</th><th style="min-width:120px">Progress</th></tr></thead>';
-  const tbody=document.createElement('tbody');
-  S.leaderboard.forEach((row,i)=>{
-    const tr=document.createElement('tr');if(row.email===S.confirmedEmail)tr.className='me';
-    const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}`;
-    const short=row.email.length>28?row.email.slice(0,25)+'...':row.email;
-    const isMe=row.email===S.confirmedEmail;
-    tr.innerHTML=`<td>${medal}</td><td style="font-size:13px">${short}${isMe?' <span style="color:var(--orange);font-size:11px;font-weight:700">(you)</span>':''}</td><td style="text-align:center">${row.weeks}</td><td style="text-align:center;font-weight:700;color:var(--orange)">${row.score}</td><td><div class="score-bar-wrap"><div class="score-bar-fill" style="width:${Math.round(row.score/maxScore*100)}%"></div></div></td>`;
-    tbody.appendChild(tr);
-  });
-  table.appendChild(tbody);wrap.appendChild(table);c.appendChild(wrap);
-}
-
-/* ═══════════════════════════════════════════
-   ADMIN — question card viewer
-   ═══════════════════════════════════════════ */
-function renderAdminQuestionCards(c, allQ) {
-  function getFiltered() {
-    return allQ.filter(q =>
-      (S.aqFilterWeek===0||q.week===S.aqFilterWeek) &&
-      (!S.aqFilterCat||q.category===S.aqFilterCat)
-    );
-  }
-
-  /* toolbar */
-  const toolbar=document.createElement('div');toolbar.className='aq-toolbar';
-  const wkSel=document.createElement('select');
-  wkSel.innerHTML='<option value="0">All weeks</option>';
-  for(let w=1;w<=16;w++) wkSel.innerHTML+=`<option value="${w}"${S.aqFilterWeek===w?' selected':''}>Week ${w}</option>`;
-  wkSel.value=S.aqFilterWeek;
-  wkSel.onchange=e=>{S.aqFilterWeek=parseInt(e.target.value);S.aqCurrent=0;S.aqVisited=new Set();drawCard(getFiltered());};
-  const catSel=document.createElement('select');
-  catSel.innerHTML='<option value="">All categories</option>';
-  CATEGORIES.forEach(cat=>catSel.innerHTML+=`<option value="${cat}"${S.aqFilterCat===cat?' selected':''}>${cat}</option>`);
-  catSel.value=S.aqFilterCat;
-  catSel.onchange=e=>{S.aqFilterCat=e.target.value;S.aqCurrent=0;S.aqVisited=new Set();drawCard(getFiltered());};
-  const rfBtn=document.createElement('button');rfBtn.className='nav-btn';rfBtn.textContent='Refresh data';rfBtn.onclick=()=>{S.adminQuestions=null;render();};
-  const counter=document.createElement('span');counter.className='aq-counter';counter.id='aq-counter';
-  toolbar.appendChild(wkSel);toolbar.appendChild(catSel);toolbar.appendChild(rfBtn);toolbar.appendChild(counter);
-  c.appendChild(toolbar);
-
-  /* progress */
-  const progWrap=document.createElement('div');progWrap.className='aq-progress';
-  const progFill=document.createElement('div');progFill.className='aq-progress-fill';progFill.id='aq-pfill';
-  progWrap.appendChild(progFill);c.appendChild(progWrap);
-
-  /* card area */
-  const cardArea=document.createElement('div');cardArea.id='aq-area';c.appendChild(cardArea);
-
-  /* nav */
-  const navRow=document.createElement('div');navRow.className='aq-nav';
-  const prevBtn=document.createElement('button');prevBtn.className='aq-nav-btn';prevBtn.id='aq-prev';
-  prevBtn.innerHTML=`<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M8.5 2L3.5 6.5L8.5 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Previous`;
-  prevBtn.onclick=()=>{if(S.aqCurrent>0){S.aqCurrent--;drawCard(getFiltered());}};
-  const dotsWrap=document.createElement('div');dotsWrap.className='aq-dots';dotsWrap.id='aq-dots';
-  const nextBtn=document.createElement('button');nextBtn.className='aq-nav-btn aq-primary';nextBtn.id='aq-next';
-  nextBtn.innerHTML=`Next<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M4.5 2L9.5 6.5L4.5 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-  nextBtn.onclick=()=>{const pool=getFiltered();if(S.aqCurrent<pool.length-1){S.aqCurrent++;drawCard(pool);}};
-  navRow.appendChild(prevBtn);navRow.appendChild(dotsWrap);navRow.appendChild(nextBtn);
-  c.appendChild(navRow);
-  const kbd=document.createElement('div');kbd.className='aq-kbd';kbd.textContent='← → arrow keys to navigate between questions';c.appendChild(kbd);
-
-  /* keyboard listener — attach only once */
-  if(!window._aqKey){
-    window._aqKey=true;
-    document.addEventListener('keydown',e=>{
-      if(S.page!=='admin'||S.adminTab!=='questions') return;
-      const pool=(S.adminQuestions||[]).filter(q=>(S.aqFilterWeek===0||q.week===S.aqFilterWeek)&&(!S.aqFilterCat||q.category===S.aqFilterCat));
-      if((e.key==='ArrowRight'||e.key==='ArrowDown')&&S.aqCurrent<pool.length-1){S.aqCurrent++;drawCard(pool);}
-      if((e.key==='ArrowLeft'||e.key==='ArrowUp')&&S.aqCurrent>0){S.aqCurrent--;drawCard(pool);}
-    });
-  }
-
-  drawCard(getFiltered());
-
-  function drawCard(pool) {
-    const area=document.getElementById('aq-area');
-    const ctr=document.getElementById('aq-counter');
-    const pf=document.getElementById('aq-pfill');
-    const dotsEl=document.getElementById('aq-dots');
-    const pb=document.getElementById('aq-prev');
-    const nb=document.getElementById('aq-next');
-    if(!area) return;
-
-    if(pool.length===0){
-      area.innerHTML='<div class="aq-empty">No questions match the current filter.</div>';
-      if(ctr) ctr.textContent='0 questions';
-      if(pf) pf.style.width='0%';
-      if(dotsEl) dotsEl.innerHTML='';
-      if(pb) pb.disabled=true;
-      if(nb) nb.disabled=true;
-      return;
-    }
-
-    if(S.aqCurrent>=pool.length) S.aqCurrent=pool.length-1;
-    S.aqVisited.add(S.aqCurrent);
-
-    const q=pool[S.aqCurrent];
-    const total=pool.length;
-    const idx=S.aqCurrent;
-    const pct=Math.round((idx+1)/total*100);
-    const letters=['A','B','C','D','E'];
-    const opts=[q.option_a,q.option_b,q.option_c,q.option_d,q.option_e];
-
-    if(ctr) ctr.textContent=`${idx+1} / ${total}`;
-    if(pf) pf.style.width=pct+'%';
-    if(pb) pb.disabled=idx===0;
-    if(nb){
-      nb.disabled=false;
-      nb.innerHTML=idx===total-1
-        ?`All done<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M4.5 2L9.5 6.5L4.5 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`
-        :`Next<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M4.5 2L9.5 6.5L4.5 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-      if(idx===total-1) nb.disabled=true;
-    }
-
-    const optHtml=opts.map((opt,i)=>{
-      const ok=i===q.correct_index;
-      return `<div class="aq-option${ok?' aq-correct':''}">
-        <span class="aq-letter">${letters[i]}</span>
-        <span style="flex:1">${opt}</span>
-        ${ok?'<div class="aq-check"></div>':''}
-      </div>`;
-    }).join('');
-
-    area.innerHTML=`
-      <div class="aq-card">
-        <div class="aq-card-meta">
-          <span class="aq-pill aq-pill-week">Week ${q.week}</span>
-          <span class="aq-pill aq-pill-cat">${q.category}</span>
-          <span class="aq-qnum">Question ${idx+1} of ${total}</span>
-        </div>
-        <div class="aq-question">${q.question}</div>
-        <div class="aq-options">${optHtml}</div>
-        <div class="aq-explanation">${q.explanation}</div>
-      </div>`;
-
-    /* dots */
-    if(dotsEl){
-      dotsEl.innerHTML='';
-      const step=total<=40?1:Math.ceil(total/40);
-      for(let i=0;i<total;i+=step){
-        const dot=document.createElement('div');
-        const isActive=step===1?i===idx:(i<=idx&&idx<i+step);
-        const isVisited=S.aqVisited.has(i);
-        dot.className='aq-dot'+(isActive?' aq-active':isVisited?' aq-visited':'');
-        dot.title=`Q${i+1}`;
-        const jump=i;
-        dot.onclick=()=>{S.aqCurrent=jump;drawCard(pool);};
-        dotsEl.appendChild(dot);
-      }
-    }
-  }
-}
-
-/* ── Admin page ── */
-function renderAdmin(c) {
-  if(!S.isAdmin){c.innerHTML='<div class="info-msg">Admin access requires ?admin=true in the URL.</div>';return;}
-  const tabRow=document.createElement('div');tabRow.className='tab-row';
-  [['questions','Questions & Answers'],['submissions','Submissions'],['lb','Leaderboard']].forEach(([id,label])=>{
-    const btn=document.createElement('button');
-    btn.className='tab-btn'+(S.adminTab===id?' active':'');
-    btn.textContent=label;btn.onclick=()=>{S.adminTab=id;render();};
-    tabRow.appendChild(btn);
-  });
-  c.appendChild(tabRow);
-
-  if(S.adminTab==='lb'){renderLeaderboard(c);return;}
-
-  if(S.adminTab==='questions'){
-    if(!S.adminQuestions&&!S.loadingAdmin){
-      S.loadingAdmin=true;
-      const m=document.createElement('div');m.className='info-msg';m.innerHTML='<span class="spinner"></span>Loading questions...';c.appendChild(m);
-      fetchAllQuestionsAdmin().then(rows=>{S.adminQuestions=rows;S.loadingAdmin=false;render();})
-        .catch(err=>{S.loadingAdmin=false;S.errorMsg=err.message;render();}); return;
-    }
-    if(S.loadingAdmin){const m=document.createElement('div');m.className='info-msg';m.innerHTML='<span class="spinner"></span>Loading...';c.appendChild(m);return;}
-    renderAdminQuestionCards(c,S.adminQuestions||[]);
+    document.getElementById('btn-start').addEventListener('click', submitEmail);
     return;
   }
 
-  /* submissions tab */
-  if(!S.adminSubmissions&&!S.loadingAdmin){
-    S.loadingAdmin=true;
-    const m=document.createElement('div');m.className='info-msg';m.innerHTML='<span class="spinner"></span>Loading submissions...';c.appendChild(m);
-    fetchAllSubmissionsAdmin().then(rows=>{S.adminSubmissions=rows;S.loadingAdmin=false;render();})
-      .catch(err=>{S.loadingAdmin=false;S.errorMsg=err.message;render();}); return;
+  if (state.loading) {
+    root.innerHTML = `<div class="card" style="margin-top:1.5rem"><div class="spinner"></div><p style="text-align:center;color:var(--text2);font-size:14px;padding-bottom:1.5rem">Loading your question…</p></div>`;
+    return;
   }
-  const rb=document.createElement('button');rb.className='nav-btn';rb.style.marginBottom='1rem';rb.textContent='Refresh';rb.onclick=()=>{S.adminSubmissions=null;render();};c.appendChild(rb);
-  if(!S.adminSubmissions||S.adminSubmissions.length===0){c.innerHTML+='<div class="info-msg">No submissions yet.</div>';return;}
-  const wrap=document.createElement('div');wrap.style.overflowX='auto';
-  const table=document.createElement('table');table.className='admin-table';
-  table.innerHTML='<thead><tr><th>Email</th><th>Week</th><th>Score</th><th>Submitted</th></tr></thead>';
-  const tbody=document.createElement('tbody');
-  S.adminSubmissions.forEach(r=>{
-    const when=r.submitted_at?new Date(r.submitted_at).toLocaleString('nl-NL',{dateStyle:'short',timeStyle:'short'}):'—';
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td style="font-size:12px">${r.email}</td><td>Week ${r.week}</td><td style="font-weight:700">${r.score??'?'}/5</td><td style="font-size:11px;color:var(--text2);white-space:nowrap">${when}</td>`;
-    tbody.appendChild(tr);
-  });
-  table.appendChild(tbody);wrap.appendChild(table);c.appendChild(wrap);
+
+  if (state.error) {
+    root.innerHTML = `
+      <div class="card" style="margin-top:1.5rem">
+        <div class="error-box">${esc(state.error)}</div>
+        <div style="margin-top:1rem;display:flex;gap:10px">
+          <button class="btn btn-primary" onclick="loadQuestion()">Retry</button>
+          <button class="btn btn-secondary" onclick="changeUser()">Change user</button>
+        </div>
+      </div>`;
+    return;
+  }
+
+  if (state.done) {
+    root.innerHTML = `
+      <div class="card" style="margin-top:1.5rem">
+        <div class="status-msg">
+          <strong>🎓</strong>
+          ${esc(state.doneMessage || 'All questions completed — well done!')}
+          <p style="margin-top:.75rem;font-size:13px;color:var(--text3)">Check back later for new questions.</p>
+        </div>
+        ${renderFooter()}
+      </div>`;
+    attachFooter();
+    return;
+  }
+
+  if (!state.question) return;
+
+  const q = state.question;
+  const diffClass = `badge-diff-${q.difficulty || 'medium'}`;
+
+  root.innerHTML = `
+    <div class="card" style="margin-top:1.5rem">
+      ${state.alreadyAnswered ? `<div class="already-banner">You already answered today's question.</div>` : ''}
+
+      <div class="q-meta">
+        <span class="badge badge-cat">${esc(q.category)}</span>
+        <span class="badge ${diffClass}">${esc(q.difficulty || 'medium')}</span>
+      </div>
+
+      <p class="q-text">${esc(q.text)}</p>
+
+      <div class="options" id="options-list">
+        ${q.options.map((opt, i) => {
+          let cls = 'option';
+          if (state.submitted) {
+            if (i === state.correctIndex) cls += ' correct';
+            else if (i === state.selectedIndex && i !== state.correctIndex) cls += ' wrong';
+          } else if (i === state.selectedIndex) {
+            cls += ' selected';
+          }
+          return `<button class="${cls}" data-index="${i}" ${state.submitted ? 'disabled' : ''} onclick="selectOption(${i})">
+            <span class="option-letter">${'ABCDE'[i]}</span>
+            <span class="option-text">${esc(opt)}</span>
+          </button>`;
+        }).join('')}
+      </div>
+
+      ${!state.submitted ? `
+        <div class="submit-row">
+          <button class="btn btn-submit" id="btn-submit" onclick="submitAnswer()" ${state.selectedIndex === null ? 'disabled' : ''}>
+            Submit answer
+          </button>
+        </div>
+      ` : `
+        <div class="result-banner ${state.correct ? 'correct' : 'wrong'}">
+          <span class="result-icon">${state.correct ? '✓' : '✗'}</span>
+          <div>
+            <div class="result-label ${state.correct ? 'correct' : 'wrong'}">
+              ${state.correct ? 'Correct!' : 'Not quite — the correct answer is ' + 'ABCDE'[state.correctIndex]}
+            </div>
+            <div class="result-explanation">${esc(state.explanation || '')}</div>
+          </div>
+        </div>
+        ${renderFeedback()}
+      `}
+    </div>
+    ${renderFooter()}`;
+
+  if (state.submitted) attachFeedback();
+  attachFooter();
 }
 
-render();
+function renderEmailGate() {
+  return `
+    <div class="email-section">
+      <h1>Mendix question of the day</h1>
+      <p>One new Mendix question every day. You'll get a random question you haven't seen before — answer it, see the explanation, and leave feedback.</p>
+      <div class="card" style="margin-top:.5rem">
+        <div style="margin-bottom:.75rem;font-size:14px;font-weight:500">Enter your PostNL email to start</div>
+        <div class="input-row">
+          <input type="email" id="email-input" class="email-input"
+            placeholder="you@postnl.nl"
+            value="${esc(state.email)}">
+          <button id="btn-start" class="btn btn-primary">Start →</button>
+        </div>
+        ${state.error ? `<div class="error-box" style="margin-top:.75rem">${esc(state.error)}</div>` : ''}
+      </div>
+    </div>`;
+}
+
+function renderFeedback() {
+  if (state.feedbackSent) {
+    return `<div class="feedback-section"><span class="feedback-sent">✓ Feedback sent — thank you!</span></div>`;
+  }
+  const stars = [1,2,3,4,5].map(n =>
+    `<button class="star ${n <= state.feedbackRating ? 'active' : ''}" onclick="setRating(${n})">★</button>`
+  ).join('');
+  return `
+    <div class="feedback-section">
+      <div class="feedback-title">Rate this question</div>
+      <div class="stars">${stars}</div>
+      <textarea class="feedback-comment" id="feedback-comment" placeholder="Optional: was anything unclear or incorrect?" maxlength="500">${esc(state.feedbackComment)}</textarea>
+      <button class="btn btn-secondary" id="btn-feedback" onclick="submitFeedback()" ${state.feedbackRating === 0 || state.feedbackSending ? 'disabled' : ''}>
+        ${state.feedbackSending ? 'Sending…' : 'Send feedback'}
+      </button>
+      ${state.feedbackError ? `<div class="feedback-error" style="margin-top:.5rem">${esc(state.feedbackError)}</div>` : ''}
+    </div>`;
+}
+
+function renderFooter() {
+  return `
+    <div class="footer-bar" id="footer-bar">
+      <span>Signed in as <strong>${esc(state.email)}</strong></span>
+      <button class="link-btn" onclick="changeUser()">Change</button>
+    </div>`;
+}
+
+function attachFeedback() {
+  const ta = document.getElementById('feedback-comment');
+  if (ta) ta.addEventListener('input', e => { state.feedbackComment = e.target.value; });
+}
+
+function attachFooter() {}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ACTIONS
+// ─────────────────────────────────────────────────────────────────────────────
+function submitEmail() {
+  const input = document.getElementById('email-input');
+  const email = input ? input.value.trim() : state.email;
+  if (!email || !email.includes('@')) {
+    state.error = 'Please enter a valid email address.';
+    render(); return;
+  }
+  state.email = email;
+  state.error = null;
+  localStorage.setItem('quiz_email', email);
+  loadQuestion();
+}
+
+async function loadQuestion() {
+  state.loading = true;
+  state.error = null;
+  state.question = null;
+  state.selectedIndex = null;
+  state.submitted = false;
+  state.correct = null;
+  state.correctIndex = null;
+  state.explanation = null;
+  state.alreadyAnswered = false;
+  state.done = false;
+  state.feedbackRating = 0;
+  state.feedbackComment = '';
+  state.feedbackSent = false;
+  state.feedbackError = null;
+  render();
+
+  try {
+    const res = await fetch(`${API}/question?email=${encodeURIComponent(state.email)}`);
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+
+    if (data.done) {
+      state.done = true;
+      state.doneMessage = data.message;
+    } else {
+      state.question = data.question;
+      state.alreadyAnswered = data.alreadyAnswered || false;
+      if (data.alreadyAnswered) {
+        state.submitted = true;
+        state.selectedIndex = data.selectedIndex;
+        state.correct = data.correct;
+        state.correctIndex = data.correctIndex;
+        state.explanation = data.explanation;
+      }
+    }
+  } catch (err) {
+    state.error = err.message || 'Could not reach the quiz API. Check your API endpoint configuration.';
+  }
+
+  state.loading = false;
+  render();
+}
+
+function selectOption(index) {
+  if (state.submitted) return;
+  state.selectedIndex = index;
+  render();
+}
+
+async function submitAnswer() {
+  if (state.selectedIndex === null || state.submitted) return;
+
+  const btnSubmit = document.getElementById('btn-submit');
+  if (btnSubmit) { btnSubmit.disabled = true; btnSubmit.textContent = 'Submitting…'; }
+
+  try {
+    const res = await fetch(`${API}/answer`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: state.email,
+        questionId: state.question.questionId,
+        answerIndex: state.selectedIndex
+      })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+
+    state.submitted = true;
+    state.correct = data.correct;
+    state.correctIndex = data.correctIndex;
+    state.explanation = data.explanation;
+  } catch (err) {
+    state.error = err.message;
+  }
+
+  render();
+}
+
+function setRating(n) {
+  state.feedbackRating = n;
+  render();
+  // keep textarea content
+  const ta = document.getElementById('feedback-comment');
+  if (ta) { ta.value = state.feedbackComment; ta.addEventListener('input', e => { state.feedbackComment = e.target.value; }); }
+}
+
+async function submitFeedback() {
+  if (state.feedbackRating === 0 || state.feedbackSending) return;
+  state.feedbackSending = true;
+  state.feedbackError = null;
+  // Save comment before re-render
+  const ta = document.getElementById('feedback-comment');
+  if (ta) state.feedbackComment = ta.value;
+  render();
+
+  try {
+    const res = await fetch(`${API}/feedback`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: state.email,
+        questionId: state.question.questionId,
+        rating: state.feedbackRating,
+        comment: state.feedbackComment
+      })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+    state.feedbackSent = true;
+  } catch (err) {
+    state.feedbackError = 'Could not send feedback: ' + err.message;
+  }
+
+  state.feedbackSending = false;
+  render();
+}
+
+function changeUser() {
+  state.email = '';
+  state.question = null;
+  state.error = null;
+  state.done = false;
+  state.submitted = false;
+  localStorage.removeItem('quiz_email');
+  render();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// UTILS
+// ─────────────────────────────────────────────────────────────────────────────
+function esc(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────────────────────────
+document.getElementById('header-date').textContent =
+  new Date().toLocaleDateString('nl-NL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+if (state.email) {
+  loadQuestion();
+} else {
+  render();
+}
 </script>
 </body>
 </html>
