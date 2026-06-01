@@ -21,8 +21,7 @@ set -euo pipefail
 # CONFIGURATION — edit these if needed
 # ---------------------------------------------------------------------------
 REGION="eu-west-1"          # Frankfurt — closest to PostNL
-#ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
-ACCOUNT_ID=851725425406
+ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
 ROLE_NAME="quiz-lambda-role"
 POLICY_NAME="quiz-dynamo-policy"
 

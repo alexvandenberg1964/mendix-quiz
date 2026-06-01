@@ -9,59 +9,87 @@
     :root {
       --orange: #FF6200; --orange-light: #FFF0E6; --orange-mid: #FFD5B3;
       --blue: #003087; --blue-light: #E6EBF5;
-      --bg: #ffffff; --bg2: #f5f5f5; --bg3: #ececec;
+      --bg: #f0f2f5; --bg2: #ffffff; --bg3: #f0f2f5;
       --text: #1a1a1a; --text2: #555555; --text3: #999999;
-      --border: rgba(0,0,0,0.10); --border2: rgba(0,0,0,0.20);
+      --border: rgba(0,0,0,0.09); --border2: rgba(0,0,0,0.18);
       --green: #2d6a0f; --green-bg: #e8f5d9;
       --red: #a32020; --red-bg: #fde8e8;
       --amber: #7a4800; --amber-bg: #fff3d9;
+      --gold: #c8960c; --silver: #6b7280; --bronze: #92400e;
       --radius: 8px; --radius-lg: 14px;
+      --shadow: 0 1px 4px rgba(0,0,0,0.08);
     }
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #18181b; --bg2: #27272a; --bg3: #3f3f46;
-        --text: #f4f4f5; --text2: #a1a1aa; --text3: #71717a;
-        --border: rgba(255,255,255,0.09); --border2: rgba(255,255,255,0.18);
-        --blue-light: #0f1f42; --orange-light: #2e1600;
-        --green-bg: #132b06; --red-bg: #2b0a0a; --amber-bg: #2b1800;
+        --bg: #111113; --bg2: #1e1e21; --bg3: #2a2a2e;
+        --text: #f4f4f5; --text2: #a1a1aa; --text3: #52525b;
+        --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.15);
+        --blue-light: #0d1a38; --orange-light: #2a1200;
+        --green-bg: #0f2204; --red-bg: #250707; --amber-bg: #221100;
+        --shadow: 0 1px 4px rgba(0,0,0,0.4);
       }
     }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
       background: var(--bg); color: var(--text); min-height: 100vh;
     }
-    #app { max-width: 680px; margin: 0 auto; padding: 0 1rem 4rem; }
 
     /* ── Header ── */
     .header {
       background: var(--blue); color: #fff;
-      padding: 0 1.5rem;
+      padding: 0 2rem;
       display: flex; align-items: center; justify-content: space-between;
-      height: 56px; margin: 0 -1rem 2rem;
+      height: 54px; position: sticky; top: 0; z-index: 100;
     }
     .header-brand { display: flex; align-items: center; gap: 10px; }
-    .header-logo { font-size: 18px; font-weight: 700; color: var(--orange); letter-spacing: -0.3px; }
-    .header-sep { color: rgba(255,255,255,0.3); font-size: 16px; }
-    .header-title { font-size: 13px; color: rgba(255,255,255,0.8); letter-spacing: 0.02em; }
-    .header-date { font-size: 12px; color: rgba(255,255,255,0.55); font-variant-numeric: tabular-nums; }
+    .header-logo { font-size: 17px; font-weight: 700; color: var(--orange); letter-spacing: -0.3px; }
+    .header-sep { color: rgba(255,255,255,0.25); }
+    .header-title { font-size: 13px; color: rgba(255,255,255,0.75); }
+    .header-right { display: flex; align-items: center; gap: 12px; }
+    .header-date { font-size: 12px; color: rgba(255,255,255,0.5); font-variant-numeric: tabular-nums; }
+    .header-user { font-size: 12px; color: rgba(255,255,255,0.6); }
+    .link-btn {
+      background: none; border: none; cursor: pointer;
+      color: var(--orange); font-size: 12px; padding: 0;
+      text-decoration: underline; text-underline-offset: 2px;
+    }
 
-    /* ── Shared card ── */
+    /* ── Layout ── */
+    .layout {
+      max-width: 1100px; margin: 0 auto;
+      padding: 1.75rem 1.25rem 4rem;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 1.5rem;
+      align-items: start;
+    }
+    @media (max-width: 760px) {
+      .layout { grid-template-columns: 1fr; }
+      .leaderboard-col { order: -1; }
+    }
+
+    /* ── Card ── */
     .card {
-      background: var(--bg2); border: 1px solid var(--border);
-      border-radius: var(--radius-lg); padding: 1.75rem;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
     }
 
     /* ── Email gate ── */
-    .email-section { padding-top: 2rem; }
-    .email-section h1 { font-size: 22px; font-weight: 600; margin-bottom: .4rem; }
-    .email-section p { color: var(--text2); font-size: 14px; line-height: 1.6; margin-bottom: 1.5rem; }
+    .email-wrap { max-width: 520px; margin: 3rem auto; padding: 0 1.25rem; }
+    .email-wrap h1 { font-size: 22px; font-weight: 600; margin-bottom: .4rem; }
+    .email-wrap p { color: var(--text2); font-size: 14px; line-height: 1.6; margin-bottom: 1.5rem; }
     .input-row { display: flex; gap: 10px; }
     .email-input {
       flex: 1; height: 42px; border: 1px solid var(--border2);
-      border-radius: var(--radius); background: var(--bg); color: var(--text);
+      border-radius: var(--radius); background: var(--bg2); color: var(--text);
       padding: 0 12px; font-size: 15px; outline: none;
     }
     .email-input:focus { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(255,98,0,.15); }
+
+    /* ── Buttons ── */
     .btn {
       height: 42px; padding: 0 20px; border-radius: var(--radius);
       font-size: 14px; font-weight: 600; cursor: pointer;
@@ -70,164 +98,176 @@
     }
     .btn:active { transform: scale(.97); }
     .btn-primary { background: var(--orange); color: #fff; }
-    .btn-primary:hover { opacity: .9; }
-    .btn-secondary { background: var(--bg3); color: var(--text2); }
-    .btn-secondary:hover { background: var(--border2); }
+    .btn-primary:hover { opacity: .88; }
+    .btn-secondary { background: var(--bg3); color: var(--text2); border: 1px solid var(--border2); }
+    .btn-secondary:hover { background: var(--border); }
+    .btn:disabled { opacity: .4; cursor: default; transform: none; }
 
-    /* ── Loading / status ── */
+    /* ── Spinner ── */
     .spinner {
-      width: 36px; height: 36px; margin: 3rem auto; display: block;
+      width: 32px; height: 32px; margin: 2.5rem auto; display: block;
       border: 3px solid var(--border2); border-top-color: var(--orange);
       border-radius: 50%; animation: spin .7s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .status-msg {
-      text-align: center; padding: 3rem 1rem; color: var(--text2); font-size: 15px;
-    }
-    .status-msg strong { display: block; font-size: 28px; margin-bottom: .5rem; }
 
-    /* ── Question card ── */
-    .q-meta {
-      display: flex; align-items: center; gap: 8px; margin-bottom: 1.2rem;
-      flex-wrap: wrap;
-    }
+    /* ── Question panel ── */
+    .q-inner { padding: 1.75rem; }
+    .q-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 1.1rem; flex-wrap: wrap; }
     .badge {
       font-size: 11px; font-weight: 600; padding: 3px 9px;
       border-radius: 20px; letter-spacing: .03em;
     }
     .badge-cat { background: var(--blue-light); color: var(--blue); }
-    .badge-diff-easy { background: var(--green-bg); color: var(--green); }
+    .badge-diff-easy   { background: var(--green-bg); color: var(--green); }
     .badge-diff-medium { background: var(--amber-bg); color: var(--amber); }
-    .badge-diff-hard { background: var(--red-bg); color: var(--red); }
-    .q-text {
-      font-size: 17px; font-weight: 500; line-height: 1.55;
-      margin-bottom: 1.5rem; color: var(--text);
-    }
-    .q-text code {
-      background: var(--bg3); padding: 1px 5px; border-radius: 4px;
-      font-size: 14px; font-family: 'Menlo', 'Consolas', monospace;
-    }
+    .badge-diff-hard   { background: var(--red-bg);   color: var(--red);   }
+    .q-text { font-size: 16px; font-weight: 500; line-height: 1.6; margin-bottom: 1.4rem; }
 
     /* ── Options ── */
-    .options { display: flex; flex-direction: column; gap: 10px; }
+    .options { display: flex; flex-direction: column; gap: 9px; }
     .option {
-      display: flex; align-items: flex-start; gap: 12px;
-      padding: 13px 15px; border-radius: var(--radius);
-      border: 1.5px solid var(--border); background: var(--bg);
-      cursor: pointer; transition: border-color .15s, background .15s;
-      text-align: left; width: 100%;
+      display: flex; align-items: flex-start; gap: 11px;
+      padding: 12px 14px; border-radius: var(--radius);
+      border: 1.5px solid var(--border2); background: var(--bg2);
+      cursor: pointer; text-align: left; width: 100%;
+      transition: border-color .13s, background .13s;
     }
     .option:hover:not(:disabled) { border-color: var(--orange); background: var(--orange-light); }
     .option:disabled { cursor: default; }
     .option-letter {
-      width: 26px; height: 26px; border-radius: 50%;
+      width: 24px; height: 24px; border-radius: 50%;
       background: var(--bg3); color: var(--text2);
-      font-size: 12px; font-weight: 700;
+      font-size: 11px; font-weight: 700;
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0; margin-top: 1px;
     }
-    .option-text { font-size: 14px; line-height: 1.5; color: var(--text); }
-    .option.selected { border-color: var(--orange); background: var(--orange-light); }
+    .option-text { font-size: 13.5px; line-height: 1.5; color: var(--text); }
+    .option.selected  { border-color: var(--orange); background: var(--orange-light); }
     .option.selected .option-letter { background: var(--orange); color: #fff; }
-    .option.correct { border-color: var(--green); background: var(--green-bg); }
+    .option.correct   { border-color: var(--green); background: var(--green-bg); }
     .option.correct .option-letter { background: var(--green); color: #fff; }
-    .option.wrong { border-color: var(--red); background: var(--red-bg); }
-    .option.wrong .option-letter { background: var(--red); color: #fff; }
+    .option.wrong     { border-color: var(--red); background: var(--red-bg); }
+    .option.wrong .option-letter   { background: var(--red); color: #fff; }
 
-    /* ── Submit row ── */
-    .submit-row { margin-top: 1.25rem; display: flex; gap: 10px; align-items: center; }
-    .btn-submit { background: var(--orange); color: #fff; height: 44px; padding: 0 24px; }
-    .btn-submit:disabled { opacity: .45; cursor: default; }
-
-    /* ── Result ── */
+    /* ── Submit / result ── */
+    .submit-row { margin-top: 1.1rem; }
     .result-banner {
-      border-radius: var(--radius); padding: 14px 16px;
-      display: flex; align-items: flex-start; gap: 10px; margin-top: 1.25rem;
+      border-radius: var(--radius); padding: 13px 15px;
+      display: flex; align-items: flex-start; gap: 10px; margin-top: 1.1rem;
     }
     .result-banner.correct { background: var(--green-bg); border: 1px solid var(--green); }
-    .result-banner.wrong { background: var(--red-bg); border: 1px solid var(--red); }
-    .result-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
-    .result-label { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .result-banner.wrong   { background: var(--red-bg);   border: 1px solid var(--red);   }
+    .result-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .result-label { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
     .result-label.correct { color: var(--green); }
-    .result-label.wrong { color: var(--red); }
-    .result-explanation { font-size: 13px; color: var(--text2); line-height: 1.6; }
+    .result-label.wrong   { color: var(--red); }
+    .result-explanation { font-size: 12.5px; color: var(--text2); line-height: 1.6; }
 
-    /* ── Feedback widget ── */
-    .feedback-section {
-      margin-top: 1.75rem; padding-top: 1.5rem;
-      border-top: 1px solid var(--border);
-    }
-    .feedback-title {
-      font-size: 13px; font-weight: 600; color: var(--text2);
-      margin-bottom: .75rem; text-transform: uppercase; letter-spacing: .05em;
-    }
-    .stars { display: flex; gap: 6px; margin-bottom: 1rem; }
-    .star {
-      font-size: 24px; cursor: pointer; color: var(--border2);
-      transition: color .1s, transform .1s;
-      background: none; border: none; padding: 0; line-height: 1;
-    }
+    /* ── Feedback ── */
+    .feedback-section { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+    .feedback-title { font-size: 11px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: .06em; margin-bottom: .6rem; }
+    .stars { display: flex; gap: 4px; margin-bottom: .85rem; }
+    .star { font-size: 22px; cursor: pointer; color: var(--border2); background: none; border: none; padding: 0; line-height: 1; transition: color .1s, transform .1s; }
     .star:hover, .star.active { color: #f5a623; }
     .star:hover { transform: scale(1.15); }
     .feedback-comment {
-      width: 100%; min-height: 70px; resize: vertical;
+      width: 100%; min-height: 64px; resize: vertical;
       border: 1px solid var(--border2); border-radius: var(--radius);
-      background: var(--bg); color: var(--text);
-      padding: 10px 12px; font-size: 13px; font-family: inherit;
-      outline: none; margin-bottom: .75rem;
+      background: var(--bg2); color: var(--text);
+      padding: 9px 11px; font-size: 13px; font-family: inherit; outline: none; margin-bottom: .7rem;
     }
     .feedback-comment:focus { border-color: var(--orange); }
-    .feedback-sent { font-size: 13px; color: var(--green); font-weight: 500; }
-    .feedback-error { font-size: 13px; color: var(--red); }
+    .feedback-sent  { font-size: 13px; color: var(--green); font-weight: 500; }
+    .feedback-error { font-size: 12px; color: var(--red); margin-top: .4rem; }
 
-    /* ── Already answered banner ── */
+    /* ── Already-answered ── */
     .already-banner {
-      background: var(--blue-light); border: 1px solid rgba(0,48,135,.2);
-      border-radius: var(--radius); padding: 10px 14px;
-      font-size: 13px; color: var(--blue); margin-bottom: 1rem;
+      background: var(--blue-light); border: 1px solid rgba(0,48,135,.18);
+      border-radius: var(--radius); padding: 9px 13px;
+      font-size: 12.5px; color: var(--blue); margin-bottom: .9rem;
     }
 
-    /* ── Footer / change user ── */
-    .footer-bar {
-      margin-top: 2rem; display: flex; align-items: center; justify-content: space-between;
-      font-size: 12px; color: var(--text3);
-    }
-    .link-btn {
-      background: none; border: none; cursor: pointer;
-      color: var(--orange); font-size: 12px; padding: 0; text-decoration: underline;
-    }
+    /* ── Status screens ── */
+    .status-msg { text-align: center; padding: 2.5rem 1rem; color: var(--text2); font-size: 14px; }
+    .status-msg strong { display: block; font-size: 32px; margin-bottom: .4rem; }
+    .error-box { background: var(--red-bg); border: 1px solid var(--red); border-radius: var(--radius); padding: 11px 14px; font-size: 13px; color: var(--red); }
 
-    /* ── Error ── */
-    .error-box {
-      background: var(--red-bg); border: 1px solid var(--red);
-      border-radius: var(--radius); padding: 12px 16px;
-      font-size: 13px; color: var(--red); margin-top: 1rem;
+    /* ── Leaderboard panel ── */
+    .lb-header {
+      padding: 1.1rem 1.25rem .85rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
     }
+    .lb-title { font-size: 13px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 6px; }
+    .lb-subtitle { font-size: 11px; color: var(--text3); margin-top: 1px; }
+    .lb-refresh {
+      font-size: 11px; color: var(--orange); background: none; border: none;
+      cursor: pointer; padding: 4px 8px; border-radius: 6px;
+      border: 1px solid var(--orange); font-weight: 600;
+    }
+    .lb-refresh:hover { background: var(--orange-light); }
+
+    .lb-list { padding: .5rem 0; }
+    .lb-row {
+      display: grid;
+      grid-template-columns: 28px 1fr 36px;
+      align-items: center; gap: 8px;
+      padding: .6rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      transition: background .1s;
+    }
+    .lb-row:last-child { border-bottom: none; }
+    .lb-row:hover { background: var(--bg3); }
+    .lb-row.me { background: var(--orange-light); }
+    .lb-row.me:hover { background: var(--orange-mid); }
+
+    .lb-rank { font-size: 13px; font-weight: 700; text-align: center; color: var(--text3); }
+    .lb-rank.gold   { color: var(--gold); }
+    .lb-rank.silver { color: var(--silver); }
+    .lb-rank.bronze { color: var(--bronze); }
+
+    .lb-info { min-width: 0; }
+    .lb-name { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .lb-meta { font-size: 11px; color: var(--text3); margin-top: 1px; display: flex; align-items: center; gap: 6px; }
+    .lb-streak { color: var(--orange); font-weight: 600; }
+
+    .lb-score { text-align: right; }
+    .lb-correct { font-size: 15px; font-weight: 700; color: var(--text); line-height: 1; }
+    .lb-pct { font-size: 10px; color: var(--text3); margin-top: 1px; }
+
+    .lb-loading { padding: 2rem; text-align: center; }
+    .lb-empty { padding: 2rem 1.25rem; text-align: center; color: var(--text3); font-size: 13px; }
+
+    .lb-updated { padding: .6rem 1.25rem; font-size: 10px; color: var(--text3); text-align: right; border-top: 1px solid var(--border); }
   </style>
 </head>
 <body>
-<div id="app">
-  <div class="header">
-    <div class="header-brand">
-      <span class="header-logo">PostNL</span>
-      <span class="header-sep">|</span>
-      <span class="header-title">Mendix Daily Quiz</span>
-    </div>
-    <span class="header-date" id="header-date"></span>
+
+<div class="header">
+  <div class="header-brand">
+    <span class="header-logo">PostNL</span>
+    <span class="header-sep">|</span>
+    <span class="header-title">Mendix Daily Quiz</span>
   </div>
-  <div id="root"></div>
+  <div class="header-right">
+    <span class="header-date" id="header-date"></span>
+    <span class="header-user" id="header-user"></span>
+  </div>
 </div>
+
+<div id="root"></div>
 
 <script>
 // ─────────────────────────────────────────────────────────────────────────────
-// CONFIG — replace with your API Gateway endpoint after running deploy.sh
+// CONFIG
 // ─────────────────────────────────────────────────────────────────────────────
 const API = 'https://r4800dlclj.execute-api.eu-west-1.amazonaws.com/prod';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // STATE
 // ─────────────────────────────────────────────────────────────────────────────
-const state = {
+const Q = {
   email: localStorage.getItem('quiz_email') || '',
   loading: false,
   error: null,
@@ -240,7 +280,6 @@ const state = {
   correctIndex: null,
   explanation: null,
   alreadyAnswered: false,
-  // feedback
   feedbackRating: 0,
   feedbackComment: '',
   feedbackSent: false,
@@ -248,317 +287,355 @@ const state = {
   feedbackSending: false,
 };
 
+const LB = {
+  loading: false,
+  board: [],
+  updatedAt: null,
+  error: null,
+};
+
 // ─────────────────────────────────────────────────────────────────────────────
-// RENDER
+// ROOT RENDER
 // ─────────────────────────────────────────────────────────────────────────────
 function render() {
   const root = document.getElementById('root');
 
-  if (!state.email) {
+  // Update header user
+  const hu = document.getElementById('header-user');
+  if (Q.email && hu) {
+    hu.innerHTML = `${esc(Q.email)} &nbsp;<button class="link-btn" onclick="changeUser()">change</button>`;
+  }
+
+  if (!Q.email) {
     root.innerHTML = renderEmailGate();
-    document.getElementById('email-input').addEventListener('keydown', e => {
-      if (e.key === 'Enter') submitEmail();
-    });
+    document.getElementById('email-input').addEventListener('keydown', e => { if (e.key === 'Enter') submitEmail(); });
     document.getElementById('btn-start').addEventListener('click', submitEmail);
     return;
   }
 
-  if (state.loading) {
-    root.innerHTML = `<div class="card" style="margin-top:1.5rem"><div class="spinner"></div><p style="text-align:center;color:var(--text2);font-size:14px;padding-bottom:1.5rem">Loading your question…</p></div>`;
-    return;
-  }
-
-  if (state.error) {
-    root.innerHTML = `
-      <div class="card" style="margin-top:1.5rem">
-        <div class="error-box">${esc(state.error)}</div>
-        <div style="margin-top:1rem;display:flex;gap:10px">
-          <button class="btn btn-primary" onclick="loadQuestion()">Retry</button>
-          <button class="btn btn-secondary" onclick="changeUser()">Change user</button>
-        </div>
-      </div>`;
-    return;
-  }
-
-  if (state.done) {
-    root.innerHTML = `
-      <div class="card" style="margin-top:1.5rem">
-        <div class="status-msg">
-          <strong>🎓</strong>
-          ${esc(state.doneMessage || 'All questions completed — well done!')}
-          <p style="margin-top:.75rem;font-size:13px;color:var(--text3)">Check back later for new questions.</p>
-        </div>
-        ${renderFooter()}
-      </div>`;
-    attachFooter();
-    return;
-  }
-
-  if (!state.question) return;
-
-  const q = state.question;
-  const diffClass = `badge-diff-${q.difficulty || 'medium'}`;
-
   root.innerHTML = `
-    <div class="card" style="margin-top:1.5rem">
-      ${state.alreadyAnswered ? `<div class="already-banner">You already answered today's question.</div>` : ''}
+    <div class="layout">
+      <div class="question-col">${renderQuestion()}</div>
+      <div class="leaderboard-col">${renderLeaderboard()}</div>
+    </div>`;
 
-      <div class="q-meta">
-        <span class="badge badge-cat">${esc(q.category)}</span>
-        <span class="badge ${diffClass}">${esc(q.difficulty || 'medium')}</span>
-      </div>
-
-      <p class="q-text">${esc(q.text)}</p>
-
-      <div class="options" id="options-list">
-        ${q.options.map((opt, i) => {
-          let cls = 'option';
-          if (state.submitted) {
-            if (i === state.correctIndex) cls += ' correct';
-            else if (i === state.selectedIndex && i !== state.correctIndex) cls += ' wrong';
-          } else if (i === state.selectedIndex) {
-            cls += ' selected';
-          }
-          return `<button class="${cls}" data-index="${i}" ${state.submitted ? 'disabled' : ''} onclick="selectOption(${i})">
-            <span class="option-letter">${'ABCDE'[i]}</span>
-            <span class="option-text">${esc(opt)}</span>
-          </button>`;
-        }).join('')}
-      </div>
-
-      ${!state.submitted ? `
-        <div class="submit-row">
-          <button class="btn btn-submit" id="btn-submit" onclick="submitAnswer()" ${state.selectedIndex === null ? 'disabled' : ''}>
-            Submit answer
-          </button>
-        </div>
-      ` : `
-        <div class="result-banner ${state.correct ? 'correct' : 'wrong'}">
-          <span class="result-icon">${state.correct ? '✓' : '✗'}</span>
-          <div>
-            <div class="result-label ${state.correct ? 'correct' : 'wrong'}">
-              ${state.correct ? 'Correct!' : 'Not quite — the correct answer is ' + 'ABCDE'[state.correctIndex]}
-            </div>
-            <div class="result-explanation">${esc(state.explanation || '')}</div>
-          </div>
-        </div>
-        ${renderFeedback()}
-      `}
-    </div>
-    ${renderFooter()}`;
-
-  if (state.submitted) attachFeedback();
-  attachFooter();
+  // Attach events
+  if (Q.submitted) {
+    const ta = document.getElementById('feedback-comment');
+    if (ta) ta.addEventListener('input', e => { Q.feedbackComment = e.target.value; });
+  }
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// EMAIL GATE
+// ─────────────────────────────────────────────────────────────────────────────
 function renderEmailGate() {
   return `
-    <div class="email-section">
+    <div class="email-wrap">
       <h1>Mendix question of the day</h1>
-      <p>One new Mendix question every day. You'll get a random question you haven't seen before — answer it, see the explanation, and leave feedback.</p>
-      <div class="card" style="margin-top:.5rem">
+      <p>One new Mendix question every day. You'll get a random question you haven't seen before - answer it, see the explanation, and leave feedback.</p>
+      <div class="card" style="padding:1.5rem">
         <div style="margin-bottom:.75rem;font-size:14px;font-weight:500">Enter your PostNL email to start</div>
         <div class="input-row">
-          <input type="email" id="email-input" class="email-input"
-            placeholder="you@postnl.nl"
-            value="${esc(state.email)}">
-          <button id="btn-start" class="btn btn-primary">Start →</button>
+          <input type="email" id="email-input" class="email-input" placeholder="you@postnl.nl" value="${esc(Q.email)}">
+          <button id="btn-start" class="btn btn-primary">Start &rarr;</button>
         </div>
-        ${state.error ? `<div class="error-box" style="margin-top:.75rem">${esc(state.error)}</div>` : ''}
+        ${Q.error ? `<div class="error-box" style="margin-top:.75rem">${esc(Q.error)}</div>` : ''}
       </div>
     </div>`;
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// QUESTION PANEL
+// ─────────────────────────────────────────────────────────────────────────────
+function renderQuestion() {
+  if (Q.loading) return `<div class="card"><div class="spinner"></div></div>`;
+
+  if (Q.error) return `
+    <div class="card"><div class="q-inner">
+      <div class="error-box">${esc(Q.error)}</div>
+      <div style="margin-top:1rem;display:flex;gap:8px">
+        <button class="btn btn-primary" onclick="loadQuestion()">Retry</button>
+        <button class="btn btn-secondary" onclick="changeUser()">Change user</button>
+      </div>
+    </div></div>`;
+
+  if (Q.done) return `
+    <div class="card"><div class="q-inner">
+      <div class="status-msg">
+        <strong>🎓</strong>
+        ${esc(Q.doneMessage || 'All questions completed - well done!')}
+        <p style="margin-top:.75rem;font-size:13px;color:var(--text3)">Check back later for new questions.</p>
+      </div>
+    </div></div>`;
+
+  if (!Q.question) return `<div class="card"><div class="spinner"></div></div>`;
+
+  const q = Q.question;
+  const diffClass = `badge-diff-${q.difficulty || 'medium'}`;
+
+  return `
+    <div class="card">
+      <div class="q-inner">
+        ${Q.alreadyAnswered ? `<div class="already-banner">You already answered today's question.</div>` : ''}
+        <div class="q-meta">
+          <span class="badge badge-cat">${esc(q.category)}</span>
+          <span class="badge ${diffClass}">${esc(q.difficulty || 'medium')}</span>
+        </div>
+        <p class="q-text">${esc(q.text)}</p>
+        <div class="options">
+          ${q.options.map((opt, i) => {
+            let cls = 'option';
+            if (Q.submitted) {
+              if (i === Q.correctIndex) cls += ' correct';
+              else if (i === Q.selectedIndex && i !== Q.correctIndex) cls += ' wrong';
+            } else if (i === Q.selectedIndex) cls += ' selected';
+            return `<button class="${cls}" data-i="${i}" ${Q.submitted ? 'disabled' : ''} onclick="selectOption(${i})">
+              <span class="option-letter">${'ABCDE'[i]}</span>
+              <span class="option-text">${esc(opt)}</span>
+            </button>`;
+          }).join('')}
+        </div>
+        ${!Q.submitted
+          ? `<div class="submit-row" style="margin-top:1.1rem">
+               <button class="btn btn-primary" onclick="submitAnswer()" id="btn-submit" style="height:42px;padding:0 22px" ${Q.selectedIndex === null ? 'disabled' : ''}>
+                 Submit answer
+               </button>
+             </div>`
+          : `<div class="result-banner ${Q.correct ? 'correct' : 'wrong'}">
+               <span class="result-icon">${Q.correct ? '✓' : '✗'}</span>
+               <div>
+                 <div class="result-label ${Q.correct ? 'correct' : 'wrong'}">
+                   ${Q.correct ? 'Correct!' : 'Not quite - the correct answer is ' + 'ABCDE'[Q.correctIndex]}
+                 </div>
+                 <div class="result-explanation">${esc(Q.explanation || '')}</div>
+               </div>
+             </div>
+             ${renderFeedback()}`
+        }
+      </div>
+    </div>`;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FEEDBACK
+// ─────────────────────────────────────────────────────────────────────────────
 function renderFeedback() {
-  if (state.feedbackSent) {
-    return `<div class="feedback-section"><span class="feedback-sent">✓ Feedback sent — thank you!</span></div>`;
-  }
-  const stars = [1,2,3,4,5].map(n =>
-    `<button class="star ${n <= state.feedbackRating ? 'active' : ''}" onclick="setRating(${n})">★</button>`
-  ).join('');
+  if (Q.feedbackSent) return `
+    <div class="feedback-section"><span class="feedback-sent">&#10003; Feedback sent - thank you!</span></div>`;
+
   return `
     <div class="feedback-section">
       <div class="feedback-title">Rate this question</div>
-      <div class="stars">${stars}</div>
-      <textarea class="feedback-comment" id="feedback-comment" placeholder="Optional: was anything unclear or incorrect?" maxlength="500">${esc(state.feedbackComment)}</textarea>
-      <button class="btn btn-secondary" id="btn-feedback" onclick="submitFeedback()" ${state.feedbackRating === 0 || state.feedbackSending ? 'disabled' : ''}>
-        ${state.feedbackSending ? 'Sending…' : 'Send feedback'}
+      <div class="stars">
+        ${[1,2,3,4,5].map(n =>
+          `<button class="star ${n <= Q.feedbackRating ? 'active' : ''}" onclick="setRating(${n})">&#9733;</button>`
+        ).join('')}
+      </div>
+      <textarea class="feedback-comment" id="feedback-comment" placeholder="Optional: was anything unclear or incorrect?" maxlength="500">${esc(Q.feedbackComment)}</textarea>
+      <button class="btn btn-secondary" onclick="submitFeedback()" style="height:36px;font-size:13px"
+        ${Q.feedbackRating === 0 || Q.feedbackSending ? 'disabled' : ''}>
+        ${Q.feedbackSending ? 'Sending...' : 'Send feedback'}
       </button>
-      ${state.feedbackError ? `<div class="feedback-error" style="margin-top:.5rem">${esc(state.feedbackError)}</div>` : ''}
+      ${Q.feedbackError ? `<div class="feedback-error">${esc(Q.feedbackError)}</div>` : ''}
     </div>`;
 }
 
-function renderFooter() {
+// ─────────────────────────────────────────────────────────────────────────────
+// LEADERBOARD PANEL
+// ─────────────────────────────────────────────────────────────────────────────
+function renderLeaderboard() {
+  const rankLabel = (rank) => {
+    if (rank === 1) return `<span class="lb-rank gold">🥇</span>`;
+    if (rank === 2) return `<span class="lb-rank silver">🥈</span>`;
+    if (rank === 3) return `<span class="lb-rank bronze">🥉</span>`;
+    return `<span class="lb-rank">${rank}</span>`;
+  };
+
+  let body;
+  if (LB.loading) {
+    body = `<div class="lb-loading"><div class="spinner" style="margin:1rem auto;width:24px;height:24px;border-width:2px"></div></div>`;
+  } else if (LB.error) {
+    body = `<div class="lb-empty">${esc(LB.error)}</div>`;
+  } else if (LB.board.length === 0) {
+    body = `<div class="lb-empty">No answers yet - be the first!</div>`;
+  } else {
+    body = `<div class="lb-list">
+      ${LB.board.map(p => {
+        const isMe = p.email === Q.email;
+        return `<div class="lb-row ${isMe ? 'me' : ''}">
+          ${rankLabel(p.rank)}
+          <div class="lb-info">
+            <div class="lb-name">${esc(p.name)}${isMe ? ' <span style="font-size:10px;color:var(--orange)">(you)</span>' : ''}</div>
+            <div class="lb-meta">
+              <span>${p.total} answered</span>
+              ${p.streak > 1 ? `<span class="lb-streak">&#128293; ${p.streak} day streak</span>` : ''}
+            </div>
+          </div>
+          <div class="lb-score">
+            <div class="lb-correct">${p.correct}</div>
+            <div class="lb-pct">${p.pct}%</div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+    ${LB.updatedAt ? `<div class="lb-updated">Updated ${formatTime(LB.updatedAt)}</div>` : ''}`;
+  }
+
   return `
-    <div class="footer-bar" id="footer-bar">
-      <span>Signed in as <strong>${esc(state.email)}</strong></span>
-      <button class="link-btn" onclick="changeUser()">Change</button>
+    <div class="card" style="position:sticky;top:70px">
+      <div class="lb-header">
+        <div>
+          <div class="lb-title">&#127942; Leaderboard</div>
+          <div class="lb-subtitle">Correct answers this season</div>
+        </div>
+        <button class="lb-refresh" onclick="loadLeaderboard()">Refresh</button>
+      </div>
+      ${body}
     </div>`;
 }
-
-function attachFeedback() {
-  const ta = document.getElementById('feedback-comment');
-  if (ta) ta.addEventListener('input', e => { state.feedbackComment = e.target.value; });
-}
-
-function attachFooter() {}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ACTIONS
 // ─────────────────────────────────────────────────────────────────────────────
 function submitEmail() {
   const input = document.getElementById('email-input');
-  const email = input ? input.value.trim() : state.email;
-  if (!email || !email.includes('@')) {
-    state.error = 'Please enter a valid email address.';
-    render(); return;
-  }
-  state.email = email;
-  state.error = null;
+  const email = (input ? input.value : Q.email).trim();
+  if (!email || !email.includes('@')) { Q.error = 'Please enter a valid email address.'; render(); return; }
+  Q.email = email;
+  Q.error = null;
   localStorage.setItem('quiz_email', email);
   loadQuestion();
+  loadLeaderboard();
 }
 
 async function loadQuestion() {
-  state.loading = true;
-  state.error = null;
-  state.question = null;
-  state.selectedIndex = null;
-  state.submitted = false;
-  state.correct = null;
-  state.correctIndex = null;
-  state.explanation = null;
-  state.alreadyAnswered = false;
-  state.done = false;
-  state.feedbackRating = 0;
-  state.feedbackComment = '';
-  state.feedbackSent = false;
-  state.feedbackError = null;
+  Q.loading = true; Q.error = null; Q.question = null;
+  Q.selectedIndex = null; Q.submitted = false;
+  Q.correct = null; Q.correctIndex = null; Q.explanation = null;
+  Q.alreadyAnswered = false; Q.done = false;
+  Q.feedbackRating = 0; Q.feedbackComment = ''; Q.feedbackSent = false; Q.feedbackError = null;
   render();
 
   try {
-    const res = await fetch(`${API}/question?email=${encodeURIComponent(state.email)}`);
+    const res = await fetch(`${API}/question?email=${encodeURIComponent(Q.email)}`);
     const data = await res.json();
-
     if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
-
     if (data.done) {
-      state.done = true;
-      state.doneMessage = data.message;
+      Q.done = true; Q.doneMessage = data.message;
     } else {
-      state.question = data.question;
-      state.alreadyAnswered = data.alreadyAnswered || false;
+      Q.question = data.question;
+      Q.alreadyAnswered = data.alreadyAnswered || false;
       if (data.alreadyAnswered) {
-        state.submitted = true;
-        state.selectedIndex = data.selectedIndex;
-        state.correct = data.correct;
-        state.correctIndex = data.correctIndex;
-        state.explanation = data.explanation;
+        Q.submitted = true;
+        Q.selectedIndex = data.selectedIndex;
+        Q.correct = data.correct;
+        Q.correctIndex = data.correctIndex;
+        Q.explanation = data.explanation;
       }
     }
   } catch (err) {
-    state.error = err.message || 'Could not reach the quiz API. Check your API endpoint configuration.';
+    Q.error = err.message;
   }
-
-  state.loading = false;
+  Q.loading = false;
   render();
 }
 
-function selectOption(index) {
-  if (state.submitted) return;
-  state.selectedIndex = index;
+async function loadLeaderboard() {
+  LB.loading = true; LB.error = null;
+  render();
+  try {
+    const res = await fetch(`${API}/leaderboard`);
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+    LB.board = data.board;
+    LB.updatedAt = data.updatedAt;
+  } catch (err) {
+    LB.error = 'Could not load leaderboard.';
+  }
+  LB.loading = false;
+  render();
+}
+
+function selectOption(i) {
+  if (Q.submitted) return;
+  Q.selectedIndex = i;
   render();
 }
 
 async function submitAnswer() {
-  if (state.selectedIndex === null || state.submitted) return;
-
-  const btnSubmit = document.getElementById('btn-submit');
-  if (btnSubmit) { btnSubmit.disabled = true; btnSubmit.textContent = 'Submitting…'; }
-
+  if (Q.selectedIndex === null || Q.submitted) return;
+  const btn = document.getElementById('btn-submit');
+  if (btn) { btn.disabled = true; btn.textContent = 'Submitting...'; }
   try {
     const res = await fetch(`${API}/answer`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: state.email,
-        questionId: state.question.questionId,
-        answerIndex: state.selectedIndex
-      })
+      body: JSON.stringify({ email: Q.email, questionId: Q.question.questionId, answerIndex: Q.selectedIndex })
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
-
-    state.submitted = true;
-    state.correct = data.correct;
-    state.correctIndex = data.correctIndex;
-    state.explanation = data.explanation;
+    Q.submitted = true;
+    Q.correct = data.correct;
+    Q.correctIndex = data.correctIndex;
+    Q.explanation = data.explanation;
+    // Refresh leaderboard after answering
+    loadLeaderboard();
   } catch (err) {
-    state.error = err.message;
+    Q.error = err.message;
   }
-
   render();
 }
 
 function setRating(n) {
-  state.feedbackRating = n;
+  Q.feedbackRating = n;
+  const comment = document.getElementById('feedback-comment');
+  if (comment) Q.feedbackComment = comment.value;
   render();
-  // keep textarea content
   const ta = document.getElementById('feedback-comment');
-  if (ta) { ta.value = state.feedbackComment; ta.addEventListener('input', e => { state.feedbackComment = e.target.value; }); }
+  if (ta) { ta.value = Q.feedbackComment; ta.addEventListener('input', e => { Q.feedbackComment = e.target.value; }); }
 }
 
 async function submitFeedback() {
-  if (state.feedbackRating === 0 || state.feedbackSending) return;
-  state.feedbackSending = true;
-  state.feedbackError = null;
-  // Save comment before re-render
+  if (Q.feedbackRating === 0 || Q.feedbackSending) return;
   const ta = document.getElementById('feedback-comment');
-  if (ta) state.feedbackComment = ta.value;
+  if (ta) Q.feedbackComment = ta.value;
+  Q.feedbackSending = true; Q.feedbackError = null;
   render();
-
   try {
     const res = await fetch(`${API}/feedback`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: state.email,
-        questionId: state.question.questionId,
-        rating: state.feedbackRating,
-        comment: state.feedbackComment
-      })
+      body: JSON.stringify({ email: Q.email, questionId: Q.question.questionId, rating: Q.feedbackRating, comment: Q.feedbackComment })
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
-    state.feedbackSent = true;
+    Q.feedbackSent = true;
   } catch (err) {
-    state.feedbackError = 'Could not send feedback: ' + err.message;
+    Q.feedbackError = 'Could not send: ' + err.message;
   }
-
-  state.feedbackSending = false;
+  Q.feedbackSending = false;
   render();
 }
 
 function changeUser() {
-  state.email = '';
-  state.question = null;
-  state.error = null;
-  state.done = false;
-  state.submitted = false;
+  Q.email = ''; Q.question = null; Q.error = null;
+  Q.done = false; Q.submitted = false;
+  LB.board = []; LB.updatedAt = null;
   localStorage.removeItem('quiz_email');
+  document.getElementById('header-user').innerHTML = '';
   render();
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
 // UTILS
 // ─────────────────────────────────────────────────────────────────────────────
-function esc(str) {
-  if (str == null) return '';
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+function esc(s) {
+  return String(s ?? '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function formatTime(iso) {
+  return new Date(iso).toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -567,11 +644,15 @@ function esc(str) {
 document.getElementById('header-date').textContent =
   new Date().toLocaleDateString('nl-NL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
-if (state.email) {
+if (Q.email) {
   loadQuestion();
+  loadLeaderboard();
 } else {
   render();
 }
+
+// Auto-refresh leaderboard every 5 minutes
+setInterval(loadLeaderboard, 5 * 60 * 1000);
 </script>
 </body>
 </html>
