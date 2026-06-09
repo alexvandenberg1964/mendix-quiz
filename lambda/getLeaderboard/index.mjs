@@ -52,9 +52,10 @@ export const handler = async () => {
       delete entry.dates;
     }
 
-    // Sort: correct desc, then total desc
+    // Sort: pct desc, then correct desc (more answers wins tie)
     const board = Object.values(map)
-      .sort((a, b) => b.correct - a.correct || b.total - a.total)
+      .map(e => ({ ...e, pct: e.total > 0 ? Math.round((e.correct / e.total) * 100) : 0 }))
+      .sort((a, b) => b.pct - a.pct || b.correct - a.correct)
       .slice(0, 20)
       .map((e, i) => ({
         rank: i + 1,
@@ -63,7 +64,7 @@ export const handler = async () => {
         total: e.total,
         correct: e.correct,
         streak: e.streak,
-        pct: e.total > 0 ? Math.round((e.correct / e.total) * 100) : 0
+        pct: e.pct
       }));
 
     return {

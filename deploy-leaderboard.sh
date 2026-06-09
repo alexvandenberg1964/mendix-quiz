@@ -34,16 +34,18 @@ echo ">>> Packaging Lambda..."
 cd lambda/getLeaderboard
 zip -j quiz-getLeaderboard.zip index.mjs
 cd ../..
-echo "  Created /tmp/quiz-getLeaderboard.zip"
+echo "  Created lambda/getLeaderboard/quiz-getLeaderboard.zip"
 
 # Deploy Lambda
 echo ""
 echo ">>> Deploying Lambda..."
 ENV_VARS="Variables={PARTICIPANTS_TABLE=$TABLE_PARTICIPANTS}"
 
+ZIP_PATH="lambda/getLeaderboard/quiz-getLeaderboard.zip"
+
 if MSYS_NO_PATHCONV=1 aws lambda update-function-code \
   --function-name "$LAMBDA_NAME" \
-  --zip-file fileb://quiz-getLeaderboard.zip \
+  --zip-file "fileb://$ZIP_PATH" \
   --region "$REGION" \
   --no-cli-pager &>/dev/null; then
 
@@ -59,7 +61,7 @@ else
     --runtime nodejs22.x \
     --role "$ROLE_ARN" \
     --handler index.handler \
-    --zip-file fileb://quiz-getLeaderboard.zip \
+    --zip-file "fileb://$ZIP_PATH" \
     --environment "$ENV_VARS" \
     --timeout 15 \
     --memory-size 256 \

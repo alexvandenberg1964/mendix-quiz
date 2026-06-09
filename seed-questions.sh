@@ -61,6 +61,7 @@ for i, q in enumerate(questions):
             "--table-name", table,
             "--item", item_json,
             "--region", region,
+            "--profile" , "sandbox-851725425406",
             "--no-cli-pager",
         ],
         capture_output=True,
