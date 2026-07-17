@@ -199,8 +199,13 @@
       border-bottom: 1px solid var(--border);
       display: flex; align-items: center; justify-content: space-between;
     }
-    .lb-title { font-size: 13px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 6px; }
+    .lb-title { font-size: 13px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 4px; }
     .lb-subtitle { font-size: 11px; color: var(--text3); margin-top: 1px; }
+    .lb-info-btn {
+      font-size: 13px; line-height: 1; color: var(--text3); background: none; border: none;
+      cursor: pointer; padding: 0; display: inline-flex;
+    }
+    .lb-info-btn:hover { color: var(--orange); }
     .lb-refresh {
       font-size: 11px; color: var(--orange); background: none; border: none;
       cursor: pointer; padding: 4px 8px; border-radius: 6px;
@@ -211,7 +216,7 @@
     .lb-list { padding: .5rem 0; }
     .lb-row {
       display: grid;
-      grid-template-columns: 28px 1fr 36px;
+      grid-template-columns: 28px 1fr 56px;
       align-items: center; gap: 8px;
       padding: .6rem 1.25rem;
       border-bottom: 1px solid var(--border);
@@ -233,13 +238,28 @@
     .lb-streak { color: var(--orange); font-weight: 600; }
 
     .lb-score { text-align: right; }
-    .lb-correct { font-size: 15px; font-weight: 700; color: var(--text); line-height: 1; }
-    .lb-pct { font-size: 10px; color: var(--text3); margin-top: 1px; }
+    .lb-correct { font-size: 15px; font-weight: 700; color: var(--text); line-height: 1; white-space: nowrap; }
+    .lb-pct { font-size: 10px; color: var(--text3); margin-top: 1px; white-space: nowrap; }
 
     .lb-loading { padding: 2rem; text-align: center; }
     .lb-empty { padding: 2rem 1.25rem; text-align: center; color: var(--text3); font-size: 13px; }
 
     .lb-updated { padding: .6rem 1.25rem; font-size: 10px; color: var(--text3); text-align: right; border-top: 1px solid var(--border); }
+
+    /* ── Leaderboard info modal ── */
+    .lb-modal-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+      display: flex; align-items: center; justify-content: center;
+      padding: 1.25rem; z-index: 200;
+    }
+    .lb-modal {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); box-shadow: var(--shadow);
+      max-width: 360px; width: 100%; padding: 1.25rem;
+    }
+    .lb-modal-title { font-size: 14px; font-weight: 700; margin-bottom: .6rem; }
+    .lb-modal p { font-size: 12.5px; color: var(--text2); line-height: 1.55; margin-bottom: .6rem; }
+    .lb-modal p:last-of-type { margin-bottom: 0; }
   </style>
 </head>
 <body>
@@ -292,6 +312,7 @@ const LB = {
   board: [],
   updatedAt: null,
   error: null,
+  showInfo: false,
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -473,8 +494,8 @@ function renderLeaderboard() {
             </div>
           </div>
           <div class="lb-score">
-            <div class="lb-correct">${p.correct}</div>
-            <div class="lb-pct">${p.pct}%</div>
+            <div class="lb-correct">${p.score}%</div>
+            <div class="lb-pct">${p.correct}/${p.total} correct</div>
           </div>
         </div>`;
       }).join('')}
@@ -486,13 +507,38 @@ function renderLeaderboard() {
     <div class="card" style="position:sticky;top:70px">
       <div class="lb-header">
         <div>
-          <div class="lb-title">&#127942; Leaderboard</div>
-          <div class="lb-subtitle">Correct answers this season</div>
+          <div class="lb-title">&#127942; Leaderboard
+            <button class="lb-info-btn" onclick="toggleLbInfo(true)" aria-label="How the score works">&#9432;</button>
+          </div>
+          <div class="lb-subtitle">Confidence-adjusted score this season</div>
         </div>
         <button class="lb-refresh" onclick="loadLeaderboard()">Refresh</button>
       </div>
       ${body}
+    </div>
+    ${LB.showInfo ? renderLbInfoModal() : ''}`;
+}
+
+function renderLbInfoModal() {
+  return `
+    <div class="lb-modal-backdrop" onclick="toggleLbInfo(false)">
+      <div class="lb-modal" onclick="event.stopPropagation()">
+        <div class="lb-modal-title">How the score works</div>
+        <p>Your score isn't just "% correct" — it's a <strong>Wilson score</strong>, a statistical
+        estimate that accounts for how many questions you've actually answered.</p>
+        <p>A raw percentage treats 1/1 (100%) as better than 18/20 (90%), even though the second
+        result is far more reliable. The Wilson score corrects for this: it shrinks toward the
+        middle when you have few answers, and moves closer to your true percentage as you answer
+        more questions.</p>
+        <p>In short: <strong>answer consistently, not just correctly</strong>, to climb the board.</p>
+        <button class="btn btn-secondary" style="width:100%;margin-top:.75rem" onclick="toggleLbInfo(false)">Got it</button>
+      </div>
     </div>`;
+}
+
+function toggleLbInfo(show) {
+  LB.showInfo = show;
+  render();
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

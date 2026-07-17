@@ -52,10 +52,11 @@ export const handler = async () => {
       delete entry.dates;
     }
 
-    // Sort: pct desc, then correct desc (more answers wins tie)
+    // Sort by Wilson score lower bound: a confidence-adjusted correctness rate
+    // that discounts small sample sizes, so 1/1 doesn't outrank 18/20.
     const board = Object.values(map)
-      .map(e => ({ ...e, pct: e.total > 0 ? Math.round((e.correct / e.total) * 100) : 0 }))
-      .sort((a, b) => b.pct - a.pct || b.correct - a.correct)
+      .map(e => ({ ...e, score: Math.round(wilsonScore(e.correct, e.total) * 100) }))
+      .sort((a, b) => b.score - a.score || b.correct - a.correct)
       .slice(0, 20)
       .map((e, i) => ({
         rank: i + 1,
@@ -64,7 +65,7 @@ export const handler = async () => {
         total: e.total,
         correct: e.correct,
         streak: e.streak,
-        pct: e.pct
+        score: e.score
       }));
 
     return {
@@ -76,6 +77,17 @@ export const handler = async () => {
     console.error(err);
     return { statusCode: 500, headers: cors, body: JSON.stringify({ error: "Internal error" }) };
   }
+};
+
+// Wilson score lower bound (95% confidence) for a binomial proportion.
+// Shrinks the score toward 0 when total is small, so a lucky 1/1 scores
+// lower than a proven 18/20 rather than tying it at the top.
+const wilsonScore = (correct, total) => {
+  if (total === 0) return 0;
+  const z = 1.96;
+  const p = correct / total;
+  const n = total;
+  return (p + z * z / (2 * n) - z * Math.sqrt((p * (1 - p) + z * z / (4 * n)) / n)) / (1 + z * z / n);
 };
 
 // "alex.van.den.berg@postnl.nl" -> "Alex van den Berg"
