@@ -171,9 +171,40 @@
       .controls { flex-direction: column; }
       .ctrl-search, .ctrl-select { width: 100%; }
     }
+
+    /* ── Password gate ── */
+    .pw-gate {
+      position: fixed; inset: 0; z-index: 9999; background: var(--blue);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pw-form {
+      background: var(--surface); border-radius: var(--radius);
+      padding: 2rem; width: 280px; box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    }
+    .pw-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 1rem; }
+    .pw-input {
+      width: 100%; height: 38px; padding: 0 10px; border-radius: 6px;
+      border: 1px solid var(--border); font-size: 13px; margin-bottom: .6rem;
+      font-family: inherit; box-sizing: border-box;
+    }
+    .pw-submit {
+      width: 100%; height: 38px; border: none; border-radius: 6px;
+      background: var(--orange); color: #fff; font-weight: 600; font-size: 13px;
+      cursor: pointer; font-family: inherit;
+    }
+    .pw-error { color: var(--red); font-size: 12px; margin-top: .6rem; display: none; }
   </style>
 </head>
 <body>
+
+<div id="pw-gate" class="pw-gate">
+  <form id="pw-form" class="pw-form">
+    <div class="pw-title">&#128274; Admin access</div>
+    <input type="password" id="pw-input" class="pw-input" placeholder="Password" autocomplete="current-password" autofocus>
+    <button type="submit" class="pw-submit">Unlock</button>
+    <div id="pw-error" class="pw-error">Incorrect password.</div>
+  </form>
+</div>
 
 <header class="header">
   <span class="header-brand">PostNL</span>
@@ -182,6 +213,7 @@
   <div class="header-spacer"></div>
   <nav class="header-nav">
     <a href="admin-questions.html" class="btn-nav">Question Editor</a>
+    <a href="stats.html" class="btn-nav">Usage Stats</a>
     <a href="index.html" class="btn-nav">Quiz</a>
     <button id="refresh-btn" class="btn-nav btn-primary" onclick="loadFeedback()">↻ Refresh</button>
   </nav>
@@ -240,6 +272,48 @@
 <script>
   const API = 'https://r4800dlclj.execute-api.eu-west-1.amazonaws.com/prod';
 
+  // ── Password gate ──────────────────────────────────────────────
+  const ADMIN_HASH = 'c0e486f98e0c9b78332da3be60182d5c0e04d9e33cfd4bb4b176989f2150065b';
+  const ADMIN_SESSION_KEY = 'quiz_admin_key';
+
+  async function sha256Hex(text) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  function getAdminKey() {
+    return sessionStorage.getItem(ADMIN_SESSION_KEY) || '';
+  }
+
+  async function initAdminGate(onUnlock) {
+    const gate = document.getElementById('pw-gate');
+    const form = document.getElementById('pw-form');
+    const input = document.getElementById('pw-input');
+    const error = document.getElementById('pw-error');
+
+    const stored = getAdminKey();
+    if (stored && (await sha256Hex(stored)) === ADMIN_HASH) {
+      gate.remove();
+      onUnlock();
+      return;
+    }
+    if (stored) sessionStorage.removeItem(ADMIN_SESSION_KEY);
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const pw = input.value;
+      if ((await sha256Hex(pw)) === ADMIN_HASH) {
+        sessionStorage.setItem(ADMIN_SESSION_KEY, pw);
+        gate.remove();
+        onUnlock();
+      } else {
+        error.style.display = 'block';
+        input.value = '';
+        input.focus();
+      }
+    });
+  }
+
   let allQuestions = [];
   const expanded = new Set();
 
@@ -252,7 +326,7 @@
     document.getElementById('questions-list').innerHTML = '';
 
     try {
-      const res = await fetch(`${API}/feedback`);
+      const res = await fetch(`${API}/feedback`, { headers: { 'x-admin-key': getAdminKey() } });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
 
@@ -442,8 +516,8 @@
   function show(id) { document.getElementById(id).hidden = false; }
   function hide(id) { document.getElementById(id).hidden = true; }
 
-  // Load on page open
-  loadFeedback();
+  // Load on page open, after the password gate is passed
+  initAdminGate(loadFeedback);
 </script>
 </body>
 </html>

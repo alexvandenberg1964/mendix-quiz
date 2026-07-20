@@ -16,6 +16,9 @@ export const handler = async (event) => {
   if (!email) {
     return { statusCode: 400, headers: cors, body: JSON.stringify({ error: "email is required" }) };
   }
+  if (!email.toLowerCase().endsWith("@postnl.nl")) {
+    return { statusCode: 403, headers: cors, body: JSON.stringify({ error: "Only @postnl.nl email addresses are allowed" }) };
+  }
 
   try {
     // Check if participant already has a question assigned for today

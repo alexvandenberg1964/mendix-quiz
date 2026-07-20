@@ -27,6 +27,9 @@ export const handler = async (event) => {
   if (!email || !questionId || rating === undefined) {
     return { statusCode: 400, headers: cors, body: JSON.stringify({ error: "email, questionId and rating are required" }) };
   }
+  if (!email.toLowerCase().endsWith("@postnl.nl")) {
+    return { statusCode: 403, headers: cors, body: JSON.stringify({ error: "Only @postnl.nl email addresses are allowed" }) };
+  }
 
   if (Number(rating) < 1 || Number(rating) > 5) {
     return { statusCode: 400, headers: cors, body: JSON.stringify({ error: "rating must be between 1 and 5" }) };

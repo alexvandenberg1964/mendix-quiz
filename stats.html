@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mendix Quiz — Usage &amp; Stats</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange: #FF6200; --orange-light: #FFF0E6;
+      --blue: #003087; --blue-light: #E6EBF5;
+      --bg: #f5f5f5; --surface: #ffffff;
+      --border: #e0e0e0;
+      --text: #1a1a1a; --text2: #555; --text3: #999;
+      --green: #2a6010; --green-bg: #e8f5d9;
+      --amber-bg: #fff3d9; --amber: #7a4800;
+      --red-bg: #fde8e8; --red: #a32020;
+      --radius: 8px;
+      --header-h: 52px;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    .header {
+      position: sticky; top: 0; z-index: 100;
+      height: var(--header-h);
+      background: var(--blue);
+      border-bottom: 3px solid var(--orange);
+      display: flex; align-items: center; padding: 0 1.25rem; gap: 0.75rem;
+    }
+    .header-brand { font-size: 15px; font-weight: 700; color: var(--orange); }
+    .header-sep { color: rgba(255,255,255,0.25); }
+    .header-title { font-size: 13px; color: rgba(255,255,255,0.75); }
+    .header-spacer { flex: 1; }
+    .header-nav { display: flex; gap: 0.5rem; }
+    .btn-nav {
+      height: 30px; padding: 0 12px; border-radius: 5px;
+      font-size: 12px; font-weight: 600; cursor: pointer; text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.3); background: transparent;
+      color: rgba(255,255,255,0.85); transition: background 0.15s;
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .btn-nav:hover { background: rgba(255,255,255,0.12); color: #fff; }
+    .btn-primary { background: var(--orange); border-color: var(--orange); color: #fff; }
+    .btn-primary:hover { background: #e05500; }
+    .btn-primary:disabled { opacity: 0.5; cursor: default; }
+
+    /* ── Page ── */
+    .page { max-width: 1000px; margin: 0 auto; padding: 1.25rem 1rem 3rem; }
+
+    /* ── States ── */
+    .state-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 3rem 2rem;
+      text-align: center; color: var(--text2);
+    }
+    .state-box.error { border-color: #f5c6c6; background: var(--red-bg); color: var(--red); }
+    .state-icon { font-size: 36px; margin-bottom: 0.75rem; }
+    .state-msg { font-size: 15px; }
+    .state-sub { font-size: 12px; margin-top: 0.5rem; color: var(--text3); }
+
+    /* ── Summary ── */
+    .summary {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem; margin-bottom: 1.25rem;
+    }
+    .stat-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1rem 1.25rem;
+      display: flex; flex-direction: column; gap: 0.25rem;
+    }
+    .stat-value { font-size: 26px; font-weight: 700; color: var(--blue); line-height: 1.1; }
+    .stat-value.orange { color: var(--orange); }
+    .stat-label { font-size: 11.5px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.05em; }
+    .stat-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.25rem; margin-bottom: 1.25rem;
+    }
+    .card-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 1rem; }
+    .card-sub { font-size: 11.5px; color: var(--text3); margin-top: -0.75rem; margin-bottom: 1rem; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+
+    /* ── Daily activity chart ── */
+    .chart-scroll { overflow-x: auto; padding-bottom: 4px; }
+    .chart-svg { display: block; }
+    .chart-bar-hit { fill: transparent; cursor: pointer; }
+    .chart-bar { fill: var(--orange); transition: fill 0.1s; }
+    .chart-bar-group:hover .chart-bar { fill: #e05500; }
+    .chart-axis-line { stroke: var(--border); stroke-width: 1; }
+    .chart-tick { font-size: 10px; fill: var(--text3); }
+    .chart-tooltip {
+      position: fixed; z-index: 500; pointer-events: none;
+      background: var(--text); color: #fff; font-size: 11.5px;
+      padding: 6px 9px; border-radius: 6px; line-height: 1.5;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.2); display: none; white-space: nowrap;
+    }
+    .chart-tooltip .tt-value { font-weight: 700; }
+
+    /* ── Breakdown bars ── */
+    .bd-row { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.55rem; font-size: 12.5px; }
+    .bd-row:last-child { margin-bottom: 0; }
+    .bd-label { width: 130px; flex-shrink: 0; color: var(--text2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .bd-track { flex: 1; height: 10px; background: #eee; border-radius: 5px; overflow: hidden; }
+    .bd-fill { height: 100%; border-radius: 5px; }
+    .bd-value { width: 90px; flex-shrink: 0; text-align: right; color: var(--text3); font-size: 11.5px; }
+    .bd-value strong { color: var(--text); font-weight: 700; }
+
+    /* ── Hardest questions ── */
+    .hq-row {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      padding: 0.7rem 0; border-bottom: 1px solid var(--border);
+    }
+    .hq-row:last-child { border-bottom: none; }
+    .hq-rank { width: 20px; flex-shrink: 0; color: var(--text3); font-size: 12px; font-weight: 700; padding-top: 1px; }
+    .hq-body { flex: 1; min-width: 0; }
+    .hq-badges { display: flex; gap: 0.4rem; margin-bottom: 0.3rem; }
+    .badge { font-size: 10.5px; font-weight: 600; padding: 1px 7px; border-radius: 20px; white-space: nowrap; }
+    .badge-category { background: var(--blue-light); color: var(--blue); }
+    .hq-text { font-size: 13px; color: var(--text); line-height: 1.45; }
+    .hq-stat { flex-shrink: 0; text-align: right; }
+    .hq-pct { font-size: 17px; font-weight: 700; color: var(--red); line-height: 1.1; }
+    .hq-count { font-size: 10.5px; color: var(--text3); }
+
+    /* ── Password gate ── */
+    .pw-gate {
+      position: fixed; inset: 0; z-index: 9999; background: var(--blue);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pw-form {
+      background: var(--surface); border-radius: var(--radius);
+      padding: 2rem; width: 280px; box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    }
+    .pw-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 1rem; }
+    .pw-input {
+      width: 100%; height: 38px; padding: 0 10px; border-radius: 6px;
+      border: 1px solid var(--border); font-size: 13px; margin-bottom: .6rem;
+      font-family: inherit; box-sizing: border-box;
+    }
+    .pw-submit {
+      width: 100%; height: 38px; border: none; border-radius: 6px;
+      background: var(--orange); color: #fff; font-weight: 600; font-size: 13px;
+      cursor: pointer; font-family: inherit;
+    }
+    .pw-error { color: var(--red); font-size: 12px; margin-top: .6rem; display: none; }
+
+    @media (max-width: 700px) {
+      .two-col { grid-template-columns: 1fr; }
+      .bd-label { width: 90px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="pw-gate" class="pw-gate">
+  <form id="pw-form" class="pw-form">
+    <div class="pw-title">&#128274; Admin access</div>
+    <input type="password" id="pw-input" class="pw-input" placeholder="Password" autocomplete="current-password" autofocus>
+    <button type="submit" class="pw-submit">Unlock</button>
+    <div id="pw-error" class="pw-error">Incorrect password.</div>
+  </form>
+</div>
+
+<header class="header">
+  <span class="header-brand">PostNL</span>
+  <span class="header-sep">|</span>
+  <span class="header-title">Mendix Quiz — Usage &amp; Stats</span>
+  <div class="header-spacer"></div>
+  <nav class="header-nav">
+    <a href="admin-questions.html" class="btn-nav">Question Editor</a>
+    <a href="feedback.html" class="btn-nav">Feedback Overview</a>
+    <a href="index.html" class="btn-nav">Quiz</a>
+    <button id="refresh-btn" class="btn-nav btn-primary" onclick="loadStats()">↻ Refresh</button>
+  </nav>
+</header>
+
+<div class="page">
+  <div id="loading" class="state-box">
+    <div class="state-icon">⏳</div>
+    <div class="state-msg">Loading usage data…</div>
+  </div>
+
+  <div id="error" class="state-box error" hidden>
+    <div class="state-icon">⚠️</div>
+    <div class="state-msg" id="error-msg">Failed to load stats.</div>
+    <div class="state-sub">Check the browser console for details.</div>
+  </div>
+
+  <div id="content" hidden>
+    <div id="summary" class="summary"></div>
+
+    <div class="card">
+      <div class="card-title">Daily activity</div>
+      <div class="card-sub" id="daily-sub"></div>
+      <div id="chart-container" class="chart-scroll"></div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">Accuracy by category</div>
+        <div id="category-breakdown"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Accuracy by difficulty</div>
+        <div id="difficulty-breakdown"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Hardest questions</div>
+      <div class="card-sub">Lowest accuracy, minimum 3 answers — candidates for review or rewrite</div>
+      <div id="hardest-list"></div>
+    </div>
+  </div>
+</div>
+
+<div id="chart-tooltip" class="chart-tooltip"></div>
+
+<script>
+  const API = 'https://r4800dlclj.execute-api.eu-west-1.amazonaws.com/prod';
+
+  // ── Password gate ──────────────────────────────────────────────
+  const ADMIN_HASH = 'c0e486f98e0c9b78332da3be60182d5c0e04d9e33cfd4bb4b176989f2150065b';
+  const ADMIN_SESSION_KEY = 'quiz_admin_key';
+
+  async function sha256Hex(text) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  function getAdminKey() {
+    return sessionStorage.getItem(ADMIN_SESSION_KEY) || '';
+  }
+
+  async function initAdminGate(onUnlock) {
+    const gate = document.getElementById('pw-gate');
+    const form = document.getElementById('pw-form');
+    const input = document.getElementById('pw-input');
+    const error = document.getElementById('pw-error');
+
+    const stored = getAdminKey();
+    if (stored && (await sha256Hex(stored)) === ADMIN_HASH) {
+      gate.remove();
+      onUnlock();
+      return;
+    }
+    if (stored) sessionStorage.removeItem(ADMIN_SESSION_KEY);
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const pw = input.value;
+      if ((await sha256Hex(pw)) === ADMIN_HASH) {
+        sessionStorage.setItem(ADMIN_SESSION_KEY, pw);
+        gate.remove();
+        onUnlock();
+      } else {
+        error.style.display = 'block';
+        input.value = '';
+        input.focus();
+      }
+    });
+  }
+
+  // ── Data loading ───────────────────────────────────────────────
+  async function loadStats() {
+    const btn = document.getElementById('refresh-btn');
+    btn.disabled = true;
+    show('loading'); hide('error'); hide('content');
+
+    try {
+      const res = await fetch(`${API}/stats`, { headers: { 'x-admin-key': getAdminKey() } });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+
+      renderSummary(data);
+      renderDailyChart(data.dailyActivity);
+      renderBreakdown('category-breakdown', data.categoryBreakdown, 'category', () => 'var(--blue)');
+      renderBreakdown('difficulty-breakdown', data.difficultyBreakdown, 'difficulty', diffColor);
+      renderHardest(data.hardestQuestions);
+
+      hide('loading');
+      show('content');
+    } catch (err) {
+      console.error(err);
+      hide('loading');
+      document.getElementById('error-msg').textContent = `Failed to load stats: ${err.message}`;
+      show('error');
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  function renderSummary(data) {
+    const t = data.totals;
+    const c = data.completion;
+    const cards = [
+      { value: t.participants, label: 'Participants', cls: '' },
+      { value: t.answers, label: 'Questions answered', cls: '' },
+      { value: t.accuracyPct + '%', label: 'Overall accuracy', cls: 'orange' },
+      { value: `${c.finished} / ${t.participants || 0}`, label: 'Finished the pool', cls: '' },
+      { value: t.feedbackCount, label: 'Feedback responses', cls: '' },
+      { value: t.avgRating > 0 ? t.avgRating.toFixed(1) : '—', label: 'Avg. feedback rating', cls: 'orange' },
+    ];
+    document.getElementById('summary').innerHTML = cards.map(c => `
+      <div class="stat-card">
+        <div class="stat-value ${c.cls}">${esc(String(c.value))}</div>
+        <div class="stat-label">${esc(c.label)}</div>
+      </div>`).join('');
+  }
+
+  // ── Daily activity bar chart (inline SVG, single hue, hover tooltip) ──
+  function renderDailyChart(daily) {
+    const container = document.getElementById('chart-container');
+    const sub = document.getElementById('daily-sub');
+    if (!daily || daily.length === 0) {
+      container.innerHTML = '<div class="state-sub" style="padding:1rem 0;">No answers recorded yet.</div>';
+      sub.textContent = '';
+      return;
+    }
+    sub.textContent = `${daily.length} day${daily.length !== 1 ? 's' : ''} with activity`;
+
+    const barW = 18, gap = 12, chartH = 140, padTop = 10, axisPad = 20;
+    const max = Math.max(...daily.map(d => d.answers), 1);
+    const width = daily.length * (barW + gap) + gap;
+    const svgH = chartH + padTop + axisPad;
+
+    let bars = '';
+    daily.forEach((d, i) => {
+      const x = gap + i * (barW + gap);
+      const h = Math.max((d.answers / max) * chartH, 2);
+      const top = padTop + (chartH - h);
+      const base = padTop + chartH;
+      const r = Math.min(4, h);
+      const path = `M ${x} ${base} L ${x} ${top + r} Q ${x} ${top} ${x + r} ${top} `
+        + `L ${x + barW - r} ${top} Q ${x + barW} ${top} ${x + barW} ${top + r} L ${x + barW} ${base} Z`;
+      const showLabel = daily.length <= 14 || i === daily.length - 1;
+      const tick = showLabel ? `<text class="chart-tick" x="${x + barW / 2}" y="${svgH - 4}" text-anchor="middle">${esc(shortDate(d.date))}</text>` : '';
+      bars += `
+        <g class="chart-bar-group" data-date="${esc(d.date)}" data-answers="${d.answers}" data-participants="${d.participants}">
+          <rect class="chart-bar-hit" x="${x - gap / 2}" y="0" width="${barW + gap}" height="${svgH}"></rect>
+          <path class="chart-bar" d="${path}"></path>
+          ${tick}
+        </g>`;
+    });
+
+    container.innerHTML = `
+      <svg class="chart-svg" width="${width}" height="${svgH}" viewBox="0 0 ${width} ${svgH}">
+        <line class="chart-axis-line" x1="0" y1="${padTop + chartH}" x2="${width}" y2="${padTop + chartH}"></line>
+        ${bars}
+      </svg>`;
+
+    const tooltip = document.getElementById('chart-tooltip');
+    container.querySelectorAll('.chart-bar-group').forEach(g => {
+      g.addEventListener('mousemove', (e) => {
+        tooltip.innerHTML = `${esc(fmtDate(g.dataset.date))}<br><span class="tt-value">${g.dataset.answers}</span> answer${g.dataset.answers !== '1' ? 's' : ''} · <span class="tt-value">${g.dataset.participants}</span> participant${g.dataset.participants !== '1' ? 's' : ''}`;
+        tooltip.style.display = 'block';
+        tooltip.style.left = (e.clientX + 14) + 'px';
+        tooltip.style.top = (e.clientY - 10) + 'px';
+      });
+      g.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+    });
+  }
+
+  // ── Category / difficulty breakdown bars ──
+  function renderBreakdown(elId, rows, keyName, colorFn) {
+    const el = document.getElementById(elId);
+    if (!rows || rows.length === 0) {
+      el.innerHTML = '<div class="state-sub">No data yet.</div>';
+      return;
+    }
+    const maxPct = Math.max(...rows.map(r => r.accuracyPct), 1);
+    el.innerHTML = rows.map(r => `
+      <div class="bd-row">
+        <div class="bd-label" title="${esc(r[keyName])}">${esc(cap(r[keyName]))}</div>
+        <div class="bd-track"><div class="bd-fill" style="width:${(r.accuracyPct / maxPct) * 100}%;background:${colorFn(r[keyName])}"></div></div>
+        <div class="bd-value"><strong>${r.accuracyPct}%</strong> (${r.correct}/${r.total})</div>
+      </div>`).join('');
+  }
+
+  function diffColor(difficulty) {
+    if (difficulty === 'easy') return 'var(--green)';
+    if (difficulty === 'medium') return 'var(--amber)';
+    if (difficulty === 'hard') return 'var(--red)';
+    return 'var(--text3)';
+  }
+
+  // ── Hardest questions ──
+  function renderHardest(rows) {
+    const el = document.getElementById('hardest-list');
+    if (!rows || rows.length === 0) {
+      el.innerHTML = '<div class="state-sub">Not enough data yet (need ≥3 answers per question).</div>';
+      return;
+    }
+    el.innerHTML = rows.map((q, i) => `
+      <div class="hq-row">
+        <div class="hq-rank">${i + 1}</div>
+        <div class="hq-body">
+          <div class="hq-badges">${q.category ? `<span class="badge badge-category">${esc(q.category)}</span>` : ''}<span class="badge badge-category" style="background:var(--bg);color:var(--text3)">${esc(q.questionId)}</span></div>
+          <div class="hq-text">${esc(q.text)}</div>
+        </div>
+        <div class="hq-stat">
+          <div class="hq-pct">${q.accuracyPct}%</div>
+          <div class="hq-count">${q.correct}/${q.total} correct</div>
+        </div>
+      </div>`).join('');
+  }
+
+  // ── Utils ──
+  function shortDate(iso) {
+    const d = new Date(iso + 'T00:00:00');
+    return d.toLocaleDateString('nl-NL', { day: '2-digit', month: '2-digit' });
+  }
+  function fmtDate(iso) {
+    const d = new Date(iso + 'T00:00:00');
+    return d.toLocaleDateString('nl-NL', { weekday: 'short', day: '2-digit', month: 'short' });
+  }
+  function cap(str) { return str ? str.charAt(0).toUpperCase() + str.slice(1) : ''; }
+  function esc(str) {
+    if (str == null) return '';
+    return String(str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+  function show(id) { document.getElementById(id).hidden = false; }
+  function hide(id) { document.getElementById(id).hidden = true; }
+
+  initAdminGate(loadStats);
+</script>
+</body>
+</html>

@@ -27,7 +27,7 @@
       "Develop, Track, Automate, Package"
     ],
     "correctIndex": 1,
-    "explanation": "DTAP stands for Development, Test, Acceptance, Production â€” the four standard environments in the Mendix deployment pipeline. Each environment serves a distinct purpose in the software delivery lifecycle.",
+    "explanation": "DTAP stands for Development, Test, Acceptance, Production — the four standard environments in the Mendix deployment pipeline. Each environment serves a distinct purpose in the software delivery lifecycle.",
     "difficulty": "easy",
     "active": true
   },
@@ -139,7 +139,7 @@
       "Non-persistent entities are automatically deleted after 24 hours"
     ],
     "correctIndex": 1,
-    "explanation": "Persistent entities are stored in the database and survive across sessions. Non-persistent entities live only in memory â€” useful for temporary data, view models, or objects that don't need to be persisted.",
+    "explanation": "Persistent entities are stored in the database and survive across sessions. Non-persistent entities live only in memory — useful for temporary data, view models, or objects that don't need to be persisted.",
     "difficulty": "medium",
     "active": true
   },
@@ -155,7 +155,7 @@
       "It defines the default sort order for associated objects"
     ],
     "correctIndex": 0,
-    "explanation": "The 'owner' property determines which entity owns the association â€” the owning side stores the foreign key in the database. This has implications for XPath traversal direction and database query performance.",
+    "explanation": "The 'owner' property determines which entity owns the association — the owning side stores the foreign key in the database. This has implications for XPath traversal direction and database query performance.",
     "difficulty": "medium",
     "active": true
   },
@@ -360,7 +360,7 @@
       "Username/password, API key, and active session",
       "Only OAuth 2.0",
       "JWT tokens only",
-      "No authentication â€” REST services are always public"
+      "No authentication — REST services are always public"
     ],
     "correctIndex": 1,
     "explanation": "Mendix published REST services natively support username/password (HTTP Basic), API keys, and active browser sessions as authentication methods.",
@@ -628,7 +628,7 @@
     "category": "Advanced Domain Modeling",
     "text": "When should you prefer a junction entity over a direct many-to-many association in Mendix?",
     "options": [
-      "Always â€” many-to-many associations are not supported in Mendix",
+      "Always — many-to-many associations are not supported in Mendix",
       "When the relationship itself has attributes that need to be stored (e.g., role, date, quantity)",
       "When the two related entities are in different modules",
       "When you need to enforce referential integrity",
@@ -1147,7 +1147,7 @@
       "The new expression only returns objects with Status = 'New'."
     ],
     "correctIndex": 1,
-    "explanation": "The original expression is an allowlist: only InTransit and OutForDelivery. The rewritten expression is a denylist: anything except Delivered and Cancelled â€” which includes New as well. This is a behavioral change that adds the New status.",
+    "explanation": "The original expression is an allowlist: only InTransit and OutForDelivery. The rewritten expression is a denylist: anything except Delivered and Cancelled — which includes New as well. This is a behavioral change that adds the New status.",
     "difficulty": "hard",
     "active": true
   },
@@ -1159,7 +1159,7 @@
       "All Shipment objects that have no associated Orders",
       "All Order objects that have no associated Shipment (the association is empty)",
       "All Order objects where the Shipment is cancelled",
-      "This XPath is invalid â€” not() cannot be applied to an association",
+      "This XPath is invalid — not() cannot be applied to an association",
       "All Shipment objects where the Order association is empty"
     ],
     "correctIndex": 1,
@@ -1173,7 +1173,7 @@
     "text": "A 'Retrieve from database' with range 'First' finds no matching objects. What does the microflow variable contain after the activity?",
     "options": [
       "It throws a 'Object not found' runtime exception that must be caught with an error handler.",
-      "It returns an empty/null object â€” the calling logic must check with the empty() function before accessing attributes.",
+      "It returns an empty/null object — the calling logic must check with the empty() function before accessing attributes.",
       "It returns a default object with all attributes at their default values.",
       "It returns the last object in the database as a fallback.",
       "The activity blocks indefinitely until a matching object is created."
@@ -1237,7 +1237,7 @@
     "text": "An import mapping expects a JSON field 'delayMinutes' (Integer), but the response omits the field entirely. What happens to the Mendix object?",
     "options": [
       "Mendix throws a runtime exception for the missing required field.",
-      "The Integer attribute is set to 0 (default for new objects) or retains its current value (for existing objects) â€” the mapping does not error.",
+      "The Integer attribute is set to 0 (default for new objects) or retains its current value (for existing objects) — the mapping does not error.",
       "The import mapping skips the entire object and logs a warning.",
       "The Integer attribute is set to -1 to indicate a missing value.",
       "The request is rejected with HTTP 400 Bad Request."
@@ -1270,7 +1270,7 @@
     "options": [
       "The object is committed to the database before the exception propagates.",
       "The entire transaction is rolled back, and the object is not persisted in the database.",
-      "The object remains in memory but is not committed â€” the user must retry manually.",
+      "The object remains in memory but is not committed — the user must retry manually.",
       "The object is saved to a 'failed transactions' table for later review.",
       "The exception is suppressed and the object is committed at the end of the outer microflow."
     ],
@@ -1348,14 +1348,14 @@
     "category": "OData & Data Hub",
     "text": "Does the Mendix OData published service support write operations (POST, PATCH, DELETE)?",
     "options": [
-      "No â€” OData services in Mendix are always read-only.",
-      "Yes â€” Mendix supports read and write OData operations since Mendix 9, and writes trigger the standard entity event microflows.",
+      "No — OData services in Mendix are always read-only.",
+      "Yes — Mendix supports read and write OData operations since Mendix 9, and writes trigger the standard entity event microflows.",
       "Yes, but only POST is supported; PATCH and DELETE require a REST service.",
       "Yes, but OData writes do NOT trigger before/after commit event microflows.",
       "Only if the Mendix app runs in production mode with security enabled."
     ],
     "correctIndex": 3,
-    "explanation": "Mendix OData published services do support write operations. However, OData writes do NOT automatically trigger before/after commit or before/after delete event microflows â€” this is a key difference from microflow-based commits and must be considered in your data consistency design.",
+    "explanation": "Mendix OData published services do support write operations. However, OData writes do NOT automatically trigger before/after commit or before/after delete event microflows — this is a key difference from microflow-based commits and must be considered in your data consistency design.",
     "difficulty": "hard",
     "active": true
   },
@@ -1410,7 +1410,7 @@
   {
     "questionId": "q089",
     "category": "Architecture & Multi-App",
-    "text": "What is the main risk of implementing a 'God microflow' â€” a single microflow that handles all logic for a major business process?",
+    "text": "What is the main risk of implementing a 'God microflow' — a single microflow that handles all logic for a major business process?",
     "options": [
       "Mendix will refuse to execute microflows longer than 100 activities",
       "It becomes impossible to unit test, reuse, or maintain; changes to one part risk breaking unrelated parts; it cannot be understood by new team members",
@@ -1492,7 +1492,7 @@
     "category": "Microflow Patterns",
     "text": "Two scheduled microflows both read and update the same configuration entity. What is the risk and how should it be mitigated?",
     "options": [
-      "No risk â€” Mendix automatically serializes scheduled event execution.",
+      "No risk — Mendix automatically serializes scheduled event execution.",
       "Race condition: both microflows could read the old value simultaneously, and the second write overwrites the first. Mitigate with pessimistic locking using a dedicated mutex entity or serialized Task Queue.",
       "The second microflow is blocked until the first commits, because Mendix holds a global entity lock during scheduled events.",
       "Scheduled microflows always run on separate database transactions with full isolation, preventing any conflict.",
@@ -1512,7 +1512,7 @@
       "Insecure Direct Object Reference (IDOR): any authenticated user can delete any order by guessing or enumerating IDs, regardless of ownership",
       "CSRF because the DELETE method does not include a CSRF token",
       "The endpoint is vulnerable to replay attacks",
-      "There is no vulnerability â€” authentication is sufficient for REST endpoints"
+      "There is no vulnerability — authentication is sufficient for REST endpoints"
     ],
     "correctIndex": 1,
     "explanation": "This is an IDOR (Insecure Direct Object Reference) vulnerability. An authenticated user who does not own Order 12345 can still delete it by calling DELETE /orders/12345. The fix is to add an XPath ownership check in the microflow: verify the order belongs to the calling user before deleting.",
@@ -1541,7 +1541,7 @@
     "text": "What is the 'soft delete' pattern in Mendix and when should you use it?",
     "options": [
       "Deleting objects in a scheduled batch job instead of immediately",
-      "Adding a Boolean 'IsDeleted' attribute and filtering it out with XPath constraints, rather than physically removing records â€” preserving audit history and foreign key integrity",
+      "Adding a Boolean 'IsDeleted' attribute and filtering it out with XPath constraints, rather than physically removing records — preserving audit history and foreign key integrity",
       "Using the Mendix recycle bin feature to stage deletions",
       "Archiving deleted objects to a separate 'Archive' entity before deletion",
       "Overwriting sensitive data with empty values before deletion"
@@ -1556,11 +1556,11 @@
     "category": "Architecture & Patterns",
     "text": "In a Mendix SAML SSO setup, a user's role changes in the Identity Provider. When will the new role take effect in the Mendix application?",
     "options": [
-      "Immediately â€” Mendix polls the IdP for role changes every 60 seconds",
-      "On the user's next login â€” SAML assertions are only processed during the authentication handshake when a new session is created",
+      "Immediately — Mendix polls the IdP for role changes every 60 seconds",
+      "On the user's next login — SAML assertions are only processed during the authentication handshake when a new session is created",
       "After a Mendix administrator manually triggers a role sync microflow",
       "Only after the application is redeployed",
-      "Never â€” roles must be managed in Mendix independently of the IdP"
+      "Never — roles must be managed in Mendix independently of the IdP"
     ],
     "correctIndex": 1,
     "explanation": "SAML role assertions are processed during the SSO login flow. A role change in the IdP takes effect when the user next logs in and a new SAML assertion is processed. Active sessions do not receive updated roles without re-authentication.",
@@ -1624,7 +1624,7 @@
       "Create a separate Manager module role with no XPath constraint on the Order entity access rule, and map it to the Manager user role",
       "Add OR '[%CurrentUser%]' = '' to allow any user to bypass the check",
       "Use a calculated attribute 'CanSeeAll' and reference it in the XPath",
-      "This is not possible in Mendix â€” one role cannot see all objects"
+      "This is not possible in Mendix — one role cannot see all objects"
     ],
     "correctIndex": 1,
     "explanation": "In Mendix, you create separate access rules per module role. The Manager role gets an access rule with no XPath constraint (returns all orders), while the Employee role gets the ownership-restricted rule. Each user role maps to the appropriate module role.",
@@ -1637,7 +1637,7 @@
     "text": "An entity 'Vehicle' has specializations 'Car' and 'Truck'. You want to retrieve all Vehicles regardless of specialization type. Which XPath retrieves all?",
     "options": [
       "Retrieve from MyModule.Car and MyModule.Truck separately and merge the lists",
-      "Retrieve from MyModule.Vehicle â€” Mendix automatically includes all specializations in the result",
+      "Retrieve from MyModule.Vehicle — Mendix automatically includes all specializations in the result",
       "Use [type = 'Car' or type = 'Truck']",
       "Create a computed view entity combining both",
       "This is not possible with a single retrieve"
@@ -1734,7 +1734,7 @@
     "options": [
       "The server version always wins and the local change is discarded silently",
       "The client version always wins and overwrites the server change",
-      "Mendix raises a synchronization conflict that must be resolved â€” by default the server version wins, but custom conflict resolution can be implemented",
+      "Mendix raises a synchronization conflict that must be resolved — by default the server version wins, but custom conflict resolution can be implemented",
       "The sync is blocked until a network administrator resolves the conflict",
       "Both versions are kept as separate objects in the database"
     ],
@@ -1765,7 +1765,7 @@
     "text": "What is the purpose of marking a microflow as 'public' in a Mendix module?",
     "options": [
       "It makes the microflow callable from REST without authentication",
-      "It exposes the microflow as part of the module's public API, allowing other modules to call it â€” private microflows are internal implementation details",
+      "It exposes the microflow as part of the module's public API, allowing other modules to call it — private microflows are internal implementation details",
       "It grants all user roles permission to call the microflow from the UI",
       "It makes the microflow appear in the Mendix Marketplace as a reusable action",
       "It allows the microflow to be called from nanoflows"
@@ -1784,7 +1784,7 @@
       "Expose only the minimal interface needed by consumers (public), hiding implementation entities and helper microflows (private) to preserve the ability to refactor internally",
       "Make only entities public and keep all microflows private",
       "Determine visibility based on which team members need to call them",
-      "Public/private visibility has no practical effect â€” it is only a documentation convention"
+      "Public/private visibility has no practical effect — it is only a documentation convention"
     ],
     "correctIndex": 1,
     "explanation": "The principle of minimal public surface area (information hiding / encapsulation) applies directly to Mendix modules. A small, stable public API allows the internal implementation to evolve without breaking dependent apps.",
@@ -1829,7 +1829,7 @@
     "text": "What does the Mendix 'before deployment' microflow allow you to do?",
     "options": [
       "Run a smoke test before the deployment package is built",
-      "Execute migration logic â€” such as data transformation or seeding â€” once during the deployment process before the application accepts traffic",
+      "Execute migration logic — such as data transformation or seeding — once during the deployment process before the application accepts traffic",
       "Notify developers when a new version is about to be deployed",
       "Validate that all constants have values before deployment proceeds",
       "Roll back the database schema if errors are detected"
@@ -1861,7 +1861,7 @@
     "text": "What does it mean when a Mendix Marketplace module is marked as 'Community supported'?",
     "options": [
       "It is maintained and supported directly by Mendix BV with SLA guarantees",
-      "It is maintained by the Mendix community; there is no official Mendix support SLA â€” use it with caution in production",
+      "It is maintained by the Mendix community; there is no official Mendix support SLA — use it with caution in production",
       "It requires a paid Mendix license to download and use",
       "It has been deprecated and will be removed from the Marketplace",
       "It has passed the Mendix security review and is certified for enterprise use"
@@ -1893,7 +1893,7 @@
     "text": "In an enterprise Mendix setup with multiple apps, what is the recommended way to propagate a business event (e.g., 'Order Shipped') to multiple consuming apps without tight coupling?",
     "options": [
       "Have the shipping app call each consuming app's REST endpoint directly in its microflow",
-      "Use a message broker (such as Kafka or AWS SNS/SQS) â€” the shipping app publishes the event, and each consumer subscribes independently",
+      "Use a message broker (such as Kafka or AWS SNS/SQS) — the shipping app publishes the event, and each consumer subscribes independently",
       "Use the Mendix App Store 'Event Broker' module to share events over SOAP",
       "Store the event in a shared database table that all apps poll every minute",
       "Use Mendix OData to expose the event as a queryable feed"
@@ -1938,7 +1938,7 @@
   {
     "questionId": "q122",
     "category": "XPath Puzzles Advanced",
-    "text": "Which XPath retrieves Orders owned by the currently logged-in user's organization, traversing two associations: Order â†’ Customer â†’ Organization?",
+    "text": "Which XPath retrieves Orders owned by the currently logged-in user's organization, traversing two associations: Order → Customer → Organization?",
     "options": [
       "[MyMod.Order_Customer/MyMod.Customer/MyMod.Customer_Organization/MyMod.Organization/MyMod.Organization_User/System.User = '[%CurrentUser%]']",
       "[Organization = '[%CurrentUser%]']",
@@ -1988,7 +1988,7 @@
     "category": "REST Design",
     "text": "A Mendix REST endpoint for bulk parcel status updates receives 500 items. 498 succeed, 2 fail validation. What is the best response strategy?",
     "options": [
-      "Return 200 OK with no body â€” the caller should verify each item independently",
+      "Return 200 OK with no body — the caller should verify each item independently",
       "Return 207 Multi-Status with a response body that individually reports success/failure per item",
       "Return 400 Bad Request and reject the entire batch if any item fails",
       "Return 200 OK with the successful items and silently discard the failed ones",
@@ -2020,10 +2020,10 @@
     "category": "Java Actions Advanced",
     "text": "When passing a Mendix IMendixObject to a Java action and modifying its attributes, do you need to commit the object in Java to persist changes?",
     "options": [
-      "No â€” Mendix automatically persists all attribute changes made in Java actions",
-      "Yes â€” you must call Core.commit(context, object) or changes remain only in memory",
-      "No â€” changes to IMendixObject are automatically committed when the Java action returns",
-      "Yes â€” but only for persistent entities; non-persistent entities are saved automatically",
+      "No — Mendix automatically persists all attribute changes made in Java actions",
+      "Yes — you must call Core.commit(context, object) or changes remain only in memory",
+      "No — changes to IMendixObject are automatically committed when the Java action returns",
+      "Yes — but only for persistent entities; non-persistent entities are saved automatically",
       "It depends on whether the Java action is called from a microflow with 'auto-commit' enabled"
     ],
     "correctIndex": 1,
@@ -2036,11 +2036,11 @@
     "category": "Architecture Decisions",
     "text": "PostNL needs to build a route optimization engine that evaluates millions of distance matrix combinations. Should this be built in Mendix?",
     "options": [
-      "Yes â€” Mendix microflows can handle computational workloads with Java actions",
-      "No â€” computationally intensive algorithms with millions of iterations are better suited to a dedicated high-code service (Python, Java, Rust); Mendix should orchestrate the call to that service via REST",
-      "Yes â€” use Mendix Task Queue to parallelize the computation across multiple threads",
-      "No â€” PostNL should purchase a commercial routing SaaS and avoid building this entirely",
-      "Yes â€” but only if the calculation can be expressed as a single SQL query"
+      "Yes — Mendix microflows can handle computational workloads with Java actions",
+      "No — computationally intensive algorithms with millions of iterations are better suited to a dedicated high-code service (Python, Java, Rust); Mendix should orchestrate the call to that service via REST",
+      "Yes — use Mendix Task Queue to parallelize the computation across multiple threads",
+      "No — PostNL should purchase a commercial routing SaaS and avoid building this entirely",
+      "Yes — but only if the calculation can be expressed as a single SQL query"
     ],
     "correctIndex": 1,
     "explanation": "Mendix is an application development platform, not a high-performance computation engine. Computationally intensive tasks (route optimization, ML inference, matrix operations) belong in dedicated services. Mendix acts as the orchestrator: it calls the service via REST, handles the response, and updates the domain model.",
@@ -2091,7 +2091,7 @@
       "Running database migration scripts in test mode before production deployment"
     ],
     "correctIndex": 1,
-    "explanation": "The MxUnitTest module allows developers to write and run unit tests against Mendix microflows. Tests execute within the runtime, creating test objects, calling microflows, and asserting outcomes â€” enabling automated regression testing of business logic.",
+    "explanation": "The MxUnitTest module allows developers to write and run unit tests against Mendix microflows. Tests execute within the runtime, creating test objects, calling microflows, and asserting outcomes — enabling automated regression testing of business logic.",
     "difficulty": "medium",
     "active": true
   },
@@ -2228,10 +2228,10 @@
     "category": "Mendix Model Reflection",
     "text": "Which Mendix pattern uses the Model Reflection module in combination with the Dynamic Data module to build reusable generic list views?",
     "options": [
-      "The template pattern â€” pre-built page templates are selected at design time",
-      "The generic view pattern â€” entity type and attributes to display are configured via domain model metadata at runtime, rendering different entities with the same page",
-      "The inherited view pattern â€” base pages are specialized per entity type",
-      "The microflow-driven refresh pattern â€” pages re-query model metadata on every load",
+      "The template pattern — pre-built page templates are selected at design time",
+      "The generic view pattern — entity type and attributes to display are configured via domain model metadata at runtime, rendering different entities with the same page",
+      "The inherited view pattern — base pages are specialized per entity type",
+      "The microflow-driven refresh pattern — pages re-query model metadata on every load",
       "Model Reflection is not used for UI patterns; it is only for backend processing"
     ],
     "correctIndex": 1,
@@ -2246,12 +2246,12 @@
     "options": [
       "The object is committed twice, creating a duplicate in the database",
       "Mendix throws a runtime exception about duplicate objects in a list",
-      "The object appears twice in the list but is committed only once â€” Mendix deduplicates by object identity on commit",
+      "The object appears twice in the list but is committed only once — Mendix deduplicates by object identity on commit",
       "Both instances are committed, but the second creates a new auto-incremented primary key",
       "The list rejects the duplicate silently, keeping only the first instance"
     ],
     "correctIndex": 2,
-    "explanation": "A Mendix list can contain the same object reference multiple times, but when committing, Mendix commits each unique object once. The duplicate reference does not cause a second database row â€” commit operates on the object's identity, not the list membership count.",
+    "explanation": "A Mendix list can contain the same object reference multiple times, but when committing, Mendix commits each unique object once. The duplicate reference does not cause a second database row — commit operates on the object's identity, not the list membership count.",
     "difficulty": "hard",
     "active": true
   },
@@ -2267,7 +2267,7 @@
       "The server-side cache is cleared for all objects of that entity type"
     ],
     "correctIndex": 1,
-    "explanation": "'Refresh in client' on a Commit triggers a notification to the browser that the object has changed. Widgets displaying that object â€” data views, list views, grids â€” update their display. Only the affected widgets refresh, not the entire page.",
+    "explanation": "'Refresh in client' on a Commit triggers a notification to the browser that the object has changed. Widgets displaying that object — data views, list views, grids — update their display. Only the affected widgets refresh, not the entire page.",
     "difficulty": "medium",
     "active": true
   },
@@ -2277,7 +2277,7 @@
     "text": "What is the effect of enabling 'Uniqueness constraint' on a combination of two attributes in a Mendix entity?",
     "options": [
       "The attribute values are hashed before storage to prevent reading sensitive data",
-      "Mendix creates a database-level unique index on the combination, ensuring no two rows have the same pair of values â€” violations throw a runtime exception",
+      "Mendix creates a database-level unique index on the combination, ensuring no two rows have the same pair of values — violations throw a runtime exception",
       "It prevents the attributes from being updated after the object is first committed",
       "The unique constraint is enforced in-memory but not at the database level",
       "It marks the combination as the natural key for use in OData queries"
@@ -2293,7 +2293,7 @@
     "text": "In Mendix, what happens to child objects when a parent object is deleted and the association has 'Keep' delete behavior on the child side?",
     "options": [
       "The child objects are deleted along with the parent (cascade)",
-      "The child objects are kept, but their association to the deleted parent is set to empty â€” they become orphaned",
+      "The child objects are kept, but their association to the deleted parent is set to empty — they become orphaned",
       "Mendix prevents deletion of the parent until all child associations are manually cleared",
       "The parent object is archived rather than deleted to preserve the child references",
       "The child objects are automatically re-associated to a default 'null parent' entity"
@@ -2308,14 +2308,14 @@
     "category": "Mendix Performance",
     "text": "A Mendix page shows a list view with 50 products, each loading associated images and prices. Users report it loads slowly. What is the most likely cause and fix?",
     "options": [
-      "The list view widget is too wide â€” reduce column count to improve render time",
+      "The list view widget is too wide — reduce column count to improve render time",
       "N+1 query problem: for each of the 50 products, the client triggers separate retrievals for image and price data. Fix by ensuring associations and calculated attributes needed for display are retrieved with the initial dataset using an optimized XPath with appropriate depth",
-      "The server has insufficient RAM â€” add more memory",
-      "HTTPS encryption overhead â€” switch to HTTP for internal networks",
-      "The page template is too complex â€” use a simpler page layout"
+      "The server has insufficient RAM — add more memory",
+      "HTTPS encryption overhead — switch to HTTP for internal networks",
+      "The page template is too complex — use a simpler page layout"
     ],
     "correctIndex": 1,
-    "explanation": "When a list view displays associated objects (images, prices retrieved by association), each item triggers additional retrievals â€” the classic N+1 pattern. The fix is to retrieve associated data eagerly in the datasource microflow rather than letting the client trigger per-item requests.",
+    "explanation": "When a list view displays associated objects (images, prices retrieved by association), each item triggers additional retrievals — the classic N+1 pattern. The fix is to retrieve associated data eagerly in the datasource microflow rather than letting the client trigger per-item requests.",
     "difficulty": "hard",
     "active": true
   },
@@ -2395,7 +2395,7 @@
       "Writing all microflow logic in one sprint and all pages in the next"
     ],
     "correctIndex": 1,
-    "explanation": "In Agile Mendix development, each sprint delivers a vertical slice of working, tested functionality across all application layers â€” domain model, microflows, pages, security, and tests. Sprint-level delivery of complete user stories enables incremental value delivery and early feedback.",
+    "explanation": "In Agile Mendix development, each sprint delivers a vertical slice of working, tested functionality across all application layers — domain model, microflows, pages, security, and tests. Sprint-level delivery of complete user stories enables incremental value delivery and early feedback.",
     "difficulty": "medium",
     "active": true
   },
@@ -2404,7 +2404,7 @@
     "category": "XPath Expert",
     "text": "An XPath constraint is [MyModule.A_B/MyModule.B/MyModule.B_C/MyModule.C/Value = 'X']. What is the performance implication?",
     "options": [
-      "No performance impact â€” Mendix optimizes multi-level association traversals automatically",
+      "No performance impact — Mendix optimizes multi-level association traversals automatically",
       "Each association level adds a SQL JOIN. A 2-level traversal generates a 3-table JOIN. On large datasets without indexes on the join columns, this can be very slow",
       "Multi-level XPath is converted to a single index scan by the Mendix optimizer",
       "The query is rejected if more than 2 association levels are used",
@@ -2488,7 +2488,7 @@
       "The server-local time in UTC+2, formatted as a date string",
       "The client browser's local time",
       "The time in Amsterdam timezone specifically",
-      "The timezone cannot be determined from this expression alone â€” formatDateTime uses UTC by default"
+      "The timezone cannot be determined from this expression alone — formatDateTime uses UTC by default"
     ],
     "correctIndex": 1,
     "explanation": "formatDateTime in Mendix uses the server's JVM timezone. If the server runs in UTC+2, the formatted output reflects UTC+2. This is a common source of date bugs in multi-timezone deployments. Use explicit timezone handling or store/display times in UTC.",
@@ -2503,7 +2503,7 @@
       "The commit proceeds but a warning is shown to the user",
       "The commit is cancelled, the validation message is displayed to the user, and the object remains in its pre-commit state",
       "The object is deleted and the user must re-enter all data",
-      "The event microflow's return value is ignored â€” commits cannot be cancelled from event microflows",
+      "The event microflow's return value is ignored — commits cannot be cancelled from event microflows",
       "The application throws an unhandled exception and logs a system error"
     ],
     "correctIndex": 1,
@@ -2536,10 +2536,10 @@
       "Implement Lambda Provisioned Concurrency to keep function instances warm, and use asynchronous invocation (Task Queue in Mendix) with polling for result, decoupling the user experience from Lambda startup time",
       "Cache the Lambda result in a Mendix constant updated every hour",
       "Switch from AWS Lambda to an AWS EC2 instance for consistent latency",
-      "Accept the latency â€” cold starts only happen once per Lambda instance"
+      "Accept the latency — cold starts only happen once per Lambda instance"
     ],
     "correctIndex": 1,
-    "explanation": "Provisioned Concurrency eliminates cold starts by pre-warming Lambda instances. Using Mendix Task Queue for async invocation means the user gets an immediate response ('processing...') and polls or gets notified when the Lambda result is ready â€” fully decoupling UX from Lambda startup latency.",
+    "explanation": "Provisioned Concurrency eliminates cold starts by pre-warming Lambda instances. Using Mendix Task Queue for async invocation means the user gets an immediate response ('processing...') and polls or gets notified when the Lambda result is ready — fully decoupling UX from Lambda startup latency.",
     "difficulty": "hard",
     "active": true
   },
@@ -2549,13 +2549,13 @@
     "text": "A Mendix app stores FileDocument objects. PostNL wants to store the actual file bytes in S3 instead of the Mendix database. What is the recommended approach?",
     "options": [
       "Override the FileDocument entity to store a URL string pointing to S3 instead of binary data",
-      "Use the Mendix StorageService configuration to point file storage to S3 via the com.mendix.storage.s3 settings â€” Mendix natively supports S3 as a storage backend",
+      "Use the Mendix StorageService configuration to point file storage to S3 via the com.mendix.storage.s3 settings — Mendix natively supports S3 as a storage backend",
       "Use a Java action to intercept FileDocument commits and redirect binary writes to S3",
       "Create a separate AwsFile entity that mirrors FileDocument but stores an S3 key, and manage the lifecycle manually",
-      "Files cannot be stored externally in Mendix â€” the database is always used for FileDocuments"
+      "Files cannot be stored externally in Mendix — the database is always used for FileDocuments"
     ],
     "correctIndex": 1,
-    "explanation": "Mendix natively supports AWS S3 as the file storage backend. By setting the com.mendix.storage.s3.* runtime configuration parameters (bucket, credentials, region), all FileDocument binary data is automatically stored in and retrieved from S3 â€” no custom code required.",
+    "explanation": "Mendix natively supports AWS S3 as the file storage backend. By setting the com.mendix.storage.s3.* runtime configuration parameters (bucket, credentials, region), all FileDocument binary data is automatically stored in and retrieved from S3 — no custom code required.",
     "difficulty": "hard",
     "active": true
   },

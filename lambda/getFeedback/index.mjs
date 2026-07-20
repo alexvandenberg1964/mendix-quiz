@@ -5,13 +5,18 @@ const db = new DynamoDBClient({});
 
 const cors = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Allow-Headers": "Content-Type, x-admin-key",
   "Content-Type": "application/json"
 };
 
 export const handler = async (event) => {
   if (event.requestContext?.http?.method === "OPTIONS") {
     return { statusCode: 200, headers: cors, body: "" };
+  }
+
+  const adminKey = event.headers?.["x-admin-key"];
+  if (!adminKey || adminKey !== process.env.ADMIN_KEY) {
+    return { statusCode: 401, headers: cors, body: JSON.stringify({ error: "Unauthorized" }) };
   }
 
   const filterQuestionId = event.queryStringParameters?.questionId ?? null;

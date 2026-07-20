@@ -1,0 +1,567 @@
+{
+    "Items": [
+        {
+            "comment": {
+                "S": ""
+            },
+            "feedbackId": {
+                "S": "07d0e05c-2fff-4322-a5b8-79daa1bb1bee"
+            },
+            "email": {
+                "S": "desiree.de.ridder@postnl.nl"
+            },
+            "rating": {
+                "N": "5"
+            },
+            "questionId": {
+                "S": "q142"
+            },
+            "submittedAt": {
+                "S": "2026-06-09T06:50:40.019Z"
+            }
+        },
+        {
+            "comment": {
+                "S": ""
+            },
+            "feedbackId": {
+                "S": "599654f5-bb03-4b4e-8332-03d194586aae"
+            },
+            "email": {
+                "S": "desiree.de.ridder@postnl.nl"
+            },
+            "rating": {
+                "N": "5"
+            },
+            "questionId": {
+                "S": "q101"
+            },
+            "submittedAt": {
+                "S": "2026-06-18T11:54:48.380Z"
+            }
+        },
+        {
+            "comment": {
+                "S": "Dit was een leuke vraag!"
+            },
+            "feedbackId": {
+                "S": "38bfbd52-8420-45ea-805e-af8f7eb362d1"
+            },
+            "email": {
+                "S": "alex.van.den.berg@postnl.nl"
+            },
+            "rating": {
+                "N": "5"
+            },
+            "questionId": {
+                "S": "q036"
+            },
+            "submittedAt": {
+                "S": "2026-05-29T13:56:01.878Z"
+            }
+        },
+        {
+            "comment": {
+                "S": ""
+            },
+            "feedbackId": {
+                "S": "30edb2dc-2107-4f42-b539-5cc5e022b26a"
+            },
+            "email": {
+                "S": "tijmen.smits@postnl.nl"
+            },
+            "rating": {
+                "N": "4"
+            },
+            "questionId": {
+                "S": "q134"
+            },
+            "submittedAt": {
+                "S": "2026-06-03T07:11:58.273Z"
+            }
+        },
+        {
+            "comment": {
+                "S": ""
+            },
+            "feedbackId": {
+                "S": "453a504e-908c-4b15-aafa-bff3eca25dcd"
+            },
+            "email": {
+                "S": "desiree.de.ridder@postnl.nl"
+            },
+            "rating": {
+                "N": "5"
+            },
+            "questionId": {
+                "S": "q128"
+            },
+            "submittedAt": {
+                "S": "2026-06-08T10:26:38.887Z"
+            }
+        },
+        {
+            "comment": {
+                "S": "this is not a hard difficulty question"
+            },
+            "feedbackId": {
+                "S": "02ae5e10-cc2b-45b5-86fc-813be3fb2a7b"
+            },
+            "email": {
+                "S": "desiree.de.ridder@postnl.nl"
+            },
+            "rating": {
+                "N": "3"
+            },
+            "questionId": {
+                "S": "q074"
+            },
+            "submittedAt": {
+                "S": "2026-06-12T06:55:37.310Z"
+            }
+        },
+        {
+            "comment": {
+                "S": ""
+            },
+            "feedbackId": {
+                "S": "33acce82-3baf-4db5-861c-3fe5bec0d751"
+            },
+            "email": {
+                "S": "desiree.de.ridder@postnl.nl"
+            },
+            "rating": {
+                "N": "5"
+            },
+            "questionId": {
+                "S": "q081"
+            },
+            "submittedAt": {
+                "S": "2026-06-30T13:52:59.927Z"
+            }
+        },
+        {
+            "comment": {
+                "S": ""
+            },
+            "feedbackId": {
+                "S": "a387914b-4234-4a7d-b53b-8e594b36f985"
+            },
+            "email": {
+                "S": "tijmen.smits@postnl.nl"
+            },
+            "rating": {
+                "N": "5"
+            },
+            "questionId": {
+                "S": "q141"
+            },
+            "submittedAt": {
+                "S": "2026-06-04T08:15:05.157Z"
+            }
+        },
+        {
+            "comment": {
+                "S": "the answer is a bit weird: 'makes the model greedy' is a weird description since a model doesn't experience emotions or wants nor does it pick as many tokens as possible"
+            },
+            "feedbackId": {
+                "S": "c2ff5f1d-126b-4180-a8f2-e65b400e5d16"
+            },
+            "email": {
+                "S": "desiree.de.ridder@postnl.nl"
+            },
+            "rating": {
+                "N": "4"
+            },
+            "questionId": {
+                "S": "q168"
+            },
+            "submittedAt": {
+                "S": "2026-07-09T08:54:11.199Z"
+            }
+        },
+        {
+            "comment": {
+                "S": "The answer shows as 'Yes â€” you must...'"
+            },
+            "feedbackId": {
+                "S": "58af7e39-912f-4196-b428-048602cd75b2"
+            },
+            "email": {
+                "S": "johan.van.der.maten@postnl.nl"
+            },
+            "rating": {
+                "N": "3"
+            },
+            "questionId": {
+                "S": "q127"
+            },
+            "submittedAt": {
+                "S": "2026-06-11T11:01:29.489Z"
+            }
+        },
+        {
+            "comment": {
+                "S": "this is not a hard question"
+            },
+            "feedbackId": {
+                "S": "f203be23-dc17-4242-a188-7c602b5d8707"
+            },
+            "email": {
+                "S": "desiree.de.ridder@postnl.nl"
+            },
+            "rating": {
+                "N": "2"
+            },
+            "questionId": {
+                "S": "q153"
+            },
+            "submittedAt": {
+                "S": "2026-07-13T07:02:22.616Z"
+            }
+        },
+        {
+            "comment": {
+                "S": "Very minor issue but there seems to be some kind of encoding issue with the text that is shown, for example one of the answers shows as: No â€\" OData services in Mendix are always read-only."
+            },
+            "feedbackId": {
+                "S": "0ddbf9b3-b952-4895-bf4e-bfa18fb4038e"
+            },
+            "email": {
+                "S": "tijmen.smits@postnl.nl"
+            },
+            "rating": {
+                "N": "5"
+            },
+            "questionId": {
+                "S": "q085"
+            },
+            "submittedAt": {
+                "S": "2026-06-01T07:25:04.507Z"
+            }
+        },
+        {
+            "comment": {
+                "S": "I guess they mean that specifically the 'updatable action' as 'write to database' doesn't trigger events (?), if you use a microflow for your update and commit in there I do not see how that would be able to ignore events. So this question is multi-interpretable in my opinion"
+            },
+            "feedbackId": {
+                "S": "8702c99c-4c71-4750-90bf-35c09e6d9274"
+            },
+            "email": {
+                "S": "desiree.de.ridder@postnl.nl"
+            },
+            "rating": {
+                "N": "1"
+            },
+            "questionId": {
+                "S": "q085"
+            },
+            "submittedAt": {
+                "S": "2026-06-26T10:17:42.038Z"
+            }
+        },
+        {
+            "comment": {
+                "S": ""
+            },
+            "feedbackId": {
+                "S": "ff7b14e6-fda9-41ba-aec8-0306baa69f43"
+            },
+            "email": {
+                "S": "desiree.de.ridder@postnl.nl"
+            },
+            "rating": {
+                "N": "5"
+            },
+            "questionId": {
+                "S": "q137"
+            },
+            "submittedAt": {
+                "S": "2026-07-07T09:36:55.671Z"
+            }
+        },
+        {
+            "comment": {
+                "S": ""
+            },
+            "feedbackId": {
+                "S": "455d8093-bc06-4d87-a1d8-342cf3194e15"
+            },
+            "email": {
+                "S": "desiree.de.ridder@postnl.nl"
+            },
+            "rating": {
+                "N": "5"
+            },
+            "questionId": {
+                "S": "q021"
+            },
+            "submittedAt": {
+                "S": "2026-06-11T10:00:56.120Z"
+            }
+        },
+        {
+            "comment": {
+                "S": "the other answers are a bit too obviously not it"
+            },
+            "feedbackId": {
+                "S": "a3d57366-63e9-4a7c-8df0-662209d9cc78"
+            },
+            "email": {
+                "S": "desiree.de.ridder@postnl.nl"
+            },
+            "rating": {
+                "N": "4"
+            },
+            "questionId": {
+                "S": "q174"
+            },
+            "submittedAt": {
+                "S": "2026-07-02T08:44:58.722Z"
+            }
+        },
+        {
+            "comment": {
+                "S": "I assume this is without XPATH module, I had assumed it was with but now I realise what they're actually answering"
+            },
+            "feedbackId": {
+                "S": "51379b32-80ba-4f93-828c-eb332a404f7c"
+            },
+            "email": {
+                "S": "desiree.de.ridder@postnl.nl"
+            },
+            "rating": {
+                "N": "3"
+            },
+            "questionId": {
+                "S": "q137"
+            },
+            "submittedAt": {
+                "S": "2026-07-07T09:41:07.020Z"
+            }
+        },
+        {
+            "comment": {
+                "S": ""
+            },
+            "feedbackId": {
+                "S": "80983c46-7fd3-4192-8b1b-0782ce02534c"
+            },
+            "email": {
+                "S": "desiree.de.ridder@postnl.nl"
+            },
+            "rating": {
+                "N": "5"
+            },
+            "questionId": {
+                "S": "q070"
+            },
+            "submittedAt": {
+                "S": "2026-07-08T08:16:34.053Z"
+            }
+        },
+        {
+            "comment": {
+                "S": ""
+            },
+            "feedbackId": {
+                "S": "888f18e8-f137-4ef6-833d-1a63863e4656"
+            },
+            "email": {
+                "S": "desiree.de.ridder@postnl.nl"
+            },
+            "rating": {
+                "N": "5"
+            },
+            "questionId": {
+                "S": "q103"
+            },
+            "submittedAt": {
+                "S": "2026-07-10T07:00:27.824Z"
+            }
+        },
+        {
+            "comment": {
+                "S": ""
+            },
+            "feedbackId": {
+                "S": "5577ac71-e1bb-4c0a-930a-e576b20b5a4b"
+            },
+            "email": {
+                "S": "desiree.de.ridder@postnl.nl"
+            },
+            "rating": {
+                "N": "5"
+            },
+            "questionId": {
+                "S": "q158"
+            },
+            "submittedAt": {
+                "S": "2026-06-05T09:18:34.617Z"
+            }
+        },
+        {
+            "comment": {
+                "S": "not sure what the added value of this question is"
+            },
+            "feedbackId": {
+                "S": "769d4875-a691-4287-aa96-b274e5161657"
+            },
+            "email": {
+                "S": "desiree.de.ridder@postnl.nl"
+            },
+            "rating": {
+                "N": "2"
+            },
+            "questionId": {
+                "S": "q200"
+            },
+            "submittedAt": {
+                "S": "2026-06-01T07:18:45.921Z"
+            }
+        },
+        {
+            "comment": {
+                "S": "It was a hard one i think."
+            },
+            "feedbackId": {
+                "S": "9a762fab-9088-4318-b7b8-70349e8732f6"
+            },
+            "email": {
+                "S": "selcuk.emre@postnl.nl"
+            },
+            "rating": {
+                "N": "5"
+            },
+            "questionId": {
+                "S": "q088"
+            },
+            "submittedAt": {
+                "S": "2026-06-18T14:01:42.572Z"
+            }
+        },
+        {
+            "comment": {
+                "S": "difficulty should be easy"
+            },
+            "feedbackId": {
+                "S": "e0bc581d-ba4e-45c2-b314-5b971979fe18"
+            },
+            "email": {
+                "S": "desiree.de.ridder@postnl.nl"
+            },
+            "rating": {
+                "N": "3"
+            },
+            "questionId": {
+                "S": "q020"
+            },
+            "submittedAt": {
+                "S": "2026-06-10T08:50:03.200Z"
+            }
+        },
+        {
+            "comment": {
+                "S": "It is unclear from the question where the filter action and retrieve are actually positioned in regards to the loop. An object is committed in 'the loop', which one? It should be made clearer that (I assume) the filtered list is what you're looping over or that the retrieve statement is in front of the loop and therefore already executed etc."
+            },
+            "feedbackId": {
+                "S": "f9ee831f-d40b-4fe1-ab69-fad53aa8fa7f"
+            },
+            "email": {
+                "S": "desiree.de.ridder@postnl.nl"
+            },
+            "rating": {
+                "N": "2"
+            },
+            "questionId": {
+                "S": "q093"
+            },
+            "submittedAt": {
+                "S": "2026-06-19T09:44:51.433Z"
+            }
+        },
+        {
+            "comment": {
+                "S": ""
+            },
+            "feedbackId": {
+                "S": "9df1e8ad-0ad7-46cb-b86c-554bfbb83bcc"
+            },
+            "email": {
+                "S": "selcuk.emre@postnl.nl"
+            },
+            "rating": {
+                "N": "4"
+            },
+            "questionId": {
+                "S": "q080"
+            },
+            "submittedAt": {
+                "S": "2026-06-12T08:25:57.147Z"
+            }
+        },
+        {
+            "comment": {
+                "S": "now() i've never seen used like this"
+            },
+            "feedbackId": {
+                "S": "7b8daa67-4e22-48db-b52c-28026191874a"
+            },
+            "email": {
+                "S": "desiree.de.ridder@postnl.nl"
+            },
+            "rating": {
+                "N": "3"
+            },
+            "questionId": {
+                "S": "q091"
+            },
+            "submittedAt": {
+                "S": "2026-06-04T11:51:21.679Z"
+            }
+        },
+        {
+            "comment": {
+                "S": ""
+            },
+            "feedbackId": {
+                "S": "31a1c67e-ce0b-4c2e-85e2-8af0f0639863"
+            },
+            "email": {
+                "S": "tijmen.smits@postnl.nl"
+            },
+            "rating": {
+                "N": "4"
+            },
+            "questionId": {
+                "S": "q040"
+            },
+            "submittedAt": {
+                "S": "2026-06-02T06:44:52.088Z"
+            }
+        },
+        {
+            "comment": {
+                "S": "Makes you think about the structure"
+            },
+            "feedbackId": {
+                "S": "0353bea9-aac0-4cfb-8936-fb1b774c3ad9"
+            },
+            "email": {
+                "S": "desiree.de.ridder@postnl.nl"
+            },
+            "rating": {
+                "N": "5"
+            },
+            "questionId": {
+                "S": "q076"
+            },
+            "submittedAt": {
+                "S": "2026-07-03T16:03:49.019Z"
+            }
+        }
+    ],
+    "Count": 28,
+    "ScannedCount": 28,
+    "ConsumedCapacity": null
+}

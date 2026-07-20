@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh api *)",
+      "PowerShell(try { $r = Invoke-WebRequest -Uri \"https://alexvandenberg1964.github.io/mendix-quiz/index.html\" -UseBasicParsing -TimeoutSec 15; \"STATUS: $\\($r.StatusCode\\)\"; $r.Content.Substring\\(0,[Math]::Min\\(500,$r.Content.Length\\)\\) } catch { \"ERROR: $\\($_.Exception.Message\\)\" })",
+      "WebFetch(domain:r4800dlclj.execute-api.eu-west-1.amazonaws.com)",
+      "WebFetch(domain:alexvandenberg1964.github.io)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:api.github.com)",
+      "WebFetch(domain:pages.github.com)"
+    ]
+  }
+}

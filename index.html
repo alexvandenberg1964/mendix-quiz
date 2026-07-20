@@ -548,6 +548,7 @@ function submitEmail() {
   const input = document.getElementById('email-input');
   const email = (input ? input.value : Q.email).trim();
   if (!email || !email.includes('@')) { Q.error = 'Please enter a valid email address.'; render(); return; }
+  if (!email.toLowerCase().endsWith('@postnl.nl')) { Q.error = 'Please use your PostNL email address (@postnl.nl).'; render(); return; }
   Q.email = email;
   Q.error = null;
   localStorage.setItem('quiz_email', email);
